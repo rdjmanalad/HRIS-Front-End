@@ -1,0 +1,19 @@
+.clsCenter {
+  padding-top: 3rem;
+  color: var(--text-color-off-white);
+  display: flex;
+  justify-content: center;
+}
+
+.welcomeBorder {
+  width: 80%;
+  display: grid;
+  text-align: center;
+  background-color: rgb(32, 32, 32);
+  border-radius: 5px;
+}
+
+.allCenter {
+  display: flex;
+  justify-content: center;
+}

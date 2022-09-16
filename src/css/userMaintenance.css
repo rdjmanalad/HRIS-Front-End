@@ -1,0 +1,35 @@
+
+.formDiv{
+    color: white;
+}
+
+label {
+    /* Other styling... */
+    margin-top: 5px;
+    text-align: left;
+    clear: both;
+    float:left;
+    margin-right:15px;
+    width: 100px;
+}
+
+.formDiv input{ 
+    margin-top: 5px;
+    padding: 0;
+    border-radius: 5px;
+}
+
+.inputLong{
+    width: 250px;
+    padding-top: 5px;
+}
+
+.inputMedium{
+    width: 200px;
+    margin-top: 10px;
+}
+
+.inputSmall{
+    width: 150px;
+    padding-top: 5px;
+}

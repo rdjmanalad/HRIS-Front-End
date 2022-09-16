@@ -1,0 +1,41 @@
+.tLogo {
+  width: 95px;
+  border-radius: 3px;
+}
+
+.dropdown-menu.show {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity));
+}
+
+.dropdown-item {
+  color: #ffffff;
+}
+
+.navBarHeightSmall {
+  height: 30px;
+  padding: auto;
+}
+
+.navBarItemHeight {
+  height: 40px;
+  text-decoration: none;
+  color: white;
+}
+
+.navBarItemHeight:hover {
+  filter: invert(100%);
+}
+
+.navBarHeightSmall:hover {
+  filter: invert(100%);
+}
+
+.iconLogout:hover {
+  cursor: pointer;
+  color: red;
+}
+
+.filter {
+  filter: invert(100%);
+}
