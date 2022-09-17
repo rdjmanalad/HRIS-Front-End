@@ -18,7 +18,16 @@ function App() {
   // const isNull = localStorage.getItem("jwt") == null ? true : false;
   // alert(isNull);
   // alert(localStorage.getItem("jwt").length);
-  let logged = localStorage.getItem("jwt").length > 5;
+  let logged = false;
+  if(localStorage.getItem("jwt")!=null){
+    if(localStorage.getItem("jwt").length>5){
+      logged= true;
+    }else{
+      logged=false;
+    }
+  }
+  // let logged = localStorage.getItem("jwt").length > 5;
+  
 
   return (
     <div>

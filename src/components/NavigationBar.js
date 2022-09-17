@@ -67,7 +67,7 @@ function NavigationBar() {
             <label
               className={"text-gray no-margin fs-med"}
               style={{
-                width: "3.5rem",
+                width: "4rem",
                 fontWeight: "bold",
                 marginRight: "10px",
               }}
