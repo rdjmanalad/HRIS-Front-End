@@ -8,6 +8,7 @@ import {
   Row,
   Col,
   Image,
+  Button,
 } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
@@ -291,10 +292,13 @@ function EmpMasterFile({ empData }) {
                 </FormGroup>
               </FormGroup>
             </FormGroup>
-            <Card>
-              <Card.Body style={{ height: "30px" }}>END</Card.Body>
-            </Card>
+            {/* <Card>
+              <Card.Body style={{ height: "10px", marginTop: "2px" }}>
+                END
+              </Card.Body>
+            </Card> */}
             <FormGroup as={Row} className="mb-1"></FormGroup>
+            <Button>Save</Button>
           </Form>
         </Card.Body>
       </Card>

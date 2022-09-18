@@ -18,6 +18,10 @@ function App() {
   // const isNull = localStorage.getItem("jwt") == null ? true : false;
   // alert(isNull);
   // alert(localStorage.getItem("jwt").length);
+  if (window.sessionStorage.getItem("jwt") == null) {
+    localStorage.setItem("jwt", "");
+  }
+  // alert(window.sessionStorage.getItem("jwt"));
   let logged = false;
   if (localStorage.getItem("jwt") != null) {
     if (localStorage.getItem("jwt").length > 5) {

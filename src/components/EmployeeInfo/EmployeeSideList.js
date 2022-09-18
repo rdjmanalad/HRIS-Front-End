@@ -53,6 +53,7 @@ function EmployeeTopList({ childToParent }) {
       setRowEmp(row);
       return true;
     },
+    style: { width: "50px" },
   };
   const columns = [
     {

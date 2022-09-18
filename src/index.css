@@ -65,9 +65,9 @@ code {
 }
 
 input[type="radio"]:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
+  /* width: 12px;
+  height: 12px;
+  border-radius: 12px; */
   position: relative;
   background-color: #d1d3d1;
   content: "";
@@ -76,10 +76,10 @@ input[type="radio"]:after {
 }
 
 input[type="radio"]:checked:after {
-  width: 15px;
+  width: 14px;
   height: 15px;
-  border-radius: 15px;
-  position: relative;
+  border-radius: 14px;
+  /* position: relative; */
   background-color: cyan;
   content: "";
   display: inline-block;
