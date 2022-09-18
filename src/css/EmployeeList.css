@@ -79,3 +79,21 @@
 .empTableHeader th span {
   display: none;
 }
+
+/* span.react-bs-table-sizePerPage-dropdown #bsTable-pageDropDown {
+  visibility: hidden;
+  display: none;
+} */
+
+.react-bootstrap-table-pagination {
+  display: grid;
+  justify-content: center;
+}
+
+.floatTop {
+  position: relative;
+}
+
+.setHeightCard {
+  height: fit-content;
+}

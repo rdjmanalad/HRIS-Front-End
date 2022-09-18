@@ -7,7 +7,6 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import { Button } from "react-bootstrap";
-import { padding } from "@mui/system";
 
 function EmployeeTopList({ childToParent }) {
   const [employees, setData] = useState([]);
@@ -42,9 +41,11 @@ function EmployeeTopList({ childToParent }) {
       </span>
     );
   };
+
   function nameFilterFormatter(cell, row) {
     return row.firstName + row.lastName;
   }
+
   const selectRowProp = {
     mode: "radio",
     clickToSelect: true,
@@ -75,13 +76,13 @@ function EmployeeTopList({ childToParent }) {
         style: { padding: "1px" },
         placeholder: "Group...",
       }),
-      style: { width: "50px" },
+      style: { width: "75px" },
     },
   ];
 
   return (
     <Card
-      style={{ "max-width": "18rem", "min-width": "18rem", height: "auto" }}
+      style={{ "max-width": "25rem", "min-width": "25rem", height: "auto" }}
       className={" border-dark bg-dark text-white"}
     >
       <Card.Header style={{ color: "white" }}>
@@ -97,7 +98,21 @@ function EmployeeTopList({ childToParent }) {
           striped
           hover
           condensed
-          pagination={paginationFactory()}
+          pagination={paginationFactory({
+            paginationSize: 3,
+            hideSizePerPage: true,
+            withFirstAndLast: true,
+            sizePerPageList: [
+              {
+                text: "12",
+                value: 12,
+              },
+              {
+                text: "15",
+                value: 15,
+              },
+            ],
+          })}
           filter={filterFactory()}
           rowStyle={{ padding: "1px" }}
           rowClasses="empTableRow"

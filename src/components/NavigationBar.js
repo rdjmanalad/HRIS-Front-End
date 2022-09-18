@@ -20,7 +20,8 @@ function NavigationBar() {
   }
   return (
     <Navbar bg="dark" variant="dark" expand="md">
-      <Container>
+      {/* <Container id="navbarContainer"> */}
+      <div id="navbarContainer" className="container-xxl">
         <Link to={""} className="navbar-brand">
           <img className="tLogo" src={logo} alt="" />
         </Link>
@@ -102,7 +103,8 @@ function NavigationBar() {
             />
           </Nav>
         </Navbar.Collapse>
-      </Container>
+        {/* </Container> */}
+      </div>
     </Navbar>
   );
 }

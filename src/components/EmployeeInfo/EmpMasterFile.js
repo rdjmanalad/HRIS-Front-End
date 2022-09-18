@@ -28,7 +28,7 @@ function EmpMasterFile({ empData }) {
   return (
     <div>
       {/* {this.props.parentToChild} */}
-      <Card className={" border-dark bg-dark text-white"}>
+      <Card className={" border-dark bg-dark text-white floatTop"}>
         <Card.Body>
           <label className="asHeader" style={{ "padding-left": "5px" }}>
             Contact Information

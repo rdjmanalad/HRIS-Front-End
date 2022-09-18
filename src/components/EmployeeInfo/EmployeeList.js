@@ -73,11 +73,11 @@ class EmployeeList extends React.Component {
     //   alert("empData:" + empData.userId);
     // }
     return (
-      <div style={{ "padding-bottom": "50px" }}>
+      <div style={{ paddingBottom: "50px" }}>
         <div
           style={{
-            "margin-top": "15px",
-            "margin-bot": "20px",
+            marginTop: "15px",
+            marginBottom: "20px",
           }}
           className="cardVertAlign"
         >
@@ -85,7 +85,7 @@ class EmployeeList extends React.Component {
 
           {/* <EmployeeTopList></EmployeeTopList> */}
           <Card
-            className={" border-dark bg-dark text-white"}
+            className={" border-dark bg-dark text-white "}
             style={{ "margin-left": "10px", width: "85rem" }}
           >
             <Card.Header className="reducePadding">

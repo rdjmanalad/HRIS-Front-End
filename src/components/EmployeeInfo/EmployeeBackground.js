@@ -6,9 +6,9 @@ import EmpCompanyTable from "./EmpCompanyTable";
 class EmployeeBackground extends React.Component {
   render() {
     return (
-      <div>
+      <div className={"floatTop"}>
         <Card
-          className={" border-dark bg-dark text-white"}
+          className={" border-dark bg-dark text-white floatTop"}
           style={{ padding: "12px" }}
         >
           <label className="asHeader" style={{ "padding-left": "5px" }}>

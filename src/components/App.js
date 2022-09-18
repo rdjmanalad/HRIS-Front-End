@@ -19,15 +19,14 @@ function App() {
   // alert(isNull);
   // alert(localStorage.getItem("jwt").length);
   let logged = false;
-  if(localStorage.getItem("jwt")!=null){
-    if(localStorage.getItem("jwt").length>5){
-      logged= true;
-    }else{
-      logged=false;
+  if (localStorage.getItem("jwt") != null) {
+    if (localStorage.getItem("jwt").length > 5) {
+      logged = true;
+    } else {
+      logged = false;
     }
   }
   // let logged = localStorage.getItem("jwt").length > 5;
-  
 
   return (
     <div>
@@ -35,7 +34,7 @@ function App() {
         {logged ? (
           <div className="bodyClass">
             <NavigationBar />
-            <Container>
+            <div className="container-xxl">
               <Row>
                 <Col>
                   <Routes>
@@ -58,7 +57,7 @@ function App() {
                   </Routes>
                 </Col>
               </Row>
-            </Container>
+            </div>
             <Footer />
           </div>
         ) : (
