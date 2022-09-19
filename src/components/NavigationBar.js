@@ -58,7 +58,7 @@ function NavigationBar() {
             </NavDropdown>
 
             <Nav.Link
-              href={"save"}
+              href={"EmployeeDetails"}
               style={{ fontWeight: "bold", fontSize: "medium" }}
             >
               Reports

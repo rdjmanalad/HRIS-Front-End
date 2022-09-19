@@ -10,22 +10,28 @@ import {
   Image,
   Button,
 } from "react-bootstrap";
-import DatePicker from "react-datepicker";
 
 // class EmpMasterFile extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = { empData: this.props.empData, address: "" };
+//   }
+
+//   alertUser() {
+//     alert("You clicked!");
+//   }
 //   render() {
-function EmpMasterFile({ empData }) {
-  function dd() {
-    setDate(new Date(empData.dateHire).toLocaleDateString("en-CA"));
-  }
+function EmpMasterFile({ empData, refreshPage }) {
+  // const { empData, address } = this.state;
 
   let defaultDate = new Date();
   defaultDate.setDate(defaultDate.getDate() + 3);
-  const [date, setDate] = useState(defaultDate);
 
-  const onSetDate = (event) => {
-    setDate(new Date(event.target.value));
-  };
+  function saveDetails() {
+    alert(empData.firstName);
+    alert(empData.address);
+  }
+
   return (
     <div>
       {/* {this.props.parentToChild} */}
@@ -45,6 +51,9 @@ function EmpMasterFile({ empData }) {
                     <FormControl
                       value={empData.address}
                       className="inpHeightXs"
+                      onChange={(event) =>
+                        (empData.address = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -123,8 +132,10 @@ function EmpMasterFile({ empData }) {
                   <Col>
                     <FormControl
                       className={"inpHeightXs"}
-                      // value={empData.birthday}
-                      value={new Date(empData.birthday).toLocaleDateString()}
+                      type="date"
+                      value={new Date(empData.dateHire).toLocaleDateString(
+                        "en-CA"
+                      )}
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
@@ -154,9 +165,7 @@ function EmpMasterFile({ empData }) {
                   <Col>
                     <FormControl
                       className={"inpHeightXs"}
-                      // value={empData.spouse}
-
-                      value={new Date(empData.dateHire).toLocaleDateString()}
+                      value={empData.spouse}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -168,13 +177,12 @@ function EmpMasterFile({ empData }) {
                     <FormControl
                       className={"inpHeightXs"}
                       type="Date"
-                      //value={new Date(empData.birthday).toLocaleDateString()}
-                      // value={new Date("03/03/2007")}
                       defaultValue={new Date(
                         empData.dateHire
                       ).toLocaleDateString("en-CA")}
-                      //value={formatToSimpleDate(empData.dateHire)}
-                      //onChange={onSetDate}
+                      value={new Date(empData.dateHire).toLocaleDateString(
+                        "en-CA"
+                      )}
                     ></FormControl>
                   </Col>
                   <FormLabel
@@ -203,6 +211,9 @@ function EmpMasterFile({ empData }) {
                     <FormControl
                       className={"inpHeightXs"}
                       type="Date"
+                      value={new Date(empData.dateHire).toLocaleDateString(
+                        "en-CA"
+                      )}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -298,7 +309,7 @@ function EmpMasterFile({ empData }) {
               </Card.Body>
             </Card> */}
             <FormGroup as={Row} className="mb-1"></FormGroup>
-            <Button>Save</Button>
+            <Button onClick={() => saveDetails()}>Save</Button>
           </Form>
         </Card.Body>
       </Card>

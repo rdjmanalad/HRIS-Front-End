@@ -13,15 +13,13 @@ import ListUsers from "./ListUsers";
 import EmployeeList from "./EmployeeInfo/EmployeeList";
 import Login from "./Login";
 import EmployeeTopList from "./EmployeeInfo/EmployeeTopList";
+import EmployeeDetails from "./EmployeeInfo/EmployeeDetails";
 
 function App() {
-  // const isNull = localStorage.getItem("jwt") == null ? true : false;
-  // alert(isNull);
-  // alert(localStorage.getItem("jwt").length);
   if (window.sessionStorage.getItem("jwt") == null) {
     localStorage.setItem("jwt", "");
   }
-  // alert(window.sessionStorage.getItem("jwt"));
+
   let logged = false;
   if (localStorage.getItem("jwt") != null) {
     if (localStorage.getItem("jwt").length > 5) {
@@ -30,7 +28,6 @@ function App() {
       logged = false;
     }
   }
-  // let logged = localStorage.getItem("jwt").length > 5;
 
   return (
     <div>
@@ -46,7 +43,10 @@ function App() {
                     {/* <Route path="/login" element={<Login />} /> */}
                     <Route path="/" element={<Welcome />} />
                     <Route path="/aaa" element={<About />} />
-                    <Route path="/Reports" element={<Maintenance />} />
+                    <Route
+                      path="/EmployeeDetails"
+                      element={<EmployeeDetails />}
+                    />
                     <Route path="/AddUser" element={<AddUser />} />
                     <Route
                       path="/UserMaintenance"

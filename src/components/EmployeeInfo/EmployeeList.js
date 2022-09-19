@@ -6,6 +6,7 @@ import EmployeeSideList from "./EmployeeSideList";
 import EmpMasterFile from "./EmpMasterFile";
 import PayrollInfo from "./PayrollInfo";
 import InfractionInfo from "./InfractionInfo";
+// import { useReducer } from "react";
 
 class EmployeeList extends React.Component {
   constructor() {
@@ -18,12 +19,14 @@ class EmployeeList extends React.Component {
       employee: [],
     };
     this.hideComponent = this.hideComponent.bind(this);
+    this.child = React.createRef();
   }
 
   hideComponent(name) {
     console.log(name);
     switch (name) {
       case "showTab1":
+        // alert("here tab1");
         this.setState({ showTab1: true });
         this.setState({ showTab2: false });
         this.setState({ showTab3: false });
@@ -58,20 +61,16 @@ class EmployeeList extends React.Component {
     const { showTab1, showTab2, showTab3, showTab4 } = this.state;
     const { employee } = this.state;
     var empp = [];
-    // var empData = [];
 
     const childToParent = (childdata) => {
       this.setState({ employee: childdata });
       empp = childdata;
       // parentToChild();
-      //alert(childdata.userId);
-      // alert(empp.userId);
     };
 
-    // function parentToChild() {
-    //   empData = empp;
-    //   alert("empData:" + empData.userId);
-    // }
+    function refreshPage() {
+      this.setState({ employee: [] });
+    }
     return (
       <div style={{ paddingBottom: "50px" }}>
         <div
@@ -81,7 +80,10 @@ class EmployeeList extends React.Component {
           }}
           className="cardVertAlign"
         >
-          <EmployeeSideList childToParent={childToParent} />
+          <EmployeeSideList
+            childToParent={childToParent}
+            refreshPage={refreshPage}
+          />
 
           {/* <EmployeeTopList></EmployeeTopList> */}
           <Card
@@ -122,6 +124,9 @@ class EmployeeList extends React.Component {
                     value={employee.employeeNo}
                     type="text"
                     className="inpHeightXs"
+                    disabled
+                    placeholder="Auto Generated"
+                    // onChange={(event) => setPassword(event.target.value)}
                   ></Form.Control>
                 </FormGroup>
                 <FormGroup as={Col} className="mb-1">
@@ -130,6 +135,9 @@ class EmployeeList extends React.Component {
                     value={employee.firstName}
                     type="text"
                     className="inpHeightXs"
+                    onChange={(event) =>
+                      (employee.firstName = event.target.value)
+                    }
                   ></Form.Control>
                 </FormGroup>
                 <FormGroup as={Col} className="mb-1">
@@ -138,6 +146,9 @@ class EmployeeList extends React.Component {
                     value={employee.middleName}
                     type="text"
                     className="inpHeightXs"
+                    onChange={(event) =>
+                      (employee.middleName = event.target.value)
+                    }
                   ></Form.Control>
                 </FormGroup>
                 <FormGroup as={Col} className="mb-1">
@@ -146,13 +157,19 @@ class EmployeeList extends React.Component {
                     value={employee.lastName}
                     type="text"
                     className="inpHeightXs"
+                    onChange={(event) =>
+                      (employee.lastName = event.target.value)
+                    }
                   ></Form.Control>
                 </FormGroup>
               </Form>
             </Card.Body>
             {showTab1 && (
               // <EmpMasterFile></EmpMasterFile>
-              <EmpMasterFile empData={employee}></EmpMasterFile>
+              <EmpMasterFile
+                empData={employee}
+                ref={this.child}
+              ></EmpMasterFile>
             )}
             {showTab2 && <EmployeeBackground></EmployeeBackground>}
             {showTab3 && <PayrollInfo empData={employee}></PayrollInfo>}

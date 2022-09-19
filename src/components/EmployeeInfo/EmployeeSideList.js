@@ -7,8 +7,9 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import { Button } from "react-bootstrap";
+import { textAlign } from "@mui/system";
 
-function EmployeeTopList({ childToParent }) {
+function EmployeeTopList({ childToParent, refreshPage }) {
   const [employees, setData] = useState([]);
   const [selectedId, setId] = useState("");
   const [employee, setRowEmp] = useState([]);
@@ -16,10 +17,18 @@ function EmployeeTopList({ childToParent }) {
   function displayOnTab() {
     // alert(employee.userId);
     childToParent(employee);
+    // refreshPage();
   }
 
   function deleteEmployee() {
     alert(selectedId);
+  }
+
+  function newEmp() {
+    window.location.reload(false);
+    refreshPage();
+    // employee = [];
+    // childToParent(employee);
   }
 
   useEffect(() => {
@@ -53,7 +62,6 @@ function EmployeeTopList({ childToParent }) {
       setRowEmp(row);
       return true;
     },
-    style: { width: "50px" },
   };
   const columns = [
     {
@@ -70,14 +78,14 @@ function EmployeeTopList({ childToParent }) {
     },
     {
       // dataField: "currentGroup",
-      dataField: "acompanyCode",
+      dataField: "ogroupCode",
       text: "Filter",
       sort: true,
       filter: textFilter({
         style: { padding: "1px" },
         placeholder: "Group...",
       }),
-      style: { width: "75px" },
+      style: { width: "75px", textAlign: "center" },
     },
   ];
 
@@ -121,7 +129,7 @@ function EmployeeTopList({ childToParent }) {
           selectRow={selectRowProp}
         ></BootstrapTable>
         <div className={"allCenter"}>
-          <Button variant="success" size="sm">
+          <Button variant="success" size="sm" onClick={() => newEmp()}>
             New
           </Button>
           <Button
