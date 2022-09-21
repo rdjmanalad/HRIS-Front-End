@@ -10,6 +10,7 @@ import {
   Image,
   Button,
 } from "react-bootstrap";
+import axios from "axios";
 
 // class EmpMasterFile extends React.Component {
 //   constructor(props) {
@@ -23,32 +24,48 @@ import {
 //   render() {
 function EmpMasterFile({ empData, refreshPage }) {
   // const { empData, address } = this.state;
-
-  let defaultDate = new Date();
-  defaultDate.setDate(defaultDate.getDate() + 3);
+  const [MasEmployee, setEmp] = useState([]);
+  const [empNo, setEmpNo] = useState(false);
 
   function saveDetails() {
-    const reqBody = empData;
+    setEmp(empData);
+    // setEmpNo(empData.employeeNo);
     alert(empData.firstName);
-    alert(empData.address);
 
-    fetch("http://localhost:8080/api/employee/save", {
-      // fetch("api/login", {
-      headers: {
-        "Content-Type": "application-json",
-      },
-      method: "post",
-      body: JSON.stringify(reqBody),
-    })
-      .then((response) => {
-        // alert(response.status);
-        if (response.status === 200)
-          return Promise.all([
-            response.json(),
-            response.data,
-          ]);
-        else return Promise.reject("Error Saving");
+    // if (!empNo) {
+    axios
+      .post("http://localhost:8080/api/masemployeeSave", MasEmployee, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
       })
+      .then((response) => {
+        alert(response.status);
+        // setData(response.data);
+        // console.log(response.data);
+      });
+    // } else {
+    //   axios.defaults.headers.common["Authorization"] =
+    //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    //   axios
+    //     .put("http://localhost:8080/api/masemployeeSave/" + empNo, {
+    //       headers: {
+    //         Accept: "application/json",
+    //         "Content-Type": "application-json",
+    //       },
+    //       // body: JSON.stringify(empData),
+    //       body: { MasEmployee },
+    //     })
+    //     .then((response) => {
+    //       alert(response.status);
+    //       // setData(response.data);
+    //       // console.log(response.data);
+    //     });
+    // }
   }
 
   return (
@@ -68,7 +85,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
-                      value={empData.address}
+                      defaultValue={empData.address}
                       className="inpHeightXs"
                       onChange={(event) =>
                         (empData.address = event.target.value)
@@ -83,7 +100,10 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col>
                     <FormControl
                       className="inpHeightXs"
-                      value={empData.paddress}
+                      defaultValue={empData.paddress}
+                      onChange={(event) =>
+                        (empData.paddress = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -94,7 +114,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col>
                     <FormControl
                       className={"inpHeightXs"}
-                      value={empData.phone}
+                      defaultValue={empData.phone}
+                      onChange={(event) => (empData.phone = event.target.value)}
                     ></FormControl>
                   </Col>
                   <Col></Col>
@@ -110,7 +131,10 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col>
                     <FormControl
                       className={"inpHeightXs"}
-                      value={empData.cperson}
+                      defaultValue={empData.cperson}
+                      onChange={(event) =>
+                        (empData.cperson = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
@@ -127,7 +151,10 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col>
                     <FormControl
                       className={"inpHeightXs"}
-                      value={empData.caddress}
+                      defaultValue={empData.caddress}
+                      onChange={(event) =>
+                        (empData.caddress = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -142,7 +169,10 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col column sm="2">
                     <FormControl
                       className={"inpHeightXs"}
-                      value={empData.gender}
+                      defaultValue={empData.gender}
+                      onChange={(event) =>
+                        (empData.gender = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
@@ -152,9 +182,16 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       className={"inpHeightXs"}
                       type="date"
-                      value={new Date(empData.dateHire).toLocaleDateString(
+                      value={new Date(empData.birthday).toLocaleDateString(
                         "en-CA"
                       )}
+                      // value={new Date(empData.birthday).toLocaleDateString(
+                      //   "en-CA"
+                      // )}
+                      // onChange={onSetDate}
+                      onChange={(event) =>
+                        (empData.gender = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">

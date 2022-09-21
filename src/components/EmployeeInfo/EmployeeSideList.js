@@ -22,6 +22,18 @@ function EmployeeTopList({ childToParent, refreshPage }) {
 
   function deleteEmployee() {
     alert(selectedId);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .delete("http://localhost:8080/api/masemployeeDel/" + selectedId, {
+        header: { employeeNo: selectedId },
+      })
+      .then((response) => {
+        alert(response.status);
+        // setData(response.data);
+        // console.log(response.data);
+      });
   }
 
   function newEmp() {
@@ -60,6 +72,7 @@ function EmployeeTopList({ childToParent, refreshPage }) {
     clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       setRowEmp(row);
+      setId(row.employeeNo);
       return true;
     },
   };

@@ -60,6 +60,7 @@ class EmployeeList extends React.Component {
   render() {
     const { showTab1, showTab2, showTab3, showTab4 } = this.state;
     const { employee } = this.state;
+
     var empp = [];
 
     const childToParent = (childdata) => {
@@ -71,6 +72,7 @@ class EmployeeList extends React.Component {
     function refreshPage() {
       this.setState({ employee: [] });
     }
+
     return (
       <div style={{ paddingBottom: "50px" }}>
         <div
@@ -132,7 +134,7 @@ class EmployeeList extends React.Component {
                 <FormGroup as={Col} className="mb-1">
                   <Form.Label className="noWrapText">First Name</Form.Label>
                   <Form.Control
-                    value={employee.firstName}
+                    defaultValue={employee.firstName}
                     type="text"
                     className="inpHeightXs"
                     onChange={(event) =>
@@ -143,7 +145,7 @@ class EmployeeList extends React.Component {
                 <FormGroup as={Col} className="mb-1">
                   <Form.Label className="noWrapText">Middle Name</Form.Label>
                   <Form.Control
-                    value={employee.middleName}
+                    defaultValue={employee.middleName}
                     type="text"
                     className="inpHeightXs"
                     onChange={(event) =>
@@ -154,7 +156,7 @@ class EmployeeList extends React.Component {
                 <FormGroup as={Col} className="mb-1">
                   <Form.Label className="noWrapText">Last Name</Form.Label>
                   <Form.Control
-                    value={employee.lastName}
+                    defaultValue={employee.lastName}
                     type="text"
                     className="inpHeightXs"
                     onChange={(event) =>
