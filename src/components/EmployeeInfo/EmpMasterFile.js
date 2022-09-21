@@ -28,8 +28,27 @@ function EmpMasterFile({ empData, refreshPage }) {
   defaultDate.setDate(defaultDate.getDate() + 3);
 
   function saveDetails() {
+    const reqBody = empData;
     alert(empData.firstName);
     alert(empData.address);
+
+    fetch("http://localhost:8080/api/employee/save", {
+      // fetch("api/login", {
+      headers: {
+        "Content-Type": "application-json",
+      },
+      method: "post",
+      body: JSON.stringify(reqBody),
+    })
+      .then((response) => {
+        // alert(response.status);
+        if (response.status === 200)
+          return Promise.all([
+            response.json(),
+            response.data,
+          ]);
+        else return Promise.reject("Error Saving");
+      })
   }
 
   return (
