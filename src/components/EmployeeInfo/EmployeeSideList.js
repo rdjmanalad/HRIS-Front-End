@@ -37,15 +37,50 @@ function EmployeeTopList({ childToParent, refreshPage }) {
   }
 
   function newEmp() {
-    window.location.reload(false);
+    //window.location.reload(false);
+    // setRowEmp([]);
+    
+		employee.abranchCode= null; employee.acompanyCode= null; employee.address= null; employee.age= null;
+    employee.agroupCode = null; employee.alowance1= null;employee.allowance2= null;employee.atmno= null;
+    employee.basicPay=null;employee.birthday=null;
+    employee.board=null; 
+    employee.caddress= null; 
+    employee.civil= null; 
+    employee.cola= null;
+    employee.cperson= null;
+    employee.datehire= null;
+    employee.employeeNo= "";
+    employee.exemption= null;
+    employee.firstName=null;
+    employee.gender= null;
+    employee.lastName= null;
+    employee.leave= false;
+    employee.middleName = null;
+    employee.obranchCode= null;
+    employee.ocompanyCode= null;
+    employee.ogroupCode=null;employee.paddress=null;
+		employee.pagibigNo= null;
+    employee.philhealthNo= null;employee.phone= null;employee.presentLeave= null;
+    employee.previousLeave= null;employee.rank= null;
+    employee.remarks= null;employee.resigned= null;employee.schedIn= null;employee.schedOut= null;employee.spouse= null;
+		employee.sssno= null;
+    employee.taxCode= null;employee.tinno= null;employee.transportation= null;employee.unionName= null;employee.waverage=null;
+    employee.workPosition= null;
+    employee.workStatus= null;
+
+
+    
+    childToParent(employee);
     refreshPage();
+    getData();
     // employee = [];
+
     // childToParent(employee);
   }
-
   useEffect(() => {
     getData();
   }, []);
+
   const getData = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
@@ -63,9 +98,20 @@ function EmployeeTopList({ childToParent, refreshPage }) {
     );
   };
 
+  useEffect(() => {
+    displayOnTab(employee);
+  }, [employee]);
+
   function nameFilterFormatter(cell, row) {
     return row.firstName + row.lastName;
   }
+
+  // const rowEvents = {
+  //   onClick: (e, row, rowIndex) => {
+  //     displayOnTab(row);
+  //     displayOnTab(row);
+  //   }
+  // };
 
   const selectRowProp = {
     mode: "radio",
@@ -127,11 +173,11 @@ function EmployeeTopList({ childToParent, refreshPage }) {
             sizePerPageList: [
               {
                 text: "12",
-                value: 12,
+                value: 15,
               },
               {
                 text: "15",
-                value: 15,
+                value: 20,
               },
             ],
           })}
@@ -140,8 +186,9 @@ function EmployeeTopList({ childToParent, refreshPage }) {
           rowClasses="empTableRow"
           headerClasses="empTableHeader"
           selectRow={selectRowProp}
+          // rowEvents={ rowEvents }
         ></BootstrapTable>
-        <div className={"allCenter"}>
+        {/* <div className={"allCenter"}>
           <Button variant="success" size="sm" onClick={() => newEmp()}>
             New
           </Button>
@@ -156,7 +203,7 @@ function EmployeeTopList({ childToParent, refreshPage }) {
           <Button variant="warning" size="sm" onClick={() => displayOnTab()}>
             Edit
           </Button>
-        </div>
+        </div> */}
       </Container>
     </Card>
   );

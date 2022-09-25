@@ -17,6 +17,7 @@ class EmployeeList extends React.Component {
       showTab3: false,
       showTab4: false,
       employee: [],
+      mountEmp: [],
     };
     this.hideComponent = this.hideComponent.bind(this);
     this.child = React.createRef();
@@ -60,25 +61,31 @@ class EmployeeList extends React.Component {
   render() {
     const { showTab1, showTab2, showTab3, showTab4 } = this.state;
     const { employee } = this.state;
+    const { mountEmp } = this.state;
 
     var empp = [];
 
     const childToParent = (childdata) => {
-      this.setState({ employee: childdata });
       empp = childdata;
+      this.setState({ employee: childdata });
+      this.setState({mountEmp: empp});
       // parentToChild();
     };
 
     function refreshPage() {
+      showTab1 = false;
       this.setState({ employee: [] });
     }
+    // componentDidMount() {
+      
+    // }
 
     return (
       <div style={{ paddingBottom: "50px" }}>
         <div
           style={{
             marginTop: "15px",
-            marginBottom: "20px",
+            marginBottom: "10px",
           }}
           className="cardVertAlign"
         >
@@ -123,11 +130,14 @@ class EmployeeList extends React.Component {
                     Employee Number
                   </Form.Label>
                   <Form.Control
-                    value={employee.employeeNo}
+                    defaultValue={employee.employeeNo}
                     type="text"
                     className="inpHeightXs"
-                    disabled
-                    placeholder="Auto Generated"
+                    // disabled
+                    onChange={(event) =>
+                      (employee.employeeNo = event.target.value)
+                    }
+                    // placeholder="Auto Generated"
                     // onChange={(event) => setPassword(event.target.value)}
                   ></Form.Control>
                 </FormGroup>
@@ -169,7 +179,7 @@ class EmployeeList extends React.Component {
             {showTab1 && (
               // <EmpMasterFile></EmpMasterFile>
               <EmpMasterFile
-                empData={employee}
+                empData={mountEmp}
                 ref={this.child}
               ></EmpMasterFile>
             )}

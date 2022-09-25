@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Card,
   FormControl,
@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 
+
 // class EmpMasterFile extends React.Component {
 //   constructor(props) {
 //     super(props);
@@ -24,17 +25,52 @@ import axios from "axios";
 //   render() {
 function EmpMasterFile({ empData, refreshPage }) {
   // const { empData, address } = this.state;
-  const [MasEmployee, setEmp] = useState([]);
+  const [masEmployee, setEmp] = useState([]);
   const [empNo, setEmpNo] = useState(false);
+  const [address, setAddress] = useState("");
+
+  const addressRef = useRef();
+  const paddressRef = useRef();
+  const phoneRef = useRef();
+  const cpersonRef = useRef();
+  const caddressRef = useRef();
+  const genderRef = useRef();
+  const birthdayRef =  useRef();
+  const ageRef = useRef();
+  const civilRef = useRef();
+  const spouseRef = useRef();
+  const hireDateRef = useRef();
+  const workStatusRef = useRef();
+  const dateRegularRef = useRef();
+  const leaveRef =useRef();
+  const atmnoRef = useRef();
+  const sssnoRef = useRef();
+  const tinnoRef = useRef();
+  const pagibigNoRef = useRef();
+  const philhealthNoRef = useRef();
+
+
+
+  useEffect(() => {
+    // alert("useEffect here");
+    setAddress(empData.address);
+  
+    setEmp(empData);
+  });
+
+  function refreshPage(){
+    alert("refresh");
+  }
 
   function saveDetails() {
-    setEmp(empData);
-    // setEmpNo(empData.employeeNo);
+    setEmpNo(empData.employeeNo);
     alert(empData.firstName);
+    
 
     // if (!empNo) {
+      alert("empnoxxx :"+empNo)
     axios
-      .post("http://localhost:8080/api/masemployeeSave", MasEmployee, {
+      .post("http://localhost:8080/api/masemployeeSave", masEmployee, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -48,47 +84,140 @@ function EmpMasterFile({ empData, refreshPage }) {
         // setData(response.data);
         // console.log(response.data);
       });
-    // } else {
-    //   axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-    //   axios
-    //     .put("http://localhost:8080/api/masemployeeSave/" + empNo, {
-    //       headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "application-json",
-    //       },
-    //       // body: JSON.stringify(empData),
-    //       body: { MasEmployee },
-    //     })
-    //     .then((response) => {
-    //       alert(response.status);
-    //       // setData(response.data);
-    //       // console.log(response.data);
-    //     });
-    // }
+  //   } else {
+  //     alert("empno :"+empNo)
+  //     axios
+  //     .put("http://localhost:8080/api/masemployeeSave"+ empNo, MasEmployee, {
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         Authorization:
+  //           "Bearer " +
+  //           localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+  //       },
+  //     })
+  //     .then((response) => {
+  //       alert(response.status);
+  //       // setData(response.data);
+  //       // console.log(response.data);
+  //     });
+  // }
+  }
+  function newDetails(){
+    // window.location.reload(false);
+    clearDetails();
+    setEmp(empData);
+
   }
 
+  function editDetails(){
+
+  }
+
+  function deleteDetails(){
+
+  }
+  useEffect(() => {
+    // alert(masEmployee.length);
+    if(masEmployee.length!==0){
+      addressRef.current.value=masEmployee.address;
+      paddressRef.current.value=masEmployee.paddress;
+      phoneRef.current.value=masEmployee.phone;
+      cpersonRef.current.value=masEmployee.cperson;
+      caddressRef.current.value=masEmployee.caddress;
+      genderRef.current.value=masEmployee.gender;
+      birthdayRef.current.value=new Date(masEmployee.birthday).toLocaleDateString("en-CA");
+      ageRef.current.value=masEmployee.age;
+      civilRef.current.value=masEmployee.civil;
+      spouseRef.current.value=masEmployee.spouse;
+      hireDateRef.current.value=new Date(masEmployee.dateHire).toLocaleDateString("en-CA");
+      workStatusRef.current.value=masEmployee.workStatus
+      dateRegularRef.current.value=new Date(masEmployee.dateRegular).toLocaleDateString("en-CA");
+      leaveRef.current.value=masEmployee.leave;
+      atmnoRef.current.value=masEmployee.atmno;
+      sssnoRef.current.value=masEmployee.sssno;
+      tinnoRef.current.value=masEmployee.tinno;
+      pagibigNoRef.current.value=masEmployee.pagibigNo;
+      philhealthNoRef.current.value=masEmployee.philhealthNo;
+    }
+    // addressRef.current.dafaultValue=masEmployee.address;
+  }, [masEmployee]);
+
+  function clearDetails(){
+    addressRef.current.value = "";
+
+    empData.abranchCode= null; 
+    empData.acompanyCode= null; 
+    empData.address= null; 
+    empData.age= null;
+    empData.agroupCode = null; 
+    empData.alowance1= null;
+    empData.allowance2= null;
+    empData.atmno= null;
+    empData.basicPay=null;
+    empData.birthday=null;
+    empData.board=null; 
+    empData.caddress= null; 
+    empData.civil= null; 
+    empData.cola= null;
+    empData.cperson= null;
+    empData.datehire= null;
+    empData.employeeNo= "";
+    empData.exemption= null;
+    empData.firstName=null;
+    empData.gender= null;
+    empData.lastName= null;
+    empData.leave= false;
+    empData.middleName = null;
+    empData.obranchCode= null;
+    empData.ocompanyCode= null;
+    empData.ogroupCode=null;
+    empData.paddress=null;
+		empData.pagibigNo= null;
+    empData.philhealthNo= null;
+    empData.phone= null;
+    empData.presentLeave= null;
+    empData.previousLeave= null;
+    empData.rank= null;
+    empData.remarks= null;
+    empData.resigned= null;
+    empData.schedIn= null;
+    empData.schedOut= null;
+    empData.spouse= null;
+		empData.sssno= null;
+    empData.taxCode= null;
+    empData.tinno= null;
+    empData.transportation= null;
+    empData.unionName= null;
+    empData.waverage=null;
+    empData.workPosition= null;
+    empData.workStatus= null;
+  };
+
+  
   return (
     <div>
       {/* {this.props.parentToChild} */}
       <Card className={" border-dark bg-dark text-white floatTop"}>
         <Card.Body>
-          <label className="asHeader" style={{ "padding-left": "5px" }}>
+          <label className="asHeader" style={{ paddingLeft: "5px" }}>
             Contact Information
           </label>
           <Form as={Row}>
-            <FormGroup as={Row} style={{ "padding-right": "0px" }}>
+            <FormGroup as={Row} style={{ paddingRight: "0px" }}>
               <FormGroup as={Col} xs="9">
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="2" className="noWrapText" >
                     Home Address
                   </FormLabel>
                   <Col>
                     <FormControl
-                      defaultValue={empData.address}
+                      // defaultValue={empData.address}
+                      ref={addressRef}
+                      // defaultValue={address}
                       className="inpHeightXs"
                       onChange={(event) =>
-                        (empData.address = event.target.value)
+                        (address = event.target.value)
                       }
                     ></FormControl>
                   </Col>
@@ -99,8 +228,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={paddressRef}
                       className="inpHeightXs"
-                      defaultValue={empData.paddress}
+                      // defaultValue={masEmployee.paddress}
                       onChange={(event) =>
                         (empData.paddress = event.target.value)
                       }
@@ -113,8 +243,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={phoneRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.phone}
+                      // defaultValue={empData.phone}
                       onChange={(event) => (empData.phone = event.target.value)}
                     ></FormControl>
                   </Col>
@@ -130,8 +261,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={cpersonRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.cperson}
+                      // defaultValue={empData.cperson}
                       onChange={(event) =>
                         (empData.cperson = event.target.value)
                       }
@@ -150,8 +282,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={caddressRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.caddress}
+                      // defaultValue={empData.caddress}
                       onChange={(event) =>
                         (empData.caddress = event.target.value)
                       }
@@ -168,8 +301,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col column sm="2">
                     <FormControl
+                      ref={genderRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.gender}
+                      // defaultValue={empData.gender}
                       onChange={(event) =>
                         (empData.gender = event.target.value)
                       }
@@ -180,17 +314,14 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={birthdayRef}
                       className={"inpHeightXs"}
                       type="date"
-                      value={new Date(empData.birthday).toLocaleDateString(
-                        "en-CA"
-                      )}
                       // value={new Date(empData.birthday).toLocaleDateString(
                       //   "en-CA"
                       // )}
-                      // onChange={onSetDate}
                       onChange={(event) =>
-                        (empData.gender = event.target.value)
+                        (empData.birthday = new Date(event.target.value).toLocaleDateString("en-CA"))
                       }
                     ></FormControl>
                   </Col>
@@ -199,8 +330,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={ageRef}
                       className={"inpHeightXs"}
-                      value={empData.age}
+                      // deFaultValue={empData.age}
+                      onChange={(event) =>
+                        (empData.age = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -211,8 +346,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col column sm="2">
                     <FormControl
+                      ref={civilRef}
                       className={"inpHeightXs"}
-                      value={empData.civil}
+                      // defaultValue={empData.civil}
+                      onChange={(event) =>
+                        (empData.civil = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
@@ -220,8 +359,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={spouseRef}
                       className={"inpHeightXs"}
-                      value={empData.spouse}
+                      // defaultValue={empData.spouse}
+                      onChange={(event) =>
+                        (empData.spouse = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -231,14 +374,16 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={hireDateRef}
                       className={"inpHeightXs"}
                       type="Date"
-                      defaultValue={new Date(
-                        empData.dateHire
-                      ).toLocaleDateString("en-CA")}
-                      value={new Date(empData.dateHire).toLocaleDateString(
-                        "en-CA"
-                      )}
+                      // defaultValue={new Date(
+                      //   empData.dateHire
+                      // ).toLocaleDateString("en-CA")}
+                      // value={new Date(empData.dateHire).toLocaleDateString(
+                      //   "en-CA"
+                      // )}
+                      // onClick={() => clearDate()}
                     ></FormControl>
                   </Col>
                   <FormLabel
@@ -251,8 +396,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={workStatusRef}
                       className={"inpHeightXs"}
-                      value={empData.workStatus}
+                      // defaultValue={empData.workStatus}
+                      onChange={(event) =>
+                        (empData.workStatus = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                   <FormLabel
@@ -265,11 +414,15 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={dateRegularRef}
                       className={"inpHeightXs"}
                       type="Date"
-                      value={new Date(empData.dateHire).toLocaleDateString(
-                        "en-CA"
-                      )}
+                      // defaultValue={new Date(empData.dateRegular).toLocaleDateString(
+                      //   "en-CA"
+                      // )}
+                      onChange={(event) =>
+                        (empData.dateRegular = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -280,8 +433,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <Form.Check
+                      ref={leaveRef}
                       style={{ "padding-top": "5px" }}
-                      value={empData.leave}
+                      // defaultValue={empData.leave}
+                      onChange={(event) =>
+                        (empData.leave = event.target.value)
+                      }
                     ></Form.Check>
                   </Col>
                 </FormGroup>
@@ -308,8 +465,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={atmnoRef}
                       className={"inpHeightXs"}
-                      value={empData.atmno}
+                      defaultValue={empData.atmno}
+                      onChange={(event) =>
+                        (empData.atmno = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -319,8 +480,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={sssnoRef}
                       className={"inpHeightXs"}
-                      value={empData.sssno}
+                      defaultValue={empData.sssno}
+                      onChange={(event) =>
+                        (empData.sssno = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -330,8 +495,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={tinnoRef}
                       className={"inpHeightXs"}
-                      value={empData.tinno}
+                      defaultValue={empData.tinno}
+                      onChange={(event) =>
+                        (empData.tinno = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -341,8 +510,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={pagibigNoRef}
                       className={"inpHeightXs"}
-                      value={empData.pagibigNo}
+                      dafaultValue={empData.pagibigNo}
+                      onChange={(event) =>
+                        (empData.pagibigNo = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -352,8 +525,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </FormLabel>
                   <Col>
                     <FormControl
+                      ref={philhealthNoRef}
                       className={"inpHeightXs"}
-                      value={empData.philhealthNo}
+                      defaultValue={empData.philhealthNo}
+                      onChange={(event) =>
+                        (empData.philhealthNo = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -364,8 +541,17 @@ function EmpMasterFile({ empData, refreshPage }) {
                 END
               </Card.Body>
             </Card> */}
-            <FormGroup as={Row} className="mb-1"></FormGroup>
-            <Button onClick={() => saveDetails()}>Save</Button>
+            <FormGroup as={Row} className="mb-1" style={{marginTop:"8px"}}>
+              <Col sm="6">
+            <Button className="setButtonMargin" variant="success" onClick={() => newDetails()}>New</Button>
+            <Button className="setButtonMargin" variant="warning" onClick={() => editDetails()}>Edit</Button>
+            <Button className="setButtonMargin" variant="danger" onClick={() => deleteDetails()}>Remove</Button>
+            </Col>
+            <Col sm="2"></Col>
+            <Col>
+            <Button className="setButtonMargin2" onClick={() => saveDetails()}>Save</Button>
+            </Col>
+            </FormGroup>
           </Form>
         </Card.Body>
       </Card>
