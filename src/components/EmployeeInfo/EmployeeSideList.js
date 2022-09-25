@@ -6,8 +6,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
-import { Button } from "react-bootstrap";
-import { textAlign } from "@mui/system";
 
 function EmployeeTopList({ childToParent, refreshPage }) {
   const [employees, setData] = useState([]);
@@ -39,37 +37,54 @@ function EmployeeTopList({ childToParent, refreshPage }) {
   function newEmp() {
     //window.location.reload(false);
     // setRowEmp([]);
-    
-		employee.abranchCode= null; employee.acompanyCode= null; employee.address= null; employee.age= null;
-    employee.agroupCode = null; employee.alowance1= null;employee.allowance2= null;employee.atmno= null;
-    employee.basicPay=null;employee.birthday=null;
-    employee.board=null; 
-    employee.caddress= null; 
-    employee.civil= null; 
-    employee.cola= null;
-    employee.cperson= null;
-    employee.datehire= null;
-    employee.employeeNo= "";
-    employee.exemption= null;
-    employee.firstName=null;
-    employee.gender= null;
-    employee.lastName= null;
-    employee.leave= false;
+
+    employee.abranchCode = null;
+    employee.acompanyCode = null;
+    employee.address = null;
+    employee.age = null;
+    employee.agroupCode = null;
+    employee.alowance1 = null;
+    employee.allowance2 = null;
+    employee.atmno = null;
+    employee.basicPay = null;
+    employee.birthday = null;
+    employee.board = null;
+    employee.caddress = null;
+    employee.civil = null;
+    employee.cola = null;
+    employee.cperson = null;
+    employee.datehire = null;
+    employee.employeeNo = "";
+    employee.exemption = null;
+    employee.firstName = null;
+    employee.gender = null;
+    employee.lastName = null;
+    employee.leave = false;
     employee.middleName = null;
-    employee.obranchCode= null;
-    employee.ocompanyCode= null;
-    employee.ogroupCode=null;employee.paddress=null;
-		employee.pagibigNo= null;
-    employee.philhealthNo= null;employee.phone= null;employee.presentLeave= null;
-    employee.previousLeave= null;employee.rank= null;
-    employee.remarks= null;employee.resigned= null;employee.schedIn= null;employee.schedOut= null;employee.spouse= null;
-		employee.sssno= null;
-    employee.taxCode= null;employee.tinno= null;employee.transportation= null;employee.unionName= null;employee.waverage=null;
-    employee.workPosition= null;
-    employee.workStatus= null;
+    employee.obranchCode = null;
+    employee.ocompanyCode = null;
+    employee.ogroupCode = null;
+    employee.paddress = null;
+    employee.pagibigNo = null;
+    employee.philhealthNo = null;
+    employee.phone = null;
+    employee.presentLeave = null;
+    employee.previousLeave = null;
+    employee.rank = null;
+    employee.remarks = null;
+    employee.resigned = null;
+    employee.schedIn = null;
+    employee.schedOut = null;
+    employee.spouse = null;
+    employee.sssno = null;
+    employee.taxCode = null;
+    employee.tinno = null;
+    employee.transportation = null;
+    employee.unionName = null;
+    employee.waverage = null;
+    employee.workPosition = null;
+    employee.workStatus = null;
 
-
-    
     childToParent(employee);
     refreshPage();
     getData();

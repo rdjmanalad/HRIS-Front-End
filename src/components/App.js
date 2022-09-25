@@ -14,6 +14,7 @@ import EmployeeList from "./EmployeeInfo/EmployeeList";
 import Login from "./Login";
 import EmployeeTopList from "./EmployeeInfo/EmployeeTopList";
 import EmployeeDetails from "./EmployeeInfo/EmployeeDetails";
+import { CompanyMasterFile } from "./CompanyMasterFile/CompanyMasterFile";
 
 function App() {
   if (window.sessionStorage.getItem("jwt") == null) {
@@ -55,6 +56,11 @@ function App() {
                     <Route
                       path="/EmployeeTopList"
                       element={<EmployeeTopList />}
+                    />
+
+                    <Route
+                      path="/CompanyMasterFile"
+                      element={<CompanyMasterFile />}
                     />
                     <Route path="/ListUsers" element={<ListUsers />} />
                     <Route path="/EmployeeList" element={<EmployeeList />} />

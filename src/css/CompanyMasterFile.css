@@ -1,0 +1,15 @@
+.nav-tabs .nav-link {
+  color: white;
+  height: 25px;
+  padding: 0px;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: red;
+  color: white;
+  border-color: red;
+}
+
+.mb-3 {
+  border-color: red;
+}

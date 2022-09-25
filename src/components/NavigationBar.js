@@ -37,7 +37,15 @@ function NavigationBar() {
               <NavDropdown.Item href="EmployeeList">
                 Emloyee List
               </NavDropdown.Item>
-              <NavDropdown.Item href="ListUsers">GBC List</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="CompanyMasterFile">
+                Company Master File
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>Change Payroll Period</NavDropdown.Item>
+              <NavDropdown.Item>Filter Actual Group</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>User Accounts</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown
               className="fs-med"
