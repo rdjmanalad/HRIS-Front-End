@@ -8,7 +8,6 @@ import {
   Card,
   FormControl,
   FormLabel,
-  Form,
   FormGroup,
   Row,
   Col,
@@ -362,7 +361,7 @@ export const CompanyList = () => {
                 sizePerPageList: [
                   {
                     text: "12",
-                    value: 5,
+                    value: 3,
                   },
                   {
                     text: "15",
