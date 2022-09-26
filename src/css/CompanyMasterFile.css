@@ -13,3 +13,22 @@
 .mb-3 {
   border-color: red;
 }
+
+.selection-cell-header {
+  width: 18px;
+}
+
+/* .react-bootstrap-table table {
+  table-layout: auto;
+  overflow: auto;
+} */
+
+.react-bootstrap-table {
+  width: 100%;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+td.selection-cell {
+  padding: 1px;
+}

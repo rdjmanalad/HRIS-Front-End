@@ -39,6 +39,7 @@
   width: 100%;
   border-radius: 3px;
   margin-bottom: 5px;
+  margin-top: 6px;
   height: 22px;
 }
 
@@ -98,13 +99,13 @@
   height: fit-content;
 }
 
-.setButtonMargin{
+.setButtonMargin {
   margin-left: 10px;
   margin-right: 10px;
   width: 80px;
 }
 
-.setButtonMargin2{
+.setButtonMargin2 {
   margin-left: 10px;
   margin-right: 10px;
   width: 215px;

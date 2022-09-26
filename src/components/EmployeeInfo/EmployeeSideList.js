@@ -6,6 +6,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
+import overlayFactory from "react-bootstrap-table2-overlay";
 
 function EmployeeTopList({ childToParent, refreshPage }) {
   const [employees, setData] = useState([]);
