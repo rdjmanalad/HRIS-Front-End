@@ -1,0 +1,755 @@
+import React, { useRef, useState, useEffect } from "react";
+
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import filterFactory from "react-bootstrap-table2-filter";
+import { textFilter } from "react-bootstrap-table2-filter";
+import axios from "axios";
+import "../../css/paySlipDataEntry.css";
+import {
+  Card,
+  FormControl,
+  FormLabel,
+  FormGroup,
+  Row,
+  Col,
+  Button,
+} from "react-bootstrap";
+
+export const PaySlipDataEntry = () => {
+  const [employees, setEmployees] = useState([]);
+  const [employee, setEmployee] = useState([]);
+
+  const periodRef = useRef();
+  const employeeNoRef = useRef();
+  const companyRef = useRef();
+  const positionRef = useRef();
+  const branchRef = useRef();
+  const lastNameRef = useRef();
+  const firstNameRef = useRef();
+  const middleNameRef = useRef();
+
+  const otherCompRef = useRef();
+  const leaveCreditsRef = useRef();
+  const absDeducRef = useRef();
+  const lateDeducRef = useRef();
+  const restOTPayRef = useRef();
+  const legHolidayPayRef = useRef();
+  const srHolidayPayRef = useRef();
+  const otpayRef = useRef();
+  const bonusRef = useRef();
+  const incentiveRef = useRef();
+  const colaRef = useRef();
+  const allow2Ref = useRef();
+  const allow1Ref = useRef();
+  const basicPayRef = useRef();
+
+  const otherDeducRef = useRef();
+  const cspsmcsRef = useRef();
+  const lifeInsRef = useRef();
+  const personalRef = useRef();
+  const emergencyRef = useRef();
+  const stPeterRef = useRef();
+  const storageRef = useRef();
+  const pagibigRef = useRef();
+  const promisoryNoteRef = useRef();
+  const sssLoanRef = useRef();
+  const promisoryRef = useRef();
+  const fakeOverRef = useRef();
+  const hmoRef = useRef();
+  const pagibigPremRef = useRef();
+  const layAwayRef = useRef();
+  const philhealthPremRef = useRef();
+  const sssPremRef = useRef();
+  const withHoldTaxRef = useRef();
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios.get("http://localhost:8080/api/masemployees").then((response) => {
+      setEmployees(response.data);
+      console.log(response.data);
+    });
+  };
+
+  function setRowEmployee() {
+    alert("");
+  }
+
+  const nameFormatter = (data, row) => {
+    return (
+      <span>
+        {row.firstName} {row.lastName}
+      </span>
+    );
+  };
+  function nameFilterFormatter(cell, row) {
+    return row.firstName + row.lastName;
+  }
+
+  const selectRowProp = {
+    mode: "radio",
+    clickToSelect: true,
+    onSelect: (row, isSelect, rowIndex, e) => {
+      setRowEmployee(row);
+      return true;
+    },
+  };
+  const columns = [
+    {
+      dataField: "employeeNo",
+      text: "Filter",
+      sort: true,
+      filter: textFilter({
+        style: { padding: "1px" },
+        placeholder: "Employee No.",
+      }),
+      style: { width: "100px", textAlign: "center", padding: "0px" },
+    },
+    {
+      dataField: "lastName",
+      formatter: nameFormatter,
+      text: "Filter",
+      sort: true,
+      filterValue: (cell, row) => nameFilterFormatter(cell, row),
+      filter: textFilter({
+        style: { padding: "1px" },
+        placeholder: "Name",
+      }),
+      style: { width: "100px", padding: "0px" },
+    },
+    {
+      dataField: "ogroupCode",
+      text: "Filter",
+      sort: true,
+      filter: textFilter({
+        style: { padding: "1px" },
+        placeholder: "Group Code",
+      }),
+      style: { width: "100px", textAlign: "center", padding: "0px" },
+    },
+  ];
+
+  return (
+    <div
+      style={{
+        marginTop: "15px",
+        marginBottom: "10px",
+        paddingBottom: "50px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        className={" border-dark bg-dark text-white floatTop"}
+        style={{ width: "80rem" }}
+      >
+        <Card.Header>
+          <label style={{ width: "200px" }}>PAYSLIP DATA ENTRY</label>
+        </Card.Header>
+        <Card.Body>
+          <BootstrapTable
+            id="bsTable"
+            // keyField="userId"
+            keyField="employeeNo"
+            data={employees}
+            columns={columns}
+            striped
+            hover
+            condensed
+            pagination={paginationFactory({
+              paginationSize: 3,
+              hideSizePerPage: true,
+              withFirstAndLast: true,
+              sizePerPageList: [
+                {
+                  text: "12",
+                  value: 3,
+                },
+                {
+                  text: "15",
+                  value: 10,
+                },
+              ],
+            })}
+            filter={filterFactory()}
+            rowStyle={{ padding: "1px" }}
+            headerClasses="empTableHeader"
+            selectRow={selectRowProp}
+          ></BootstrapTable>
+          <label className="asHeader" style={{ paddingLeft: "5px" }}>
+            EMPLOYEE PAYSLIP INFORMATION
+          </label>
+          <FormGroup as={Row}>
+            <FormGroup as={Col}>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Period
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={periodRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Employee No.
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={employeeNoRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Company
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={companyRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+            </FormGroup>
+            <FormGroup as={Col}>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Position
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={positionRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Branch
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={branchRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+            </FormGroup>
+            <FormGroup as={Col}>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Last Name
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={lastNameRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  First Name
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={firstNameRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Middle Name
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={middleNameRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+            </FormGroup>
+          </FormGroup>
+          <label className="asHeader" style={{ paddingLeft: "5px" }}>
+            PAYSLIP DETAILS
+          </label>
+          {/* ############################ DETAILS ####################### */}
+          {/* ############################ DETAILS ####################### */}
+          {/* ############################ DETAILS ####################### */}
+          <FormGroup as={Row}>
+            <FormGroup as={Col}>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Basic Pay
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={basicPayRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Allow 1 - Meal Allow
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={allow1Ref}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Allow 2 - Night Diff
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={allow2Ref}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  COLA
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={colaRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Incentive
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={incentiveRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Bonus/13th Month
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={bonusRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Over Time Pay
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={otpayRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Special/Reg. Hol Pay
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={srHolidayPayRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Legal Holiday
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={legHolidayPayRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Rest/Sunday OT Pay
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={restOTPayRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Late Deductions
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={lateDeducRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Absent Deductions
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={absDeducRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Leave Credits
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={leaveCreditsRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Other Compensation
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={otherCompRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+            </FormGroup>
+            {/* ############################################################### */}
+            {/* ############################################################### */}
+            {/* ############################################################### */}
+            <FormGroup as={Col}>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Witholding Tax
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={withHoldTaxRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  SSSnPremium
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={sssPremRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Philhealth Premium
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={philhealthPremRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Pagibig Premium
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={pagibigPremRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  HMO
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={hmoRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Fake / Over
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={fakeOverRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Promisory
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={promisoryRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  SSS Loan
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={sssLoanRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Promisory Note
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={promisoryNoteRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Pagibig
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={pagibigRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Storage
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={storageRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  St. Peter
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={stPeterRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Emergency
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={emergencyRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Lay Away
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={layAwayRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Personal
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={personalRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Life Insurance
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={lifeInsRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  CS/PS/MCS
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={cspsmcsRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Other Deductions
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={otherDeducRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+            </FormGroup>
+            {/* ############################################################### */}
+            {/* ############################################################### */}
+            {/* ############################################################### */}
+
+            <FormGroup as={Col}>
+              <FormGroup
+                as={Row}
+                style={{ marginTop: "6px", marginBottom: "5px" }}
+              >
+                <FormGroup as={Row}>
+                  <Card>
+                    <FormLabel column sm="3" className="noWrapText">
+                      Salary Adjustment
+                    </FormLabel>
+                    <Col>
+                      <label>0000</label>
+                    </Col>
+                    <FormGroup as={Col}>
+                      <label className="blackText">0000</label>
+                    </FormGroup>
+                  </Card>
+                </FormGroup>
+                {/* </Col> */}
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Last Name
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={lastNameRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  First Name
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={firstNameRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="3" className="noWrapText">
+                  Middle Name
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={middleNameRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+            </FormGroup>
+          </FormGroup>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+};

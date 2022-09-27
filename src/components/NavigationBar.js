@@ -57,7 +57,9 @@ function NavigationBar() {
               id="basic-nav-dropdown"
               style={{ fontWeight: "bold" }}
             >
-              <NavDropdown.Item>Payroll Register</NavDropdown.Item>
+              <NavDropdown.Item href="PaySlipDataEntry">
+                Payroll Register
+              </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>Employee Loans</NavDropdown.Item>
               <NavDropdown.Item>Employee Leaves</NavDropdown.Item>
