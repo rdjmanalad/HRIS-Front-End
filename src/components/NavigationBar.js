@@ -42,7 +42,9 @@ function NavigationBar() {
                 Company Master File
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>Change Payroll Period</NavDropdown.Item>
+              <NavDropdown.Item href="ChangePayrollPeriod">
+                Change Payroll Period
+              </NavDropdown.Item>
               <NavDropdown.Item>Filter Actual Group</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>User Accounts</NavDropdown.Item>
