@@ -7,10 +7,10 @@ import {
   FormGroup,
   Row,
   Col,
-  Container,
+  Form,
 } from "react-bootstrap";
 
-export const BranchList = () => {
+export const ChangePayrollPeriod = () => {
   const payPeriodFromRef = useRef();
   const payPeriodToRef = useRef();
   const cutPeriodFromRef = useRef();
@@ -19,10 +19,23 @@ export const BranchList = () => {
   const transpoRateRef = useRef();
   const unionDueRateRef = useRef();
   const yearEndTaxAdjRef = useRef();
+  const collectPeriodRef = useRef();
+  const bonus13thRef = useRef();
 
-  render(
-    <div>
-      <Card className={" border-dark bg-dark text-white floatTop"}>
+  return (
+    <div
+      style={{
+        marginTop: "15px",
+        marginBottom: "10px",
+        paddingBottom: "50px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        className={" border-dark bg-dark text-white floatTop"}
+        style={{ width: "55rem" }}
+      >
         <Card.Body>
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             PRESENT PAYROLL PERIOD
@@ -30,7 +43,7 @@ export const BranchList = () => {
           <FormGroup as={Row}>
             <FormGroup as={Col}>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
+                <FormLabel column sm="4" className="noWrapText">
                   Payroll Period From
                 </FormLabel>
                 <Col>
@@ -44,7 +57,7 @@ export const BranchList = () => {
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
+                <FormLabel column sm="4" className="noWrapText">
                   Cut-off Period From
                 </FormLabel>
                 <Col>
@@ -58,7 +71,7 @@ export const BranchList = () => {
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
+                <FormLabel column sm="4" className="noWrapText">
                   Actual no of Days
                 </FormLabel>
                 <Col>
@@ -72,7 +85,7 @@ export const BranchList = () => {
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
+                <FormLabel column sm="4" className="noWrapText">
                   Transportation Rate
                 </FormLabel>
                 <Col>
@@ -86,7 +99,7 @@ export const BranchList = () => {
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
+                <FormLabel column sm="4" className="noWrapText">
                   Union Dues (Rate)
                 </FormLabel>
                 <Col>
@@ -100,7 +113,7 @@ export const BranchList = () => {
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
+                <FormLabel column sm="4" className="noWrapText">
                   Year-End Tax Adj
                 </FormLabel>
                 <Col>
@@ -113,11 +126,22 @@ export const BranchList = () => {
                   ></FormControl>
                 </Col>
               </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Bonus / 13th Month Rate
+                </FormLabel>
+                <Col>
+                  <Form.Check
+                    ref={bonus13thRef}
+                    style={{ "padding-top": "5px" }}
+                  ></Form.Check>
+                </Col>
+              </FormGroup>
             </FormGroup>
             {/* <FormGroup as={Col} xs="1"></FormGroup> */}
-            <FormGroup as={Col} sm="8">
+            <FormGroup as={Col} sm="5">
               <FormGroup as={Row}>
-                <FormLabel column className="noWrapText" sm="2">
+                <FormLabel column className="noWrapText" sm="1">
                   To
                 </FormLabel>
                 <Col sm="">
@@ -131,12 +155,29 @@ export const BranchList = () => {
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column className="noWrapText" sm="2">
+                <FormLabel column className="noWrapText" sm="1">
                   To
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={cutPeriodToRef}
+                    className="inpHeightXs"
+                    // onChange={(event) =>
+                    //   (group.paddress = event.target.value)
+                    // }
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row} style={{ height: "95px" }}>
+                <FormLabel sm="1"> </FormLabel>
+              </FormGroup>
+              <FormGroup as={Row} style={{ height: "25px" }}>
+                <FormLabel column className="noWrapText" sm="5">
+                  Collect this Period
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={collectPeriodRef}
                     className="inpHeightXs"
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)

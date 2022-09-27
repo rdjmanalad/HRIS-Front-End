@@ -47,11 +47,38 @@ function NavigationBar() {
               </NavDropdown.Item>
               <NavDropdown.Item>Filter Actual Group</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>User Accounts</NavDropdown.Item>
+              <NavDropdown.Item href="UserManagement">
+                User Accounts
+              </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown
               className="fs-med"
-              title="Maintenance"
+              title="Payroll"
+              id="basic-nav-dropdown"
+              style={{ fontWeight: "bold" }}
+            >
+              <NavDropdown.Item>Payroll Register</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>Employee Loans</NavDropdown.Item>
+              <NavDropdown.Item>Employee Leaves</NavDropdown.Item>
+              <NavDropdown.Item>Employer's Deduction</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>APC Data Entry</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>Bank Upload Report</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>Mass Computation</NavDropdown.Item>
+            </NavDropdown>
+
+            <Nav.Link
+              href={"EmployeeDetails"}
+              style={{ fontWeight: "bold", fontSize: "medium" }}
+            >
+              Reports
+            </Nav.Link>
+            <NavDropdown
+              className="fs-med"
+              title="Test"
               id="basic-nav-dropdown"
               style={{ fontWeight: "bold" }}
             >
@@ -66,13 +93,6 @@ function NavigationBar() {
                 Separated link
               </NavDropdown.Item>
             </NavDropdown>
-
-            <Nav.Link
-              href={"EmployeeDetails"}
-              style={{ fontWeight: "bold", fontSize: "medium" }}
-            >
-              Reports
-            </Nav.Link>
           </Nav>
           <Nav>
             <label
