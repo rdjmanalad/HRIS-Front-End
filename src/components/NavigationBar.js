@@ -61,9 +61,13 @@ function NavigationBar() {
                 Payroll Register
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>Employee Loans</NavDropdown.Item>
+              <NavDropdown.Item href="EmployeeLoans">
+                Employee Loans
+              </NavDropdown.Item>
               <NavDropdown.Item>Employee Leaves</NavDropdown.Item>
-              <NavDropdown.Item>Employer's Deduction</NavDropdown.Item>
+              <NavDropdown.Item href="EmployersDeduction">
+                Employers Deduction
+              </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>APC Data Entry</NavDropdown.Item>
               <NavDropdown.Divider />

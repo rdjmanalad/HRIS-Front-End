@@ -95,3 +95,16 @@ input[type="radio"]:checked:after {
   margin-bottom: 10px;
   margin-top: 10px;
 }
+
+.separator2 {
+  border-bottom: 1px;
+  border-color: gray;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 0px;
+}
+
+.noPaddingLabel {
+  padding: 0px;
+}

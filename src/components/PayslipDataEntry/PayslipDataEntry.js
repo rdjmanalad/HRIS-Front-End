@@ -62,6 +62,14 @@ export const PaySlipDataEntry = () => {
   const philhealthPremRef = useRef();
   const sssPremRef = useRef();
   const withHoldTaxRef = useRef();
+  const lateRef = useRef();
+  const absentRef = useRef();
+  const overTimeRef = useRef();
+  const srHolRef = useRef();
+  const legHolRef = useRef();
+  const restSunRef = useRef();
+  const vacLeaveRef = useRef();
+
   useEffect(() => {
     getData();
   }, []);
@@ -693,60 +701,326 @@ export const PaySlipDataEntry = () => {
             <FormGroup as={Col}>
               <FormGroup
                 as={Row}
-                style={{ marginTop: "6px", marginBottom: "5px" }}
+                style={{
+                  marginTop: "6px",
+                  marginBottom: "4px",
+                }}
               >
-                <FormGroup as={Row}>
-                  <Card>
-                    <FormLabel column sm="3" className="noWrapText">
-                      Salary Adjustment
+                <Card
+                  style={{
+                    width: "94%",
+                    paddingTop: "7px",
+                    paddingBottom: "12px",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      SALARY ADJUSTMENT
                     </FormLabel>
-                    <Col>
-                      <label>0000</label>
+                    <Col sm="1">
+                      <label className="blackText3">0000</label>
                     </Col>
-                    <FormGroup as={Col}>
-                      <label className="blackText">0000</label>
-                    </FormGroup>
-                  </Card>
-                </FormGroup>
-                {/* </Col> */}
+                  </FormGroup>
+                  <label className="separator2"></label>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      BASIC PAY
+                    </FormLabel>
+                    <Col sm="1">
+                      <label className="blackText3">0000</label>
+                    </Col>
+                  </FormGroup>
+                  <label className="separator2"></label>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      style={{ padding: "0px 0px 0px 10px" }}
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      Per Cut-off
+                    </FormLabel>
+                    <Col sm="1">
+                      <label className="blackText2">0000</label>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      style={{ padding: "0px 0px 0px 10px" }}
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      Per Day
+                    </FormLabel>
+                    <Col sm="2">
+                      <label className={"blackText2"}>0000</label>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      style={{ padding: "0px 0px 0px 10px" }}
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      Per Hour
+                    </FormLabel>
+                    <Col sm="2">
+                      <label className={"blackText2"}>0000</label>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      style={{ padding: "0px 0px 0px 10px" }}
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      Per Minute
+                    </FormLabel>
+                    <Col sm="2">
+                      <label className={"blackText2"}>0000</label>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      style={{ padding: "0px 0px 0px 10px" }}
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      Leave Balance
+                    </FormLabel>
+                    <Col sm="2">
+                      <label className={"blackText2"}>0000</label>
+                    </Col>
+                  </FormGroup>
+                  <label className="separator2"></label>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      COLA (13)
+                    </FormLabel>
+                    <Col sm="1">
+                      <label className="blackText3">0000</label>
+                    </Col>
+                  </FormGroup>
+                  <label className="separator2"></label>
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      style={{ padding: "0px 0px 0px 10px" }}
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      Per Day
+                    </FormLabel>
+                    <Col sm="2">
+                      <label className={"blackText2"}>0000</label>
+                    </Col>
+                  </FormGroup>
+                </Card>
               </FormGroup>
+
+              {/* ############################################################### */}
+              {/* ############################################################### */}
+              {/* ############################################################### */}
+
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Last Name
+                <FormLabel column sm="4" className="noWrapText">
+                  Vacation Leave (D)
                 </FormLabel>
                 <Col>
                   <FormControl
-                    ref={lastNameRef}
+                    ref={vacLeaveRef}
                     className="inpHeightXs"
                     disabled
                   ></FormControl>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  First Name
+                <FormLabel column sm="4" className="noWrapText">
+                  Late (M)
                 </FormLabel>
                 <Col>
                   <FormControl
-                    ref={firstNameRef}
+                    ref={lateRef}
                     className="inpHeightXs"
                     disabled
                   ></FormControl>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Middle Name
+                <FormLabel column sm="4" className="noWrapText">
+                  Absent (D)
                 </FormLabel>
                 <Col>
                   <FormControl
-                    ref={middleNameRef}
+                    ref={absentRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Over Time (H)
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={overTimeRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Special/Reg. Hol (D)
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={srHolRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Legal Holiday (D)
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={legHolRef}
+                    className="inpHeightXs"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Rest Sunday (D)
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={restSunRef}
                     className="inpHeightXs"
                     disabled
                   ></FormControl>
                 </Col>
               </FormGroup>
             </FormGroup>
+            {/* <label className="separator2"></label> */}
+            <Card className="asTotal">
+              <FormGroup as={Row}>
+                <FormGroup as={Col} sm="4">
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      column
+                      sm="8"
+                      className={("noWrapText", "greenText")}
+                    >
+                      TOTAL GROSS PAY:
+                    </FormLabel>
+                    <Col sm="1">
+                      <label className="blackText3">0000</label>
+                    </Col>
+                  </FormGroup>
+                </FormGroup>
+                <FormGroup as={Col} sm="4">
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      column
+                      sm="8"
+                      className={("noWrapText", "redText")}
+                    >
+                      TOTAL DEDUCTIONS:
+                    </FormLabel>
+                    <Col sm="1">
+                      <label className="blackText3">0000</label>
+                    </Col>
+                  </FormGroup>
+                </FormGroup>
+                <FormGroup as={Col} sm="4">
+                  <FormGroup as={Row}>
+                    <FormLabel
+                      column
+                      sm="8"
+                      className={("noWrapText", "blackText")}
+                    >
+                      TOTAL NET PAY:
+                    </FormLabel>
+                    <Col sm="1">
+                      <label className="blackText3">0000</label>
+                    </Col>
+                  </FormGroup>
+                </FormGroup>
+              </FormGroup>
+            </Card>
+            <Card className={" border-dark bg-dark text-white asButtonPart"}>
+              <FormGroup as={Row}>
+                <Col sm="5"></Col>
+                <Col sm="2">
+                  <Button
+                    className="setButtonMargin"
+                    style={{ width: "150px" }}
+                    variant="info"
+                    // onClick={() => deleteUser()}
+                  >
+                    Time Records
+                  </Button>
+                </Col>
+                <Col sm="1">
+                  <Button
+                    className="setButtonMargin"
+                    // onClick={() => newUser()}
+                  >
+                    Edit
+                  </Button>
+                </Col>
+                <Col sm="1">
+                  <Button
+                    className="setButtonMargin"
+                    variant="danger"
+                    // onClick={() => deleteUser()}
+                  >
+                    Remove
+                  </Button>
+                </Col>
+                <Col sm="1">
+                  <Button
+                    className="setButtonMargin"
+                    variant="success"
+                    // onClick={() => deleteUser()}
+                  >
+                    Back
+                  </Button>
+                </Col>
+                <Col sm="1">
+                  <Button
+                    className="setButtonMargin"
+                    variant="success"
+                    // onClick={() => deleteUser()}
+                  >
+                    Next
+                  </Button>
+                </Col>
+              </FormGroup>
+            </Card>
           </FormGroup>
         </Card.Body>
       </Card>

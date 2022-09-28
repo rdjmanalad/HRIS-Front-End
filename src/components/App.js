@@ -18,6 +18,8 @@ import { ChangePayrollPeriod } from "./ChangePayrollPeriod/ChangePayrollPeriod";
 import { CompanyMasterFile } from "./CompanyMasterFile/CompanyMasterFile";
 import { UserManagement } from "./Users/UserManagement";
 import { PaySlipDataEntry } from "./PayslipDataEntry/PayslipDataEntry";
+import { EmployeeLoans } from "./EmloyeeLoans/EmployeeLoans";
+import { EmployersDeduction } from "./EmployersDeduction/EmployersDeduction";
 
 function App() {
   if (window.sessionStorage.getItem("jwt") == null) {
@@ -76,6 +78,11 @@ function App() {
                       path="/PaySlipDataEntry"
                       element={<PaySlipDataEntry />}
                     />
+                    <Route
+                      path="/EmployersDeduction"
+                      element={<EmployersDeduction />}
+                    />
+                    <Route path="/EmployeeLoans" element={<EmployeeLoans />} />
                     <Route path="/ListUsers" element={<ListUsers />} />
                     <Route path="/EmployeeList" element={<EmployeeList />} />
                   </Routes>
