@@ -68,7 +68,7 @@ class EmployeeList extends React.Component {
     const childToParent = (childdata) => {
       empp = childdata;
       this.setState({ employee: childdata });
-      this.setState({mountEmp: empp});
+      this.setState({ mountEmp: empp });
       // parentToChild();
     };
 
@@ -77,7 +77,7 @@ class EmployeeList extends React.Component {
       this.setState({ employee: [] });
     }
     // componentDidMount() {
-      
+
     // }
 
     return (
@@ -97,7 +97,7 @@ class EmployeeList extends React.Component {
           {/* <EmployeeTopList></EmployeeTopList> */}
           <Card
             className={" border-dark bg-dark text-white "}
-            style={{ "margin-left": "10px", width: "85rem" }}
+            style={{ marginLeft: "10px", width: "85rem" }}
           >
             <Card.Header className="reducePadding">
               <Nav fill variant="pills" defaultActiveKey="#first">
@@ -180,7 +180,7 @@ class EmployeeList extends React.Component {
               // <EmpMasterFile></EmpMasterFile>
               <EmpMasterFile
                 empData={mountEmp}
-                ref={this.child}
+                // ref={this.child}
               ></EmpMasterFile>
             )}
             {showTab2 && <EmployeeBackground></EmployeeBackground>}

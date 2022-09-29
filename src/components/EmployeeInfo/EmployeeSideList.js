@@ -6,11 +6,15 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
+import { ColorRing } from "react-loader-spinner";
+// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function EmployeeTopList({ childToParent, refreshPage }) {
   const [employees, setData] = useState([]);
   const [selectedId, setId] = useState("");
   const [employee, setRowEmp] = useState([]);
+
+  const [loading, setL] = useState(true);
 
   function displayOnTab() {
     // alert(employee.userId);
@@ -101,6 +105,7 @@ function EmployeeTopList({ childToParent, refreshPage }) {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
     axios.get("http://localhost:8080/api/masemployees").then((response) => {
+      setL(false);
       setData(response.data);
       console.log(response.data);
     });
@@ -112,6 +117,10 @@ function EmployeeTopList({ childToParent, refreshPage }) {
       </span>
     );
   };
+
+  useEffect(() => {
+    // loading = false;
+  }, [employees]);
 
   useEffect(() => {
     displayOnTab(employee);
@@ -165,44 +174,56 @@ function EmployeeTopList({ childToParent, refreshPage }) {
 
   return (
     <Card
-      style={{ "max-width": "25rem", "min-width": "25rem", height: "auto" }}
+      style={{ maxWidth: "25rem", minWidth: "25rem", height: "auto" }}
       className={" border-dark bg-dark text-white"}
     >
       <Card.Header style={{ color: "white" }}>
         <label>Employee List</label>
       </Card.Header>
       <Container>
-        <BootstrapTable
-          id="bsTable"
-          // keyField="userId"
-          keyField="employeeNo"
-          data={employees}
-          columns={columns}
-          striped
-          hover
-          condensed
-          pagination={paginationFactory({
-            paginationSize: 3,
-            hideSizePerPage: true,
-            withFirstAndLast: true,
-            sizePerPageList: [
-              {
-                text: "12",
-                value: 15,
-              },
-              {
-                text: "15",
-                value: 20,
-              },
-            ],
-          })}
-          filter={filterFactory()}
-          rowStyle={{ padding: "1px" }}
-          rowClasses="empTableRow"
-          headerClasses="empTableHeader"
-          selectRow={selectRowProp}
-          // rowEvents={ rowEvents }
-        ></BootstrapTable>
+        {loading ? (
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
+            wrapperClass="blocks-wrapper"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        ) : (
+          <BootstrapTable
+            id="bsTable"
+            // keyField="userId"
+            keyField="employeeNo"
+            data={employees}
+            columns={columns}
+            striped
+            hover
+            condensed
+            pagination={paginationFactory({
+              paginationSize: 3,
+              hideSizePerPage: true,
+              withFirstAndLast: true,
+              sizePerPageList: [
+                {
+                  text: "12",
+                  value: 15,
+                },
+                {
+                  text: "15",
+                  value: 20,
+                },
+              ],
+            })}
+            filter={filterFactory()}
+            rowStyle={{ padding: "1px" }}
+            rowClasses="empTableRow"
+            headerClasses="empTableHeader"
+            selectRow={selectRowProp}
+            // rowEvents={ rowEvents }
+          ></BootstrapTable>
+        )}
         {/* <div className={"allCenter"}>
           <Button variant="success" size="sm" onClick={() => newEmp()}>
             New

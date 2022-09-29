@@ -1,6 +1,19 @@
 import React from "react";
-import { Button, ButtonGroup, Card, Form, Table } from "react-bootstrap";
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Form,
+  Table,
+  Tooltip,
+} from "react-bootstrap";
 import axios from "axios";
+import {
+  BsFileEarmarkPlusFill,
+  BsFileEarmarkMinusFill,
+  BsFileEarmarkFontFill,
+} from "react-icons/bs";
+
 // import { FontAwesommeIcon } from "@fortawesome/react-fontawesome";
 // import { faList, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -35,8 +48,19 @@ class ListUsers extends React.Component {
 
   render() {
     return (
-      <div style={{ "margin-top": "20px" }}>
-        <Card className={" border-dark bg-dark text-white"}>
+      <div
+        style={{
+          marginTop: "15px",
+          marginBottom: "10px",
+          paddingBottom: "40px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Card
+          className={" border-dark bg-dark text-white"}
+          style={{ width: "40rem" }}
+        >
           <Card.Header>
             <Card.Title>User List</Card.Title>
           </Card.Header>
@@ -46,8 +70,6 @@ class ListUsers extends React.Component {
                 <thead>
                   <tr>
                     <th>User Id</th>
-                    <th>Name</th>
-                    <th>Password</th>
                     <th>Username</th>
                     <th>Roles</th>
                     <th>Action</th>
@@ -62,12 +84,10 @@ class ListUsers extends React.Component {
                     this.state.users.map((users) => (
                       <tr key={users.id}>
                         <td>{users.id}</td>
-                        <td>{users.name}</td>
-                        <td>{users.password}</td>
                         <td>{users.username}</td>
                         <td>{users.roles.map((roles) => roles.name + ", ")}</td>
                         <td>
-                          <ButtonGroup>
+                          {/* <ButtonGroup>
                             <Button size="sm" variant="primary">
                               Edit
                             </Button>
@@ -75,7 +95,10 @@ class ListUsers extends React.Component {
                             <Button size="sm" variant="outline-danger">
                               Delete
                             </Button>
-                          </ButtonGroup>
+                          </ButtonGroup> */}
+                          <BsFileEarmarkFontFill className="editIcon" />
+                          <BsFileEarmarkMinusFill className="deleteIcon" />
+                          <BsFileEarmarkPlusFill className="addIcon" />
                         </td>
                       </tr>
                     ))

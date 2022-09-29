@@ -69,15 +69,19 @@ function NavigationBar() {
                 Employers Deduction
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>APC Data Entry</NavDropdown.Item>
+              <NavDropdown.Item href="APCDataEntry">
+                APC Data Entry
+              </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>Bank Upload Report</NavDropdown.Item>
+              <NavDropdown.Item href="BankUploadReport">
+                Bank Upload Report
+              </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>Mass Computation</NavDropdown.Item>
             </NavDropdown>
 
             <Nav.Link
-              href={"EmployeeDetails"}
+              href={"Reports"}
               style={{ fontWeight: "bold", fontSize: "medium" }}
             >
               Reports

@@ -13,7 +13,7 @@ function EmployeeDetails() {
   const [employee, setEmployee] = useState([]);
   const childToParent = (childdata) => {
     setEmployee(childdata);
-    forceUpdate();
+    // forceUpdate();
     // forceUpdate();
   };
 
@@ -21,7 +21,7 @@ function EmployeeDetails() {
     console.log("console");
   }
 
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+  // const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   return (
     <div style={{ paddingBottom: "50px" }}>
@@ -65,22 +65,31 @@ function EmployeeDetails() {
           </Card.Header>
           <Card.Body className="reducePadding">
             <Form as={Row}>
-              <FormGroup as={Col} className="mb-1">
-                <Form.Label className="noWrapText">Employee Number</Form.Label>
-                <Form.Control
-                  value={employee.employeeNo}
-                  type="text"
-                  className="inpHeightXs"
-                ></Form.Control>
-              </FormGroup>
-              <FormGroup as={Col} className="mb-1">
-                <Form.Label className="noWrapText">First Name</Form.Label>
-                <Form.Control
-                  value={employee.firstName}
-                  type="text"
-                  className="inpHeightXs"
-                ></Form.Control>
-              </FormGroup>
+            <FormGroup as={Col} className="mb-1">
+                  <Form.Label className="noWrapText">
+                    Employee Number
+                  </Form.Label>
+                  <Form.Control
+                    defaultValue={employee.employeeNo}
+                    type="text"
+                    className="inpHeightXs"
+                    // disabled
+                    onChange={(event) =>
+                      (employee.employeeNo = event.target.value)
+                    }
+                  ></Form.Control>
+                </FormGroup>
+                <FormGroup as={Col} className="mb-1">
+                  <Form.Label className="noWrapText">First Name</Form.Label>
+                  <Form.Control
+                    defaultValue={employee.firstName}
+                    type="text"
+                    className="inpHeightXs"
+                    onChange={(event) =>
+                      (employee.firstName = event.target.value)
+                    }
+                  ></Form.Control>
+                </FormGroup>
               <FormGroup as={Col} className="mb-1">
                 <Form.Label className="noWrapText">Middle Name</Form.Label>
                 <Form.Control

@@ -20,6 +20,9 @@ import { UserManagement } from "./Users/UserManagement";
 import { PaySlipDataEntry } from "./PayslipDataEntry/PayslipDataEntry";
 import { EmployeeLoans } from "./EmloyeeLoans/EmployeeLoans";
 import { EmployersDeduction } from "./EmployersDeduction/EmployersDeduction";
+import { APCDataEntry } from "./APCDataEntry/APCDataEntry";
+import { BankUploadReport } from "./BankUploadReport/BankUploadReport";
+import { Reports } from "./Reports/Reports";
 
 function App() {
   if (window.sessionStorage.getItem("jwt") == null) {
@@ -82,6 +85,12 @@ function App() {
                       path="/EmployersDeduction"
                       element={<EmployersDeduction />}
                     />
+                    <Route
+                      path="/BankUploadReport"
+                      element={<BankUploadReport />}
+                    />
+                    <Route path="/Reports" element={<Reports />} />
+                    <Route path="/APCDataEntry" element={<APCDataEntry />} />
                     <Route path="/EmployeeLoans" element={<EmployeeLoans />} />
                     <Route path="/ListUsers" element={<ListUsers />} />
                     <Route path="/EmployeeList" element={<EmployeeList />} />

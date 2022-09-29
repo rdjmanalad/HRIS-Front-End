@@ -12,7 +12,6 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 
-
 // class EmpMasterFile extends React.Component {
 //   constructor(props) {
 //     super(props);
@@ -35,40 +34,37 @@ function EmpMasterFile({ empData, refreshPage }) {
   const cpersonRef = useRef();
   const caddressRef = useRef();
   const genderRef = useRef();
-  const birthdayRef =  useRef();
+  const birthdayRef = useRef();
   const ageRef = useRef();
   const civilRef = useRef();
   const spouseRef = useRef();
   const hireDateRef = useRef();
   const workStatusRef = useRef();
   const dateRegularRef = useRef();
-  const leaveRef =useRef();
+  const leaveRef = useRef();
   const atmnoRef = useRef();
   const sssnoRef = useRef();
   const tinnoRef = useRef();
   const pagibigNoRef = useRef();
   const philhealthNoRef = useRef();
 
-
-
   useEffect(() => {
     // alert("useEffect here");
     setAddress(empData.address);
-  
+
     setEmp(empData);
   });
 
-  function refreshPage(){
+  function refreshPage() {
     alert("refresh");
   }
 
   function saveDetails() {
     setEmpNo(empData.employeeNo);
     alert(empData.firstName);
-    
 
     // if (!empNo) {
-      alert("empnoxxx :"+empNo)
+    alert("empnoxxx :" + empNo);
     axios
       .post("http://localhost:8080/api/masemployeeSave", masEmployee, {
         headers: {
@@ -84,117 +80,117 @@ function EmpMasterFile({ empData, refreshPage }) {
         // setData(response.data);
         // console.log(response.data);
       });
-  //   } else {
-  //     alert("empno :"+empNo)
-  //     axios
-  //     .put("http://localhost:8080/api/masemployeeSave"+ empNo, MasEmployee, {
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //         Authorization:
-  //           "Bearer " +
-  //           localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
-  //       },
-  //     })
-  //     .then((response) => {
-  //       alert(response.status);
-  //       // setData(response.data);
-  //       // console.log(response.data);
-  //     });
-  // }
+    //   } else {
+    //     alert("empno :"+empNo)
+    //     axios
+    //     .put("http://localhost:8080/api/masemployeeSave"+ empNo, MasEmployee, {
+    //       headers: {
+    //         Accept: "application/json",
+    //         "Content-Type": "application/json",
+    //         Authorization:
+    //           "Bearer " +
+    //           localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+    //       },
+    //     })
+    //     .then((response) => {
+    //       alert(response.status);
+    //       // setData(response.data);
+    //       // console.log(response.data);
+    //     });
+    // }
   }
-  function newDetails(){
+  function newDetails() {
     // window.location.reload(false);
     clearDetails();
     setEmp(empData);
-
   }
 
-  function editDetails(){
+  function editDetails() {}
 
-  }
-
-  function deleteDetails(){
-
-  }
+  function deleteDetails() {}
   useEffect(() => {
     // alert(masEmployee.length);
-    if(masEmployee.length!==0){
-      addressRef.current.value=masEmployee.address;
-      paddressRef.current.value=masEmployee.paddress;
-      phoneRef.current.value=masEmployee.phone;
-      cpersonRef.current.value=masEmployee.cperson;
-      caddressRef.current.value=masEmployee.caddress;
-      genderRef.current.value=masEmployee.gender;
-      birthdayRef.current.value=new Date(masEmployee.birthday).toLocaleDateString("en-CA");
-      ageRef.current.value=masEmployee.age;
-      civilRef.current.value=masEmployee.civil;
-      spouseRef.current.value=masEmployee.spouse;
-      hireDateRef.current.value=new Date(masEmployee.dateHire).toLocaleDateString("en-CA");
-      workStatusRef.current.value=masEmployee.workStatus
-      dateRegularRef.current.value=new Date(masEmployee.dateRegular).toLocaleDateString("en-CA");
-      leaveRef.current.value=masEmployee.leave;
-      atmnoRef.current.value=masEmployee.atmno;
-      sssnoRef.current.value=masEmployee.sssno;
-      tinnoRef.current.value=masEmployee.tinno;
-      pagibigNoRef.current.value=masEmployee.pagibigNo;
-      philhealthNoRef.current.value=masEmployee.philhealthNo;
+    if (masEmployee.length !== 0) {
+      addressRef.current.value = masEmployee.address;
+      paddressRef.current.value = masEmployee.paddress;
+      phoneRef.current.value = masEmployee.phone;
+      cpersonRef.current.value = masEmployee.cperson;
+      caddressRef.current.value = masEmployee.caddress;
+      genderRef.current.value = masEmployee.gender;
+      birthdayRef.current.value = new Date(
+        masEmployee.birthday
+      ).toLocaleDateString("en-CA");
+      ageRef.current.value = masEmployee.age;
+      civilRef.current.value = masEmployee.civil;
+      spouseRef.current.value = masEmployee.spouse;
+      hireDateRef.current.value = new Date(
+        masEmployee.dateHire
+      ).toLocaleDateString("en-CA");
+      workStatusRef.current.value = masEmployee.workStatus;
+      dateRegularRef.current.value = new Date(
+        masEmployee.dateRegular
+      ).toLocaleDateString("en-CA");
+      leaveRef.current.value = masEmployee.leave;
+      atmnoRef.current.value = masEmployee.atmno;
+      sssnoRef.current.value = masEmployee.sssno;
+      tinnoRef.current.value = masEmployee.tinno;
+      pagibigNoRef.current.value = masEmployee.pagibigNo;
+      philhealthNoRef.current.value = masEmployee.philhealthNo;
     }
     // addressRef.current.dafaultValue=masEmployee.address;
   }, [masEmployee]);
 
-  function clearDetails(){
+  function clearDetails() {
     addressRef.current.value = "";
 
-    empData.abranchCode= null; 
-    empData.acompanyCode= null; 
-    empData.address= null; 
-    empData.age= null;
-    empData.agroupCode = null; 
-    empData.alowance1= null;
-    empData.allowance2= null;
-    empData.atmno= null;
-    empData.basicPay=null;
-    empData.birthday=null;
-    empData.board=null; 
-    empData.caddress= null; 
-    empData.civil= null; 
-    empData.cola= null;
-    empData.cperson= null;
-    empData.datehire= null;
-    empData.employeeNo= "";
-    empData.exemption= null;
-    empData.firstName=null;
-    empData.gender= null;
-    empData.lastName= null;
-    empData.leave= false;
+    empData.abranchCode = null;
+    empData.acompanyCode = null;
+    empData.address = null;
+    empData.age = null;
+    empData.agroupCode = null;
+    empData.alowance1 = null;
+    empData.allowance2 = null;
+    empData.atmno = null;
+    empData.basicPay = null;
+    empData.birthday = null;
+    empData.board = null;
+    empData.caddress = null;
+    empData.civil = null;
+    empData.cola = null;
+    empData.cperson = null;
+    empData.datehire = null;
+    empData.employeeNo = "";
+    empData.exemption = null;
+    empData.firstName = null;
+    empData.gender = null;
+    empData.lastName = null;
+    empData.leave = false;
     empData.middleName = null;
-    empData.obranchCode= null;
-    empData.ocompanyCode= null;
-    empData.ogroupCode=null;
-    empData.paddress=null;
-		empData.pagibigNo= null;
-    empData.philhealthNo= null;
-    empData.phone= null;
-    empData.presentLeave= null;
-    empData.previousLeave= null;
-    empData.rank= null;
-    empData.remarks= null;
-    empData.resigned= null;
-    empData.schedIn= null;
-    empData.schedOut= null;
-    empData.spouse= null;
-		empData.sssno= null;
-    empData.taxCode= null;
-    empData.tinno= null;
-    empData.transportation= null;
-    empData.unionName= null;
-    empData.waverage=null;
-    empData.workPosition= null;
-    empData.workStatus= null;
-  };
+    empData.obranchCode = null;
+    empData.ocompanyCode = null;
+    empData.ogroupCode = null;
+    empData.paddress = null;
+    empData.pagibigNo = null;
+    empData.philhealthNo = null;
+    empData.phone = null;
+    empData.presentLeave = null;
+    empData.previousLeave = null;
+    empData.rank = null;
+    empData.remarks = null;
+    empData.resigned = null;
+    empData.schedIn = null;
+    empData.schedOut = null;
+    empData.spouse = null;
+    empData.sssno = null;
+    empData.taxCode = null;
+    empData.tinno = null;
+    empData.transportation = null;
+    empData.unionName = null;
+    empData.waverage = null;
+    empData.workPosition = null;
+    empData.workStatus = null;
+  }
 
-  
   return (
     <div>
       {/* {this.props.parentToChild} */}
@@ -207,7 +203,7 @@ function EmpMasterFile({ empData, refreshPage }) {
             <FormGroup as={Row} style={{ paddingRight: "0px" }}>
               <FormGroup as={Col} xs="9">
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText" >
+                  <FormLabel column sm="2" className="noWrapText">
                     Home Address
                   </FormLabel>
                   <Col>
@@ -216,9 +212,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={addressRef}
                       // defaultValue={address}
                       className="inpHeightXs"
-                      onChange={(event) =>
-                        (address = event.target.value)
-                      }
+                      onChange={(event) => (address = event.target.value)}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -252,7 +246,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col></Col>
                 </FormGroup>
                 {/* Contact in Case of Emergency ######################*/}
-                <label className="asHeader" style={{ "padding-left": "10px" }}>
+                <label className="asHeader" style={{ paddingLeft: "10px" }}>
                   Contact in Case of Emergency
                 </label>
                 <FormGroup as={Row}>
@@ -292,14 +286,14 @@ function EmpMasterFile({ empData, refreshPage }) {
                   </Col>
                 </FormGroup>
                 {/* Employee Iformation ##############################*/}
-                <label className="asHeader" style={{ "padding-left": "10px" }}>
+                <label className="asHeader" style={{ paddingLeft: "10px" }}>
                   Employee Information
                 </label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="1" className="noWrapText">
                     Gender
                   </FormLabel>
-                  <Col column sm="2">
+                  <Col sm="2">
                     <FormControl
                       ref={genderRef}
                       className={"inpHeightXs"}
@@ -321,7 +315,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                       //   "en-CA"
                       // )}
                       onChange={(event) =>
-                        (empData.birthday = new Date(event.target.value).toLocaleDateString("en-CA"))
+                        (empData.birthday = new Date(
+                          event.target.value
+                        ).toLocaleDateString("en-CA"))
                       }
                     ></FormControl>
                   </Col>
@@ -333,9 +329,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={ageRef}
                       className={"inpHeightXs"}
                       // deFaultValue={empData.age}
-                      onChange={(event) =>
-                        (empData.age = event.target.value)
-                      }
+                      onChange={(event) => (empData.age = event.target.value)}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -344,14 +338,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <FormLabel column sm="1" className="noWrapText">
                     Civil Status
                   </FormLabel>
-                  <Col column sm="2">
+                  <Col sm="2">
                     <FormControl
                       ref={civilRef}
                       className={"inpHeightXs"}
                       // defaultValue={empData.civil}
-                      onChange={(event) =>
-                        (empData.civil = event.target.value)
-                      }
+                      onChange={(event) => (empData.civil = event.target.value)}
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
@@ -390,7 +382,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                     column
                     sm="1"
                     className="noWrapText"
-                    style={{ "padding-left": "0px" }}
+                    style={{ paddingLeft: "0px" }}
                   >
                     Work Status
                   </FormLabel>
@@ -408,7 +400,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                     column
                     sm="1"
                     className="noWrapText"
-                    style={{ "padding-left": "0px" }}
+                    style={{ paddingLeft: "0px" }}
                   >
                     Date Regular
                   </FormLabel>
@@ -434,11 +426,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col>
                     <Form.Check
                       ref={leaveRef}
-                      style={{ "padding-top": "5px" }}
+                      style={{ paddingTop: "5px" }}
                       // defaultValue={empData.leave}
-                      onChange={(event) =>
-                        (empData.leave = event.target.value)
-                      }
+                      onChange={(event) => (empData.leave = event.target.value)}
                     ></Form.Check>
                   </Col>
                 </FormGroup>
@@ -456,7 +446,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                     </div>
                   </FormLabel>
                 </FormGroup>
-                <label className="asHeader" style={{ "padding-left": "10px" }}>
+                <label className="asHeader" style={{ paddingLeft: "10px" }}>
                   Payroll Summary
                 </label>
                 <FormGroup as={Row}>
@@ -467,10 +457,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={atmnoRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.atmno}
-                      onChange={(event) =>
-                        (empData.atmno = event.target.value)
-                      }
+                      // defaultValue={empData.atmno}
+                      onChange={(event) => (empData.atmno = event.target.value)}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -482,10 +470,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={sssnoRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.sssno}
-                      onChange={(event) =>
-                        (empData.sssno = event.target.value)
-                      }
+                      // defaultValue={empData.sssno}
+                      onChange={(event) => (empData.sssno = event.target.value)}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -497,10 +483,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={tinnoRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.tinno}
-                      onChange={(event) =>
-                        (empData.tinno = event.target.value)
-                      }
+                      // defaultValue={empData.tinno}
+                      onChange={(event) => (empData.tinno = event.target.value)}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -512,7 +496,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={pagibigNoRef}
                       className={"inpHeightXs"}
-                      dafaultValue={empData.pagibigNo}
+                      // dafaultValue={empData.pagibigNo}
                       onChange={(event) =>
                         (empData.pagibigNo = event.target.value)
                       }
@@ -527,7 +511,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={philhealthNoRef}
                       className={"inpHeightXs"}
-                      defaultValue={empData.philhealthNo}
+                      // defaultValue={empData.philhealthNo}
                       onChange={(event) =>
                         (empData.philhealthNo = event.target.value)
                       }
@@ -541,16 +525,39 @@ function EmpMasterFile({ empData, refreshPage }) {
                 END
               </Card.Body>
             </Card> */}
-            <FormGroup as={Row} className="mb-1" style={{marginTop:"8px"}}>
+            <FormGroup as={Row} className="mb-1" style={{ marginTop: "8px" }}>
               <Col sm="6">
-            <Button className="setButtonMargin" variant="success" onClick={() => newDetails()}>New</Button>
-            <Button className="setButtonMargin" variant="warning" onClick={() => editDetails()}>Edit</Button>
-            <Button className="setButtonMargin" variant="danger" onClick={() => deleteDetails()}>Remove</Button>
-            </Col>
-            <Col sm="2"></Col>
-            <Col>
-            <Button className="setButtonMargin2" onClick={() => saveDetails()}>Save</Button>
-            </Col>
+                <Button
+                  className="setButtonMargin"
+                  variant="success"
+                  onClick={() => newDetails()}
+                >
+                  New
+                </Button>
+                <Button
+                  className="setButtonMargin"
+                  variant="warning"
+                  onClick={() => editDetails()}
+                >
+                  Edit
+                </Button>
+                <Button
+                  className="setButtonMargin"
+                  variant="danger"
+                  onClick={() => deleteDetails()}
+                >
+                  Remove
+                </Button>
+              </Col>
+              <Col sm="2"></Col>
+              <Col>
+                <Button
+                  className="setButtonMargin2"
+                  onClick={() => saveDetails()}
+                >
+                  Save
+                </Button>
+              </Col>
             </FormGroup>
           </Form>
         </Card.Body>
