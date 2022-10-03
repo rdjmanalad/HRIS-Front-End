@@ -110,19 +110,57 @@ input[type="radio"]:checked:after {
 }
 
 .addIcon {
-  width: 25px;
-  height: 25px;
-  fill: greenyellow;
+  margin: 0px 5px 0px 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.addIcon:hover {
+  fill: green;
+  cursor: pointer;
+}
+
+.addIcon:focus {
+  fill: green;
 }
 
 .deleteIcon {
-  width: 25px;
-  height: 25px;
+  margin: 0px 5px 0px 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.deleteIcon:hover {
+  fill: red;
+  cursor: pointer;
+}
+
+.deleteIcon:focus {
   fill: red;
 }
 
 .editIcon {
-  width: 25px;
-  height: 25px;
+  margin: 0px 5px 0px 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.editIcon:hover {
   fill: yellow;
+  cursor: pointer;
+}
+
+.editIcon:focus {
+  fill: yellow;
+}
+
+.centerDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropDownList {
+  height: 24px;
+  margin-top: 5px;
 }

@@ -1,13 +1,7 @@
-import React from "react";
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  Form,
-  Table,
-  Tooltip,
-} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, ButtonGroup, Card, Form, Table, Modal } from "react-bootstrap";
 import axios from "axios";
+import ReactTooltip from "react-tooltip";
 import {
   BsFileEarmarkPlusFill,
   BsFileEarmarkMinusFill,
@@ -17,77 +11,93 @@ import {
 // import { FontAwesommeIcon } from "@fortawesome/react-fontawesome";
 // import { faList, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-class ListUsers extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: [],
-    };
-  }
+function ListUsers() {
+  const [users, setUsers] = useState([]);
+  const [tooltip, showTooltip] = useState(true);
+  const [roles, setRoles] = useState([]);
 
-  componentDidMount() {
-    // alert(localStorage.getItem("jwt"));
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    getUsers();
+    getRoles();
+  }, []);
+
+  const getUsers = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-    // axios
-    //   .get("http://localhost:8080/api/users", {
-    //     headers: {
-    //       Authorization: "Bearer " + localStorage.getItem("jwt"),
-    //     },
-    //   })
     axios
       .get("http://localhost:8080/api/users")
       .then((response) => response.data)
       .then((data) => {
-        this.setState({ users: data });
+        setUsers(data);
       })
       .catch((message) => {
         alert(message);
       });
-  }
+  };
 
-  render() {
-    return (
-      <div
-        style={{
-          marginTop: "15px",
-          marginBottom: "10px",
-          paddingBottom: "40px",
-          display: "flex",
-          justifyContent: "center",
-        }}
+  const getRoles = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get("http://localhost:8080/api/roles")
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        setRoles(data);
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = () => setShow(true);
+
+  return (
+    <div
+      style={{
+        marginTop: "15px",
+        marginBottom: "10px",
+        paddingBottom: "40px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        className={" border-dark bg-dark text-white"}
+        style={{ width: "40rem" }}
       >
-        <Card
-          className={" border-dark bg-dark text-white"}
-          style={{ width: "40rem" }}
-        >
-          <Card.Header>
-            <Card.Title>User List</Card.Title>
-          </Card.Header>
-          <Form id="addUserId" onSubmit={this.listUser}>
-            <Card.Body>
-              <Table striped bordered hover variant="dark">
-                <thead>
-                  <tr>
-                    <th>User Id</th>
-                    <th>Username</th>
-                    <th>Roles</th>
-                    <th>Action</th>
+        <Card.Header>
+          <Card.Title>User List</Card.Title>
+        </Card.Header>
+        <Form id="addUserId">
+          <Card.Body>
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>User Id</th>
+                  <th>Username</th>
+                  <th>Roles</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.length === 0 ? (
+                  <tr align="center">
+                    <td colSpan={"4"}>No Users Found</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {this.state.users.length === 0 ? (
-                    <tr align="center">
-                      <td colSpan={"5"}>No Users Found</td>
-                    </tr>
-                  ) : (
-                    this.state.users.map((users) => (
-                      <tr key={users.id}>
-                        <td>{users.id}</td>
-                        <td>{users.username}</td>
-                        <td>{users.roles.map((roles) => roles.name + ", ")}</td>
-                        <td>
-                          {/* <ButtonGroup>
+                ) : (
+                  users.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.id}</td>
+                      <td>{user.username}</td>
+                      <td>{user.roles.map((roles) => roles.name + ", ")}</td>
+                      <td>
+                        {/* <ButtonGroup>
                             <Button size="sm" variant="primary">
                               Edit
                             </Button>
@@ -96,21 +106,90 @@ class ListUsers extends React.Component {
                               Delete
                             </Button>
                           </ButtonGroup> */}
-                          <BsFileEarmarkFontFill className="editIcon" />
-                          <BsFileEarmarkMinusFill className="deleteIcon" />
-                          <BsFileEarmarkPlusFill className="addIcon" />
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Form>
-        </Card>
-      </div>
-    );
-  }
+                        <div className="centerDiv">
+                          {tooltip && <ReactTooltip effect="solid" />}
+                          <BsFileEarmarkFontFill
+                            className="editIcon"
+                            data-tip="EDIT"
+                            data-type="info"
+                            data-effect="solid"
+                            onMouseEnter={() => showTooltip(true)}
+                            onMouseLeave={() => {
+                              showTooltip(false);
+                              setTimeout(() => showTooltip(true), 5);
+                            }}
+                          />
+
+                          <BsFileEarmarkMinusFill
+                            className="deleteIcon"
+                            data-tip="DELETE"
+                            data-type="info"
+                            data-effect="solid"
+                            onMouseEnter={() => showTooltip(true)}
+                            onMouseLeave={() => {
+                              showTooltip(false);
+                              setTimeout(() => showTooltip(true), 5);
+                            }}
+                          />
+                          <BsFileEarmarkPlusFill
+                            className="addIcon"
+                            data-tip="NEW"
+                            data-type="info"
+                            onClick={handleShow}
+                            onMouseEnter={() => showTooltip(true)}
+                            onMouseLeave={() => {
+                              showTooltip(false);
+                              setTimeout(() => showTooltip(true), 5);
+                            }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Form>
+        <form action="/action_page.php">
+          <select>
+            <option></option>
+            {roles.map((role) => (
+              <option value={role.name}>{role.name}</option>
+            ))}
+          </select>
+        </form>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          dialogClassName="my-modal"
+          backdrop="static"
+        >
+          <Modal.Header closeButton className="border-dark bg-dark text-white">
+            <Modal.Title>Employee List</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="border-dark bg-dark text-white">
+            <Card
+              style={{
+                "max-width": "25rem",
+                "min-width": "25rem",
+                height: "auto",
+              }}
+              className={" border-dark bg-dark text-white"}
+            ></Card>
+          </Modal.Body>
+          <Modal.Footer className={" border-dark bg-dark text-white"}>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+              Show Employee Loans
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Card>
+    </div>
+  );
 }
 
 export default ListUsers;
