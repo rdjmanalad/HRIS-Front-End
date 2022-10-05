@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container, Button } from "react-bootstrap";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -9,12 +9,62 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-function EmployeeTopList({ childToParent, refreshPage }) {
+function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   const [employees, setData] = useState([]);
   const [selectedId, setId] = useState("");
   const [employee, setRowEmp] = useState([]);
+  const [emptyEmp, setEmptyEmp] = useState([]);
 
   const [loading, setL] = useState(true);
+  var emptyObj = {};
+  emptyObj = {
+    abranchCode: "",
+    acompanyCode: "",
+    address: "",
+    age: "",
+    agroupCode: "",
+    alowance1: "",
+    allowance2: "",
+    atmno: "",
+    basicPay: "",
+    birthday: "",
+    board: "",
+    caddress: "",
+    civil: "",
+    cola: "",
+    cperson: "",
+    datehire: "",
+    employeeNo: "",
+    exemption: "",
+    firstName: "",
+    gender: "",
+    lastName: "",
+    leave: false,
+    middleName: "",
+    obranchCode: "",
+    ocompanyCode: "",
+    ogroupCode: "",
+    paddress: "",
+    pagibigNo: "",
+    philhealthNo: "",
+    phone: "",
+    presentLeave: "",
+    previousLeave: "",
+    rank: "",
+    remarks: "",
+    resigned: "",
+    schedIn: "",
+    schedOut: "",
+    spouse: "",
+    sssno: "",
+    taxCode: "",
+    tinno: "",
+    transportation: "",
+    unionName: "",
+    waverage: "",
+    workPosition: "",
+    workStatus: "",
+  };
 
   function displayOnTab() {
     // alert(employee.userId);
@@ -32,70 +82,12 @@ function EmployeeTopList({ childToParent, refreshPage }) {
         header: { employeeNo: selectedId },
       })
       .then((response) => {
-        alert(response.status);
-        // setData(response.data);
-        // console.log(response.data);
+        if (response.status === 200) {
+          alert("Delete Success!");
+        }
       });
   }
 
-  function newEmp() {
-    //window.location.reload(false);
-    // setRowEmp([]);
-
-    employee.abranchCode = null;
-    employee.acompanyCode = null;
-    employee.address = null;
-    employee.age = null;
-    employee.agroupCode = null;
-    employee.alowance1 = null;
-    employee.allowance2 = null;
-    employee.atmno = null;
-    employee.basicPay = null;
-    employee.birthday = null;
-    employee.board = null;
-    employee.caddress = null;
-    employee.civil = null;
-    employee.cola = null;
-    employee.cperson = null;
-    employee.datehire = null;
-    employee.employeeNo = "";
-    employee.exemption = null;
-    employee.firstName = null;
-    employee.gender = null;
-    employee.lastName = null;
-    employee.leave = false;
-    employee.middleName = null;
-    employee.obranchCode = null;
-    employee.ocompanyCode = null;
-    employee.ogroupCode = null;
-    employee.paddress = null;
-    employee.pagibigNo = null;
-    employee.philhealthNo = null;
-    employee.phone = null;
-    employee.presentLeave = null;
-    employee.previousLeave = null;
-    employee.rank = null;
-    employee.remarks = null;
-    employee.resigned = null;
-    employee.schedIn = null;
-    employee.schedOut = null;
-    employee.spouse = null;
-    employee.sssno = null;
-    employee.taxCode = null;
-    employee.tinno = null;
-    employee.transportation = null;
-    employee.unionName = null;
-    employee.waverage = null;
-    employee.workPosition = null;
-    employee.workStatus = null;
-
-    childToParent(employee);
-    refreshPage();
-    getData();
-    // employee = [];
-
-    // childToParent(employee);
-  }
   useEffect(() => {
     getData();
   }, []);
@@ -113,13 +105,13 @@ function EmployeeTopList({ childToParent, refreshPage }) {
   const nameFormatter = (data, row) => {
     return (
       <span>
-        {row.firstName} {row.lastName}
+        {row.lastName} {row.firstName} {row.employeeNo}
       </span>
     );
   };
 
   useEffect(() => {
-    // loading = false;
+    childToParent2(emptyObj);
   }, [employees]);
 
   useEffect(() => {
@@ -127,7 +119,7 @@ function EmployeeTopList({ childToParent, refreshPage }) {
   }, [employee]);
 
   function nameFilterFormatter(cell, row) {
-    return row.firstName + row.lastName;
+    return row.lastName + row.firstName + row.employeeNo;
   }
 
   // const rowEvents = {
@@ -224,10 +216,10 @@ function EmployeeTopList({ childToParent, refreshPage }) {
             // rowEvents={ rowEvents }
           ></BootstrapTable>
         )}
-        {/* <div className={"allCenter"}>
-          <Button variant="success" size="sm" onClick={() => newEmp()}>
+        <div className={"allCenter"}>
+          {/* <Button variant="success" size="sm" onClick={() => newEmp()}>
             New
-          </Button>
+          </Button> */}
           <Button
             variant="danger"
             size="sm"
@@ -236,10 +228,10 @@ function EmployeeTopList({ childToParent, refreshPage }) {
           >
             Remove
           </Button>
-          <Button variant="warning" size="sm" onClick={() => displayOnTab()}>
+          {/* <Button variant="warning" size="sm" onClick={() => displayOnTab()}>
             Edit
-          </Button>
-        </div> */}
+          </Button> */}
+        </div>
       </Container>
     </Card>
   );

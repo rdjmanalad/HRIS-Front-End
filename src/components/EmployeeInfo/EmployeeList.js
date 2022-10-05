@@ -18,9 +18,14 @@ class EmployeeList extends React.Component {
       showTab4: false,
       employee: [],
       mountEmp: [],
+      preEmp: [],
     };
     this.hideComponent = this.hideComponent.bind(this);
     this.child = React.createRef();
+    this.empNoRef = React.createRef();
+    this.firstNameRef = React.createRef();
+    this.lastNameRef = React.createRef();
+    this.middleNameRef = React.createRef();
   }
 
   hideComponent(name) {
@@ -62,14 +67,31 @@ class EmployeeList extends React.Component {
     const { showTab1, showTab2, showTab3, showTab4 } = this.state;
     const { employee } = this.state;
     const { mountEmp } = this.state;
+    const { empNoRef } = this.state;
+    const { preEmp } = this.state;
 
     var empp = [];
 
     const childToParent = (childdata) => {
       empp = childdata;
+      // alert(childdata.length);
+      if (childdata.length !== 0) {
+        this.empNoRef.current.value = empp.employeeNo;
+        this.firstNameRef.current.value = empp.firstName;
+        this.lastNameRef.current.value = empp.lastName;
+        this.middleNameRef.current.value = empp.middleName;
+      }
+
       this.setState({ employee: childdata });
       this.setState({ mountEmp: empp });
       // parentToChild();
+    };
+
+    const childToParent2 = (childdata2) => {
+      empp = childdata2;
+      this.setState({ employee: childdata2 });
+      this.setState({ mountEmp: empp });
+      // clearDetails();
     };
 
     function refreshPage() {
@@ -92,6 +114,7 @@ class EmployeeList extends React.Component {
           <EmployeeSideList
             childToParent={childToParent}
             refreshPage={refreshPage}
+            childToParent2={childToParent2}
           />
 
           {/* <EmployeeTopList></EmployeeTopList> */}
@@ -130,7 +153,8 @@ class EmployeeList extends React.Component {
                     Employee Number
                   </Form.Label>
                   <Form.Control
-                    defaultValue={employee.employeeNo}
+                    // defaultValue={employee.employeeNo}
+                    ref={this.empNoRef}
                     type="text"
                     className="inpHeightXs"
                     // disabled
@@ -144,7 +168,7 @@ class EmployeeList extends React.Component {
                 <FormGroup as={Col} className="mb-1">
                   <Form.Label className="noWrapText">First Name</Form.Label>
                   <Form.Control
-                    defaultValue={employee.firstName}
+                    ref={this.firstNameRef}
                     type="text"
                     className="inpHeightXs"
                     onChange={(event) =>
@@ -155,7 +179,7 @@ class EmployeeList extends React.Component {
                 <FormGroup as={Col} className="mb-1">
                   <Form.Label className="noWrapText">Middle Name</Form.Label>
                   <Form.Control
-                    defaultValue={employee.middleName}
+                    ref={this.middleNameRef}
                     type="text"
                     className="inpHeightXs"
                     onChange={(event) =>
@@ -166,7 +190,7 @@ class EmployeeList extends React.Component {
                 <FormGroup as={Col} className="mb-1">
                   <Form.Label className="noWrapText">Last Name</Form.Label>
                   <Form.Control
-                    defaultValue={employee.lastName}
+                    ref={this.lastNameRef}
                     type="text"
                     className="inpHeightXs"
                     onChange={(event) =>
@@ -183,7 +207,11 @@ class EmployeeList extends React.Component {
                 // ref={this.child}
               ></EmpMasterFile>
             )}
-            {showTab2 && <EmployeeBackground></EmployeeBackground>}
+            {showTab2 && (
+              <EmployeeBackground
+                empNo={this.empNoRef.current.value}
+              ></EmployeeBackground>
+            )}
             {showTab3 && <PayrollInfo empData={employee}></PayrollInfo>}
             {showTab4 && <InfractionInfo></InfractionInfo>}
           </Card>

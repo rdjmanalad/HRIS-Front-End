@@ -99,8 +99,26 @@ function EmpMasterFile({ empData, refreshPage }) {
     //     });
     // }
   }
+
+  function deleteEmployee() {
+    alert(empData.employeeNo);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .delete(
+        "http://localhost:8080/api/masemployeeDel/" + empData.employeeNo,
+        {}
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Delete Success!");
+        }
+      });
+  }
+
   function newDetails() {
-    // window.location.reload(false);
+    window.location.reload(false);
     clearDetails();
     setEmp(empData);
   }
@@ -140,55 +158,59 @@ function EmpMasterFile({ empData, refreshPage }) {
     // addressRef.current.dafaultValue=masEmployee.address;
   }, [masEmployee]);
 
+  // function newDetails() {
+  //   window.location.reload(false);
+  // }
+
   function clearDetails() {
     addressRef.current.value = "";
 
-    empData.abranchCode = null;
-    empData.acompanyCode = null;
-    empData.address = null;
-    empData.age = null;
-    empData.agroupCode = null;
-    empData.alowance1 = null;
-    empData.allowance2 = null;
-    empData.atmno = null;
-    empData.basicPay = null;
-    empData.birthday = null;
-    empData.board = null;
-    empData.caddress = null;
-    empData.civil = null;
-    empData.cola = null;
-    empData.cperson = null;
-    empData.datehire = null;
+    empData.abranchCode = "";
+    empData.acompanyCode = "";
+    empData.address = "";
+    empData.age = "";
+    empData.agroupCode = "";
+    empData.alowance1 = "";
+    empData.allowance2 = "";
+    empData.atmno = "";
+    empData.basicPay = "";
+    empData.birthday = "";
+    empData.board = "";
+    empData.caddress = "";
+    empData.civil = "";
+    empData.cola = "";
+    empData.cperson = "";
+    empData.datehire = "";
     empData.employeeNo = "";
-    empData.exemption = null;
-    empData.firstName = null;
-    empData.gender = null;
-    empData.lastName = null;
+    empData.exemption = "";
+    empData.firstName = "";
+    empData.gender = "";
+    empData.lastName = "";
     empData.leave = false;
-    empData.middleName = null;
-    empData.obranchCode = null;
-    empData.ocompanyCode = null;
-    empData.ogroupCode = null;
-    empData.paddress = null;
-    empData.pagibigNo = null;
-    empData.philhealthNo = null;
-    empData.phone = null;
-    empData.presentLeave = null;
-    empData.previousLeave = null;
-    empData.rank = null;
-    empData.remarks = null;
-    empData.resigned = null;
-    empData.schedIn = null;
-    empData.schedOut = null;
-    empData.spouse = null;
-    empData.sssno = null;
-    empData.taxCode = null;
-    empData.tinno = null;
-    empData.transportation = null;
-    empData.unionName = null;
-    empData.waverage = null;
-    empData.workPosition = null;
-    empData.workStatus = null;
+    empData.middleName = "";
+    empData.obranchCode = "";
+    empData.ocompanyCode = "";
+    empData.ogroupCode = "";
+    empData.paddress = "";
+    empData.pagibigNo = "";
+    empData.philhealthNo = "";
+    empData.phone = "";
+    empData.presentLeave = "";
+    empData.previousLeave = "";
+    empData.rank = "";
+    empData.remarks = "";
+    empData.resigned = "";
+    empData.schedIn = "";
+    empData.schedOut = "";
+    empData.spouse = "";
+    empData.sssno = "";
+    empData.taxCode = "";
+    empData.tinno = "";
+    empData.transportation = "";
+    empData.unionName = "";
+    empData.waverage = "";
+    empData.workPosition = "";
+    empData.workStatus = "";
   }
 
   return (
@@ -541,13 +563,13 @@ function EmpMasterFile({ empData, refreshPage }) {
                 >
                   Edit
                 </Button>
-                <Button
+                {/* <Button
                   className="setButtonMargin"
                   variant="danger"
-                  onClick={() => deleteDetails()}
+                  onClick={() => deleteEmployee()}
                 >
                   Remove
-                </Button>
+                </Button> */}
               </Col>
               <Col sm="2"></Col>
               <Col>
