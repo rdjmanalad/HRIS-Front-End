@@ -98,9 +98,6 @@ class EmployeeList extends React.Component {
       showTab1 = false;
       this.setState({ employee: [] });
     }
-    // componentDidMount() {
-
-    // }
 
     return (
       <div style={{ paddingBottom: "50px" }}>
@@ -207,12 +204,8 @@ class EmployeeList extends React.Component {
                 // ref={this.child}
               ></EmpMasterFile>
             )}
-            {showTab2 && (
-              <EmployeeBackground
-                empNo={this.empNoRef.current.value}
-              ></EmployeeBackground>
-            )}
-            {showTab3 && <PayrollInfo empData={employee}></PayrollInfo>}
+            {showTab2 && <EmployeeBackground empData={mountEmp} />}
+            {showTab3 && <PayrollInfo empData={employee} />}
             {showTab4 && <InfractionInfo></InfractionInfo>}
           </Card>
         </div>

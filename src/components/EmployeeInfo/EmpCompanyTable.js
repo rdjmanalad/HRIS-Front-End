@@ -12,7 +12,7 @@ class EmpCompanyTable extends React.Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:8080/api/company")
+      .get("http://localhost:8080/api/companyyyyy")
       .then((response) => response.data)
       .then((data) => {
         this.setState({ company: data });
