@@ -4,19 +4,23 @@ import axios from "axios";
 import { useRef } from "react";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
 
-function EducationTable(empNo) {
+function EducationTable({ empNo }) {
   const [eduList, setEduList] = useState([]);
   const [edu, setEdu] = useState([]);
   const startYearRef = useRef();
   const endYearRef = useRef();
   const placeRef = useRef();
   const remarksRef = useRef();
-  var action = "";
+  const [rowId, setRowId] = useState("");
+  // var rowId = 0;
   var [showMod, setShowMod] = useState(false);
+  var [action, setAction] = useState("");
+  var [rem, setRem] = useState("");
   var setArray = {};
 
   setArray = {
     id: "",
+    status: "",
     employeeNo: "",
     startYear: "",
     endYear: "",
@@ -24,9 +28,9 @@ function EducationTable(empNo) {
     remarks: "",
   };
 
-  function getData() {
+  const getData = () => {
     axios
-      .get("http://localhost:8080/api/att/attainmentEDU/" + empNo.empNo, {
+      .get("http://localhost:8080/api/att/attainmentEDU/" + empNo, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -43,11 +47,11 @@ function EducationTable(empNo) {
       .catch((message) => {
         alert(message);
       });
-  }
+  };
 
-  function delAttainment(id) {
+  const delAttainment = (id) => {
     axios
-      .get("http://localhost:8080/api/att/deleteAttainment/" + id, {
+      .delete("http://localhost:8080/api/att/deleteAttainment/" + id, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -56,27 +60,74 @@ function EducationTable(empNo) {
             localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
         },
       })
-      .then((response) => response.data)
-      .then((data) => {
-        console.log(data);
-        setEduList(data);
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Delete Success!");
+          getData();
+        }
       })
       .catch((message) => {
         alert(message);
       });
-  }
+  };
+
+  const saveAttainment = () => {
+    axios
+      .post("http://localhost:8080/api/att/saveAttainment", setArray, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Saved Successfully!");
+          getData();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const saveEditAttainment = (edited) => {
+    axios
+      .post("http://localhost:8080/api/att/saveAttainment", edited, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Edit Saved!");
+          getData();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
 
   useEffect(() => {
     getData();
   }, [empNo]);
 
   function addNew() {
-    setArray.employeeNo = empNo.empNo;
+    setArray.employeeNo = empNo;
+    setArray.status = "EDU";
     setArray.startYear = startYearRef.current.value;
     setArray.endYear = endYearRef.current.value;
     setArray.place = placeRef.current.value;
     setArray.remarks = remarksRef.current.value;
-    alert(setArray.remarks);
+    saveAttainment();
+    // alert(setArray.remarks);
   }
 
   function handleClick(hey) {
@@ -84,18 +135,28 @@ function EducationTable(empNo) {
   }
 
   function deleteEdu(roww) {
+    setAction("DELETE");
     setShowMod(true);
+    setRowId(roww);
     //delAttainment(roww);
   }
 
-  const handleClose = (x) => {
-    setShowMod(false);
-    alert(x);
-    x ? alert("delete") : alert("cancel");
+  const saveEditEdu = (rowData) => {
+    // alert(rowData.remarks);
+    saveEditAttainment(rowData);
+  };
+
+  const handleClose = (deleteAtt) => {
+    if (deleteAtt) {
+      delAttainment(rowId);
+      setShowMod(false);
+    } else {
+      setShowMod(false);
+    }
   };
 
   return (
-    <div className="table-responsive" style={{ maxHeight: "150px" }}>
+    <div className="table-responsive" style={{ maxHeight: "175px" }}>
       <Table
         striped
         bordered
@@ -144,14 +205,40 @@ function EducationTable(empNo) {
           ) : (
             eduList.map((school) => (
               <tr key={school.id}>
-                <td contenteditable="true">{school.startYear}</td>
-                <td contenteditable="true">{school.endYear}</td>
-                <td contenteditable="true">{school.place}</td>
-                <td contenteditable="true">{school.remarks}</td>
+                <td
+                  contentEditable="true"
+                  onBlur={(e) => (school.startYear = e.target.textContent)}
+                >
+                  {school.startYear}
+                </td>
+                <td
+                  contentEditable="true"
+                  onBlur={(e) => (school.endYear = e.target.textContent)}
+                >
+                  {school.endYear}
+                </td>
+                <td
+                  contentEditable="true"
+                  onBlur={(e) => (school.place = e.target.textContent)}
+                >
+                  {school.place}
+                </td>
+                <td
+                  contentEditable="true"
+                  onBlur={(event) =>
+                    (school.remarks = event.target.textContent)
+                  }
+                >
+                  {school.remarks}
+                </td>
                 <td>
                   <div className="centerDiv">
                     <ButtonGroup>
-                      <Button size="sm" variant="warning">
+                      <Button
+                        size="sm"
+                        variant="warning"
+                        onClick={() => saveEditEdu(school)}
+                      >
                         Save
                       </Button>
                       {"  "}
@@ -171,7 +258,7 @@ function EducationTable(empNo) {
         </tbody>
       </Table>
       {showMod ? (
-        <ModalConfirm handleClose={handleClose}></ModalConfirm>
+        <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
       ) : (
         <a></a>
       )}

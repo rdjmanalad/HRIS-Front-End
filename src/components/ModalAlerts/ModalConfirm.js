@@ -1,8 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
+import {
+  BsFillExclamationCircleFill,
+  BsFillInfoCircleFill,
+} from "react-icons/bs";
 
-function ModalConfirm({ handleClose }) {
+function ModalConfirm({ handleClose, action }) {
   const [showMod, setShowMod] = useState(true);
 
   const handleClose1 = () => {
@@ -23,7 +27,23 @@ function ModalConfirm({ handleClose }) {
         backdrop="static"
       >
         <Modal.Header closeButton className="border-dark bg-dark text-white">
-          <Modal.Title></Modal.Title>
+          <Modal.Title>
+            {action === "DELETE" ? (
+              <BsFillExclamationCircleFill className="deleteWarningIcon" />
+            ) : (
+              <a />
+            )}
+            {action === "EDIT" ? (
+              <BsFillExclamationCircleFill className="infoWarningIcon" />
+            ) : (
+              <a />
+            )}
+            {action === "INFO" ? (
+              <BsFillExclamationCircleFill className="infoWarningIcon" />
+            ) : (
+              <a />
+            )}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="border-dark bg-dark text-white">
           <Card
@@ -34,7 +54,7 @@ function ModalConfirm({ handleClose }) {
             }}
             className={" border-dark bg-dark text-white"}
           >
-            <label>aaaaaaaaaaaaaaaaaa</label>
+            <h3 style={{ textAlign: "center" }}>CONFIRM {action} ?</h3>
           </Card>
         </Modal.Body>
         <Modal.Footer className={" border-dark bg-dark text-white"}>
