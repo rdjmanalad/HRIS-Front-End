@@ -46,6 +46,7 @@ function PayrollInfo({ empData }) {
     allowance1: "",
     allowance2: "",
     others: "",
+    remarks: "",
   };
 
   const ogcRef = useRef();
@@ -66,7 +67,7 @@ function PayrollInfo({ empData }) {
   const allow2Ref = useRef();
   const coopRef = useRef();
   const jobRef = useRef();
-  const RemarksRef = useRef();
+  const remarksRef = useRef();
 
   useEffect(() => {
     getDropDown();
@@ -103,7 +104,7 @@ function PayrollInfo({ empData }) {
     coopRef.current.value = "";
     jobRef.current.value = empData.workPosition;
     natureRef.current.value = "";
-    RemarksRef.current.value = empData.remarks;
+    remarksRef.current.value = empData.remarks;
   }, [empData]);
 
   const obj = [];
@@ -204,23 +205,26 @@ function PayrollInfo({ empData }) {
     //   });
   };
 
+  const formatCurrency = (val) => {
+    return val.replaceAll(",", "").replaceAll("₱", "");
+  };
+
   const setCheckData = () => {
     payroll.employeeNo = empData.employeeNo;
-    payroll.exemption = exemptionRef.current.value
-      .replaceAll(",", "")
-      .replaceAll("₱", "");
-    payroll.basic = basicRef.current.value
-      .replaceAll(",", "")
-      .replaceAll("₱", "");
-    payroll.ecola = ecolaRef.current.value
-      .replaceAll(",", "")
-      .replaceAll("₱", "");
-    payroll.allowance1 = allow1Ref.current.value
-      .replaceAll(",", "")
-      .replaceAll("₱", "");
-    payroll.allowance2 = allow1Ref.current.value
-      .replaceAll(",", "")
-      .replaceAll("₱", "");
+    payroll.exemption = formatCurrency(exemptionRef.current.value);
+    payroll.basic = formatCurrency(basicRef.current.value);
+    payroll.ecola = formatCurrency(ecolaRef.current.value);
+    payroll.allowance1 = formatCurrency(allow1Ref.current.value);
+    payroll.allowance2 = formatCurrency(allow1Ref.current.value);
+    payroll.agroupCode = agcRef.current.value;
+    payroll.acompanyCode = accRef.current.value;
+    payroll.abranchCode = abcRef.current.value;
+    payroll.ogroupCode = ogcRef.current.value;
+    payroll.ocompanyCode = occRef.current.value;
+    payroll.obranchCode = obcRef.current.value;
+    payroll.workPosition = jobRef.current.value;
+    payroll.remarks = remarksRef.current.value;
+    payroll.nature = natureRef.current.value;
   };
 
   return (
@@ -431,6 +435,7 @@ function PayrollInfo({ empData }) {
                     className="inpHeightXs"
                     // value={empData.rank}
                     ref={rankRef}
+                    onChange={(event) => (payroll.rank = event.target.value)}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -443,6 +448,7 @@ function PayrollInfo({ empData }) {
                     className="inpHeightXs"
                     // value={empData.taxCode}
                     ref={taxRef}
+                    onChange={(event) => (payroll.tax = event.target.value)}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -583,6 +589,9 @@ function PayrollInfo({ empData }) {
                   <FormControl
                     className="inpHeightXs"
                     ref={jobRef}
+                    onChange={(event) =>
+                      (payroll.workPosition = event.target.value)
+                    }
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -595,11 +604,11 @@ function PayrollInfo({ empData }) {
                     className="dropDownList"
                     style={{ padding: "0px 0px 0px 5px" }}
                     ref={natureRef}
-                    onChange={(event) => (payroll.nature = event.target.value)}
+                    onChange={(event) => (empData.nature = event.target.value)}
                   >
                     <option></option>
                     {nature.map((code) => (
-                      <option value={code.id} key={code.id}>
+                      <option value={code.natureName} key={code.id}>
                         {code.id} - {code.natureName}
                       </option>
                     ))}
@@ -616,7 +625,8 @@ function PayrollInfo({ empData }) {
                     rows={2}
                     className="inpHeightXs"
                     style={{ height: "60px" }}
-                    ref={RemarksRef}
+                    ref={remarksRef}
+                    onChange={(event) => (payroll.remarks = event.target.value)}
                   ></FormControl>
                 </Col>
               </FormGroup>
