@@ -105,7 +105,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   const nameFormatter = (data, row) => {
     return (
       <span>
-        {row.lastName} {row.firstName} {row.employeeNo}
+        {row.lastName}, {row.firstName} {row.employeeNo}
       </span>
     );
   };
@@ -209,7 +209,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
               ],
             })}
             filter={filterFactory()}
-            rowStyle={{ padding: "1px" }}
+            rowStyle={{ padding: "1px", fontWeight: "bold" }}
             rowClasses="empTableRow"
             headerClasses="empTableHeader"
             selectRow={selectRowProp}
@@ -222,7 +222,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
           </Button> */}
           <Button
             variant="danger"
-            size="sm"
+            size="md"
             className="buttonMargin"
             onClick={() => deleteEmployee()}
           >

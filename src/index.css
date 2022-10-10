@@ -178,3 +178,17 @@ input[type="radio"]:checked:after {
   height: 30px;
   fill: green;
 }
+
+.invertColor {
+  filter: invert(88%);
+}
+
+.buttonRight {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.currency {
+  text-align: right;
+}

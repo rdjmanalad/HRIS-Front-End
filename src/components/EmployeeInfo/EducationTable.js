@@ -43,9 +43,6 @@ function EducationTable({ empNo }) {
       .then((data) => {
         console.log(data);
         setEduList(data);
-      })
-      .catch((message) => {
-        alert(message);
       });
   };
 
