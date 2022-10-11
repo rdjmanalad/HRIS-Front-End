@@ -206,7 +206,9 @@ class EmployeeList extends React.Component {
             )}
             {showTab2 && <EmployeeBackground empData={mountEmp} />}
             {showTab3 && <PayrollInfo empData={employee} />}
-            {showTab4 && <InfractionInfo></InfractionInfo>}
+            {showTab4 && (
+              <InfractionInfo empNo={mountEmp.employeeNo}></InfractionInfo>
+            )}
           </Card>
         </div>
         {/* <Card style={{ "margin-top": "60px" }}>

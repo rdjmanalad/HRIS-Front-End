@@ -11,7 +11,7 @@ function ModalPromoTransferHist({ empNo }) {
 
   useEffect(() => {
     getPayroll();
-  }, [empNo]);
+  }, [show]);
 
   const addZero = () => {
     var length = stringEmpno.length;

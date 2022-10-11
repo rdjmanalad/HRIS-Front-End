@@ -109,6 +109,7 @@ function PayrollInfo({ empData }) {
 
   const obj = [];
   const rows = [];
+  var success = false;
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN", {
@@ -183,34 +184,66 @@ function PayrollInfo({ empData }) {
   const saveChanges = () => {
     setCheckData();
     console.log(payroll);
-    // axios.defaults.headers.common["Authorization"] =
-    //   "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-    // axios
-    //   .post("http://localhost:8080/api/nature/save", payroll,{
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json",
-    //       Authorization:
-    //         "Bearer " +
-    //         localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
-    //     },
-    //   })
-    //   .then((response) => {
-    //     if (response.status === 200) {
-    //       alert("Data Saved!");
-    //     }
-    //   })
-    //   .catch((message) => {
-    //     alert(message);
-    //   });
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .post("http://localhost:8080/api/payroll/save", payroll, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          success = true;
+          // alert("Data Saved!");
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+
+    axios
+      .post("http://localhost:8080/api/masemployeeSave", empData, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          success = true;
+          // alert("Data Saved!");
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+
+    alert(success && "Data Saved");
   };
 
   const formatCurrency = (val) => {
     return val.replaceAll(",", "").replaceAll("₱", "");
   };
 
+  const addZero = (empNo) => {
+    var empString = String(empNo);
+    var length = empString.length;
+    for (let i = length; i < 4; i++) {
+      empString = "0" + empString;
+    }
+    return empString;
+  };
+
   const setCheckData = () => {
-    payroll.employeeNo = empData.employeeNo;
+    payroll.employeeNo = addZero(empData.employeeNo);
     payroll.exemption = formatCurrency(exemptionRef.current.value);
     payroll.basic = formatCurrency(basicRef.current.value);
     payroll.ecola = formatCurrency(ecolaRef.current.value);
@@ -225,6 +258,22 @@ function PayrollInfo({ empData }) {
     payroll.workPosition = jobRef.current.value;
     payroll.remarks = remarksRef.current.value;
     payroll.nature = natureRef.current.value;
+
+    empData.agroupCode = agcRef.current.value;
+    empData.acompanyCode = accRef.current.value;
+    empData.abranchCode = abcRef.current.value;
+    empData.ogroupCode = ogcRef.current.value;
+    empData.ocompanyCode = occRef.current.value;
+    empData.obranchCode = obcRef.current.value;
+    empData.exemption = formatCurrency(exemptionRef.current.value);
+    empData.basicPay = formatCurrency(basicRef.current.value);
+    empData.cola = formatCurrency(ecolaRef.current.value);
+    empData.allowance1 = formatCurrency(allow1Ref.current.value);
+    empData.allowance2 = formatCurrency(allow1Ref.current.value);
+    empData.workPosition = jobRef.current.value;
+    empData.remarks = remarksRef.current.value;
+    empData.taxCode = taxRef.current.value;
+    empData.rank = rankRef.current.value;
   };
 
   return (
