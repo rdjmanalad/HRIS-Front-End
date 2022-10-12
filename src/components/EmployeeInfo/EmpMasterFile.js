@@ -31,6 +31,7 @@ function EmpMasterFile({ empData, refreshPage }) {
   const addressRef = useRef();
   const paddressRef = useRef();
   const phoneRef = useRef();
+  const cphoneRef = useRef();
   const cpersonRef = useRef();
   const caddressRef = useRef();
   const genderRef = useRef();
@@ -49,22 +50,14 @@ function EmpMasterFile({ empData, refreshPage }) {
   const philhealthNoRef = useRef();
 
   useEffect(() => {
-    // alert("useEffect here");
     setAddress(empData.address);
-
     setEmp(empData);
   });
 
-  function refreshPage() {
-    alert("refresh");
-  }
-
   function saveDetails() {
+    console.log(masEmployee);
     setEmpNo(empData.employeeNo);
-    alert(empData.firstName);
 
-    // if (!empNo) {
-    alert("empnoxxx :" + empNo);
     axios
       .post("http://localhost:8080/api/masemployeeSave", masEmployee, {
         headers: {
@@ -76,9 +69,12 @@ function EmpMasterFile({ empData, refreshPage }) {
         },
       })
       .then((response) => {
-        alert(response.status);
-        // setData(response.data);
-        // console.log(response.data);
+        if (response.status === 200) {
+          alert("Successfully Saved!");
+        }
+      })
+      .catch((message) => {
+        alert(message);
       });
     //   } else {
     //     alert("empno :"+empNo)
@@ -100,23 +96,6 @@ function EmpMasterFile({ empData, refreshPage }) {
     // }
   }
 
-  function deleteEmployee() {
-    alert(empData.employeeNo);
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-    axios
-      .delete(
-        "http://localhost:8080/api/masemployeeDel/" + empData.employeeNo,
-        {}
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          alert("Delete Success!");
-        }
-      });
-  }
-
   function newDetails() {
     window.location.reload(false);
     clearDetails();
@@ -125,15 +104,16 @@ function EmpMasterFile({ empData, refreshPage }) {
 
   function editDetails() {}
 
-  function deleteDetails() {}
   useEffect(() => {
     // alert(masEmployee.length);
     if (masEmployee.length !== 0) {
+      console.log(masEmployee.cphone);
       addressRef.current.value = masEmployee.address;
       paddressRef.current.value = masEmployee.paddress;
       phoneRef.current.value = masEmployee.phone;
       cpersonRef.current.value = masEmployee.cperson;
       caddressRef.current.value = masEmployee.caddress;
+      cphoneRef.current.value = masEmployee.cphone;
       genderRef.current.value = masEmployee.gender;
       birthdayRef.current.value = new Date(
         masEmployee.birthday
@@ -148,7 +128,7 @@ function EmpMasterFile({ empData, refreshPage }) {
       dateRegularRef.current.value = new Date(
         masEmployee.dateRegular
       ).toLocaleDateString("en-CA");
-      leaveRef.current.value = masEmployee.leave;
+      leaveRef.current.checked = masEmployee.leave === "1" ? true : false;
       atmnoRef.current.value = masEmployee.atmno;
       sssnoRef.current.value = masEmployee.sssno;
       tinnoRef.current.value = masEmployee.tinno;
@@ -180,13 +160,14 @@ function EmpMasterFile({ empData, refreshPage }) {
     empData.civil = "";
     empData.cola = "";
     empData.cperson = "";
+    empData.cphone = "";
     empData.datehire = "";
     empData.employeeNo = "";
     empData.exemption = "";
     empData.firstName = "";
     empData.gender = "";
     empData.lastName = "";
-    empData.leave = false;
+    empData.leave = "";
     empData.middleName = "";
     empData.obranchCode = "";
     empData.ocompanyCode = "";
@@ -213,6 +194,10 @@ function EmpMasterFile({ empData, refreshPage }) {
     empData.workStatus = "";
   }
 
+  const checkToggle = (e) => {
+    e.target.checked ? (empData.leave = 1) : (empData.leave = 0);
+  };
+
   return (
     <div>
       {/* {this.props.parentToChild} */}
@@ -234,7 +219,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={addressRef}
                       // defaultValue={address}
                       className="inpHeightXs"
-                      onChange={(event) => (address = event.target.value)}
+                      onChange={(event) =>
+                        (empData.address = event.target.value)
+                      }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -289,7 +276,13 @@ function EmpMasterFile({ empData, refreshPage }) {
                     Phone
                   </FormLabel>
                   <Col>
-                    <FormControl className={"inpHeightXs"}></FormControl>
+                    <FormControl
+                      className={"inpHeightXs"}
+                      ref={cphoneRef}
+                      onChange={(event) =>
+                        (empData.cphone = event.target.value)
+                      }
+                    ></FormControl>
                   </Col>
                 </FormGroup>
                 <FormGroup as={Row}>
@@ -449,8 +442,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <Form.Check
                       ref={leaveRef}
                       style={{ paddingTop: "5px" }}
-                      // defaultValue={empData.leave}
-                      onChange={(event) => (empData.leave = event.target.value)}
+                      onChange={(event) => checkToggle(event)}
+                      // onSelect={(event) => (empData.leave = 1)}
                     ></Form.Check>
                   </Col>
                 </FormGroup>

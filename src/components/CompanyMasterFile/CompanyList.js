@@ -40,11 +40,25 @@ export const CompanyList = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/company").then((response) => {
-      setCompanies(response.data);
-      console.log(response.data);
-    });
+    axios
+      .get("http://localhost:8080/api/company/withLocator")
+      .then((response) => {
+        setCompanies(response.data);
+        console.log(response.data);
+      });
+
+    // axios.defaults.headers.common["Authorization"] =
+    //   "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    // axios.get("http://localhost:8080/api/company").then((response) => {
+    //   setCompanies(response.data);
+    //   console.log(response.data);
+    // });
   };
+
+  const saveData = () => {};
+
+  const deleteData = () => {};
 
   function setRowCompany(row) {
     setCompany(row);
@@ -56,6 +70,10 @@ export const CompanyList = () => {
     sssnoRef.current.value = row.sssnumber;
     pagibigNoRef.current.value = row.pagibigNumber;
     dateOpenRef.current.value = row.dateOpen;
+    philPositionRef.current.value = row.philPosition;
+    philSignatoryRef.current.value = row.philSignatory;
+    pagibigBranchRef.current.value = row.pagibigBranch;
+    locIDRef.current.value = row.locID;
   }
 
   const selectRowProp = {
@@ -146,7 +164,7 @@ export const CompanyList = () => {
   return (
     <div>
       <Card className={" border-dark bg-dark text-white floatTop"}>
-        <Card.Body style={{ paddingTop: "0px" }}>
+        <Card.Body style={{ paddingTop: "0px", paddingBottom: "0px" }}>
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             COMPANY INFORMATION
           </label>
@@ -162,6 +180,19 @@ export const CompanyList = () => {
                     className="inpHeightXs"
                     // onChange={(event) =>
                     //   (empData.paddress = event.target.value)
+                    // }
+                  ></FormControl>
+                </Col>
+                <Col></Col>
+                <FormLabel column className="noWrapText" sm="1">
+                  SSS Locator
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={locIDRef}
+                    className="inpHeightXs"
+                    // onChange={(event) =>
+                    //   (group.paddress = event.target.value)
                     // }
                   ></FormControl>
                 </Col>
@@ -241,20 +272,6 @@ export const CompanyList = () => {
             <FormGroup as={Col} sm="3">
               <FormGroup as={Row}>
                 <FormLabel column className="noWrapText" sm="4">
-                  Tin No.
-                </FormLabel>
-                <Col sm="">
-                  <FormControl
-                    ref={tinRef}
-                    className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (empData.paddress = event.target.value)
-                    // }
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column className="noWrapText" sm="4">
                   SSS No.
                 </FormLabel>
                 <Col>
@@ -267,6 +284,21 @@ export const CompanyList = () => {
                   ></FormControl>
                 </Col>
               </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column className="noWrapText" sm="4">
+                  Tin No.
+                </FormLabel>
+                <Col sm="">
+                  <FormControl
+                    ref={tinRef}
+                    className="inpHeightXs"
+                    // onChange={(event) =>
+                    //   (empData.paddress = event.target.value)
+                    // }
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+
               <FormGroup as={Row}>
                 <FormLabel column className="noWrapText" sm="4">
                   Philhealth No.
@@ -324,7 +356,7 @@ export const CompanyList = () => {
                   ></FormControl>
                 </Col>
               </FormGroup>
-              <FormGroup as={Row}>
+              {/* <FormGroup as={Row}>
                 <FormLabel column className="noWrapText" sm="4">
                   SSS Locator
                 </FormLabel>
@@ -337,7 +369,7 @@ export const CompanyList = () => {
                     // }
                   ></FormControl>
                 </Col>
-              </FormGroup>
+              </FormGroup> */}
             </FormGroup>
           </FormGroup>
 
@@ -378,6 +410,26 @@ export const CompanyList = () => {
             ></BootstrapTable>
           </Container>
         </Card.Body>
+        <Card.Footer>
+          <div style={{ display: "flex" }}>
+            <button
+              type="submit"
+              className="btn btn-danger btn-md buttonRight"
+              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
+              onClick={() => deleteData()}
+            >
+              Delete
+            </button>
+            <button
+              type="submit"
+              className="btn btn-success btn-md "
+              style={{ width: "80px", marginTop: "0px" }}
+              onClick={() => saveData()}
+            >
+              Save
+            </button>
+          </div>
+        </Card.Footer>
       </Card>
     </div>
   );

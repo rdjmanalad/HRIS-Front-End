@@ -4,6 +4,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
+import ModalConfirm from "../ModalAlerts/ModalConfirm";
 import {
   Card,
   FormControl,
@@ -21,6 +22,9 @@ export const GroupList = () => {
   const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState([]);
   var setArray = { groupCode: "", groupName: "" };
+  var [showMod, setShowMod] = useState(false);
+  var [action, setAction] = useState("");
+  var [delId, setDelId] = useState("");
 
   useEffect(() => {
     getData();
@@ -59,6 +63,29 @@ export const GroupList = () => {
       });
   };
 
+  const delData = () => {
+    axios
+      .delete("http://localhost:8080/api/group1/delete/" + delId, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Delete Success!");
+          clearFields();
+          getData();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
   function setRowGroup(row) {
     setGroup(row);
     groupCodeRef.current.value = row.groupCode;
@@ -70,6 +97,21 @@ export const GroupList = () => {
     setArray.groupName = groupNameRef.current.value.toUpperCase();
     console.log(setArray);
     saveGroup();
+  };
+
+  const deleteGroup = () => {
+    setAction("DELETE");
+    setShowMod(true);
+    //delAttainment(roww);
+  };
+
+  const handleClose = (deleteAtt) => {
+    if (deleteAtt) {
+      delData();
+      setShowMod(false);
+    } else {
+      setShowMod(false);
+    }
   };
 
   const clearFields = () => {
@@ -87,6 +129,7 @@ export const GroupList = () => {
     onSelect: (row, isSelect, rowIndex, e) => {
       setRowGroup(row);
       // setId(row.employeeNo);
+      setDelId(row.groupCode);
       return true;
     },
     style: { width: "20px" },
@@ -156,7 +199,7 @@ export const GroupList = () => {
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             Group List
           </label>
-          <Container>
+          <Container style={{ width: "500px" }}>
             <BootstrapTable
               id="bsTable2"
               keyField="groupCode"
@@ -195,7 +238,7 @@ export const GroupList = () => {
               type="submit"
               className="btn btn-danger btn-md buttonRight"
               style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
-              onClick={() => saveNew()}
+              onClick={() => deleteGroup()}
             >
               Delete
             </button>
@@ -210,6 +253,11 @@ export const GroupList = () => {
           </div>
         </Card.Footer>
       </Card>
+      {showMod ? (
+        <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
+      ) : (
+        <a></a>
+      )}
     </div>
   );
 };

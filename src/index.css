@@ -53,6 +53,7 @@ code {
   margin-bottom: 0.5rem;
   border-color: rgb(173, 173, 173);
   filter: invert(100%);
+  font-weight: bold;
 }
 
 .react-bootstrap-table > table > thead > tr > th .filter-label {
@@ -204,4 +205,5 @@ input[type="radio"]:checked:after {
   margin-bottom: 0.5rem;
   border-color: rgb(173, 173, 173);
   filter: invert(100%);
+  font-weight: bold;
 }

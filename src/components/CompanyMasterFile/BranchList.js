@@ -23,6 +23,15 @@ export const BranchList = () => {
   const companyCodeRef = useRef();
   const addressRef = useRef();
   const branchNameRef = useRef();
+  const [delId, setDelId] = useState("");
+
+  var setArray = {
+    branchCode: "",
+    groupCode: "",
+    companyCode: "",
+    branchName: "",
+    branchAddress: "",
+  };
 
   function setRowCompany(row) {
     setBranch(row);
@@ -47,11 +56,79 @@ export const BranchList = () => {
     });
   };
 
+  const saveBranch = () => {
+    axios
+      .post("http://localhost:8080/api/branches/save", setArray, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Saved Successfully!");
+          getData();
+          clearFields();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const deleteBranch = () => {
+    axios
+      .delete("http://localhost:8080/api/branches/delete/" + delId, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Delete Success!");
+          clearFields();
+          getData();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const saveData = () => {
+    setArray.branchCode = branchCodeRef.current.value;
+    setArray.groupCode = groupCodeRef.current.value;
+    setArray.companyCode = companyCodeRef.current.value;
+    setArray.branchName = branchNameRef.current.value;
+    setArray.branchAddress = addressRef.current.value;
+    saveBranch();
+  };
+
+  const clearFields = () => {
+    branchCodeRef.current.value = "";
+    groupCodeRef.current.value = "";
+    companyCodeRef.current.value = "";
+    addressRef.current.value = "";
+    branchNameRef.current.value = "";
+  };
+
+  const deleteData = () => {
+    deleteBranch();
+  };
+
   const selectRowProp = {
     mode: "radio",
     clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       setRowCompany(row);
+      setDelId(row.branchCode);
       return true;
     },
   };
@@ -86,7 +163,7 @@ export const BranchList = () => {
         style: { padding: "1px" },
         placeholder: "Comp. Code",
       }),
-      style: { padding: "0px 0px 0px 5px" },
+      style: { padding: "0px ", textAlign: "center", width: "100px" },
     },
     {
       // dataField: "currentGroup",
@@ -108,14 +185,14 @@ export const BranchList = () => {
         style: { padding: "1px" },
         placeholder: "Address",
       }),
-      style: { padding: "0px 0px 0px 5px" },
+      style: { padding: "0px", textAlign: "center", width: "100px" },
     },
   ];
 
   return (
     <div>
       <Card className={" border-dark bg-dark text-white floatTop"}>
-        <Card.Body>
+        <Card.Body style={{ paddingBottom: "0px" }}>
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             BRANCH INFORMATION
           </label>
@@ -199,36 +276,58 @@ export const BranchList = () => {
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             BRANCH LIST
           </label>
-          <BootstrapTable
-            id="bsTable"
-            // keyField="userId"
-            keyField="branchCode"
-            data={branches}
-            columns={columns}
-            striped
-            hover
-            condensed
-            pagination={paginationFactory({
-              paginationSize: 3,
-              hideSizePerPage: true,
-              withFirstAndLast: true,
-              sizePerPageList: [
-                {
-                  text: "12",
-                  value: 8,
-                },
-                {
-                  text: "15",
-                  value: 10,
-                },
-              ],
-            })}
-            filter={filterFactory()}
-            rowStyle={{ padding: "1px" }}
-            headerClasses="empTableHeader"
-            selectRow={selectRowProp}
-          ></BootstrapTable>
+          <Container style={{ width: "700px" }}>
+            <BootstrapTable
+              id="bsTable"
+              // keyField="userId"
+              keyField="branchCode"
+              data={branches}
+              columns={columns}
+              striped
+              hover
+              condensed
+              pagination={paginationFactory({
+                paginationSize: 3,
+                hideSizePerPage: true,
+                withFirstAndLast: true,
+                sizePerPageList: [
+                  {
+                    text: "12",
+                    value: 8,
+                  },
+                  {
+                    text: "15",
+                    value: 10,
+                  },
+                ],
+              })}
+              filter={filterFactory()}
+              rowStyle={{ padding: "1px" }}
+              headerClasses="empTableHeader"
+              selectRow={selectRowProp}
+            ></BootstrapTable>
+          </Container>
         </Card.Body>
+        <Card.Footer>
+          <div style={{ display: "flex" }}>
+            <button
+              type="submit"
+              className="btn btn-danger btn-md buttonRight"
+              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
+              onClick={() => deleteData()}
+            >
+              Delete
+            </button>
+            <button
+              type="submit"
+              className="btn btn-success btn-md "
+              style={{ width: "80px", marginTop: "0px" }}
+              onClick={() => saveData()}
+            >
+              Save
+            </button>
+          </div>
+        </Card.Footer>
       </Card>
     </div>
   );
