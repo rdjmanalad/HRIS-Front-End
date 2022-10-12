@@ -14,6 +14,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   const [selectedId, setId] = useState("");
   const [employee, setRowEmp] = useState([]);
   const [emptyEmp, setEmptyEmp] = useState([]);
+  var count = 1;
 
   const [loading, setL] = useState(true);
   var emptyObj = {};
@@ -105,13 +106,16 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   const nameFormatter = (data, row) => {
     return (
       <span>
-        {row.lastName}, {row.firstName} {row.employeeNo}
+        {row.lastName} {row.firstName} {row.employeeNo}
       </span>
     );
   };
 
   useEffect(() => {
-    childToParent2(emptyObj);
+    if (count === 1) {
+      childToParent2(emptyObj);
+    }
+    count++;
   }, [employees]);
 
   useEffect(() => {
@@ -209,7 +213,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
               ],
             })}
             filter={filterFactory()}
-            rowStyle={{ padding: "1px", fontWeight: "bold" }}
+            rowStyle={{ padding: "1px" }}
             rowClasses="empTableRow"
             headerClasses="empTableHeader"
             selectRow={selectRowProp}
@@ -222,7 +226,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
           </Button> */}
           <Button
             variant="danger"
-            size="md"
+            size="sm"
             className="buttonMargin"
             onClick={() => deleteEmployee()}
           >
