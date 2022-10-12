@@ -192,3 +192,16 @@ input[type="radio"]:checked:after {
 .currency {
   text-align: right;
 }
+
+/* .react-bootstrap-table {
+  max-height: 420px;
+  overflow-y: scroll;
+} */
+
+#bsTable2 {
+  /* color: white; */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-color: rgb(173, 173, 173);
+  filter: invert(100%);
+}

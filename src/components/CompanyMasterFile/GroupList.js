@@ -20,6 +20,7 @@ export const GroupList = () => {
   const groupNameRef = useRef();
   const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState([]);
+  var setArray = { groupCode: "", groupName: "" };
 
   useEffect(() => {
     getData();
@@ -29,17 +30,56 @@ export const GroupList = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/groups").then((response) => {
+    axios.get("http://localhost:8080/api/group1/gcode").then((response) => {
       setGroups(response.data);
       console.log(response.data);
     });
   };
 
+  const saveGroup = () => {
+    axios
+      .post("http://localhost:8080/api/group1/save", setArray, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Saved Successfully!");
+          getData();
+          clearFields();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
   function setRowGroup(row) {
     setGroup(row);
-    groupCodeRef.current.value = row.new;
-    groupNameRef.current.value = row.f4;
+    groupCodeRef.current.value = row.groupCode;
+    groupNameRef.current.value = row.groupName;
   }
+
+  const saveNew = () => {
+    setArray.groupCode = groupCodeRef.current.value.toUpperCase();
+    setArray.groupName = groupNameRef.current.value.toUpperCase();
+    console.log(setArray);
+    saveGroup();
+  };
+
+  const clearFields = () => {
+    groupCodeRef.current.value = "";
+    groupNameRef.current.value = "";
+  };
+
+  const handleChange = (event) => {
+    event.target.value.toUpperCase();
+  };
 
   const selectRowProp = {
     mode: "radio",
@@ -54,7 +94,7 @@ export const GroupList = () => {
   const columns = [
     {
       // dataField: "username",
-      dataField: "new",
+      dataField: "groupCode",
       text: "Filter",
       sort: true,
       filter: textFilter({
@@ -65,7 +105,7 @@ export const GroupList = () => {
     },
     {
       // dataField: "currentGroup",
-      dataField: "f4",
+      dataField: "groupName",
       text: "Filter",
       sort: true,
       filter: textFilter({
@@ -95,6 +135,7 @@ export const GroupList = () => {
                 <FormControl
                   ref={groupCodeRef}
                   className="inpHeightXs"
+                  style={{ textTransform: "uppercase" }}
                   // onChange={(event) =>
                   //   (empData.paddress = event.target.value)
                   // }
@@ -107,7 +148,7 @@ export const GroupList = () => {
                 <FormControl
                   ref={groupNameRef}
                   className="inpHeightXs"
-                  onChange={(event) => (group.paddress = event.target.value)}
+                  style={{ textTransform: "uppercase" }}
                 ></FormControl>
               </Col>
             </FormGroup>
@@ -117,9 +158,8 @@ export const GroupList = () => {
           </label>
           <Container>
             <BootstrapTable
-              id="bsTable"
-              // keyField="userId"
-              keyField="new"
+              id="bsTable2"
+              keyField="groupCode"
               data={groups}
               columns={columns}
               striped
@@ -148,50 +188,27 @@ export const GroupList = () => {
               // rowEvents={ rowEvents }
             ></BootstrapTable>
           </Container>
-          {/* <Card
-            className={" border-dark bg-dark text-white"}
-            style={{ height: "500px" }}
-          >
-            <Form id="addUserId">
-              <Card.Body>
-                <Table striped bordered hover variant="dark">
-                  <thead>
-                    <tr>
-                      <th style={{ width: "260px" }}>Group Code</th>
-                      <th>Group Name</th>
-                      <th style={{ width: "120px" }}>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {groups.length === 0 ? (
-                      <tr align="center">
-                        <td colSpan={"2"}>No Groups Found</td>
-                      </tr>
-                    ) : (
-                      groups.map((group) => (
-                        <tr key={group?.id}>
-                          <td>{group?.new}</td>
-                          <td>{group?.f4}</td>
-                          <td>
-                            <ButtonGroup>
-                              <Button size="sm" variant="primary">
-                                Edit
-                              </Button>
-                              {"  "}
-                              <Button size="sm" variant="outline-danger">
-                                Delete
-                              </Button>
-                            </ButtonGroup>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </Table>
-              </Card.Body>
-            </Form>
-          </Card> */}
         </Card.Body>
+        <Card.Footer>
+          <div style={{ display: "flex" }}>
+            <button
+              type="submit"
+              className="btn btn-danger btn-md buttonRight"
+              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
+              onClick={() => saveNew()}
+            >
+              Delete
+            </button>
+            <button
+              type="submit"
+              className="btn btn-success btn-md "
+              style={{ width: "80px", marginTop: "0px" }}
+              onClick={() => saveNew()}
+            >
+              Save
+            </button>
+          </div>
+        </Card.Footer>
       </Card>
     </div>
   );
