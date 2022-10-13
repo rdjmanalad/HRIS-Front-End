@@ -4,6 +4,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
+import ModalConfirm from "../ModalAlerts/ModalConfirm";
 import {
   Card,
   FormControl,
@@ -24,6 +25,9 @@ export const BranchList = () => {
   const addressRef = useRef();
   const branchNameRef = useRef();
   const [delId, setDelId] = useState("");
+
+  var [showMod, setShowMod] = useState(false);
+  var [action, setAction] = useState("");
 
   var setArray = {
     branchCode: "",
@@ -120,7 +124,18 @@ export const BranchList = () => {
   };
 
   const deleteData = () => {
-    deleteBranch();
+    setAction("DELETE");
+    setShowMod(true);
+    //delAttainment(roww);
+  };
+
+  const handleClose = (deleteAtt) => {
+    if (deleteAtt) {
+      deleteBranch();
+      setShowMod(false);
+    } else {
+      setShowMod(false);
+    }
   };
 
   const selectRowProp = {
@@ -329,6 +344,11 @@ export const BranchList = () => {
           </div>
         </Card.Footer>
       </Card>
+      {showMod ? (
+        <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
+      ) : (
+        <a></a>
+      )}
     </div>
   );
 };

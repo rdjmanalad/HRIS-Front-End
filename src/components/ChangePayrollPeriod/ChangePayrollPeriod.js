@@ -22,6 +22,8 @@ export const ChangePayrollPeriod = () => {
   const collectPeriodRef = useRef();
   const bonus13thRef = useRef();
 
+  const saveData = () => {};
+
   return (
     <div
       style={{
@@ -50,6 +52,7 @@ export const ChangePayrollPeriod = () => {
                   <FormControl
                     ref={payPeriodFromRef}
                     className="inpHeightXs"
+                    type="Date"
                     // onChange={(event) =>
                     //   (empData.paddress = event.target.value)
                     // }
@@ -64,6 +67,7 @@ export const ChangePayrollPeriod = () => {
                   <FormControl
                     ref={cutPeriodFromRef}
                     className="inpHeightXs"
+                    type="Date"
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -148,6 +152,7 @@ export const ChangePayrollPeriod = () => {
                   <FormControl
                     ref={payPeriodToRef}
                     className="inpHeightXs"
+                    type="Date"
                     // onChange={(event) =>
                     //   (empData.paddress = event.target.value)
                     // }
@@ -162,6 +167,7 @@ export const ChangePayrollPeriod = () => {
                   <FormControl
                     ref={cutPeriodToRef}
                     className="inpHeightXs"
+                    type="Date"
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -188,6 +194,18 @@ export const ChangePayrollPeriod = () => {
             </FormGroup>
           </FormGroup>
         </Card.Body>
+        <Card.Footer>
+          <div style={{ display: "flex" }}>
+            <button
+              type="submit"
+              className="btn btn-success btn-md buttonRight"
+              style={{ width: "80px", marginTop: "0px" }}
+              onClick={() => saveData()}
+            >
+              Save
+            </button>
+          </div>
+        </Card.Footer>
       </Card>
     </div>
   );

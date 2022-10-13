@@ -4,6 +4,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
+import ModalConfirm from "../ModalAlerts/ModalConfirm";
 import {
   Card,
   FormControl,
@@ -17,6 +18,12 @@ import {
 export const CompanyList = () => {
   const [companies, setCompanies] = useState([]);
   const [company, setCompany] = useState([]);
+  const [success, setSuccess] = useState(false);
+
+  var [showMod, setShowMod] = useState(false);
+  var [action, setAction] = useState("");
+
+  var [delId, setDelId] = useState("");
 
   const companyCodeRef = useRef();
   const groupCodeRef = useRef();
@@ -32,6 +39,25 @@ export const CompanyList = () => {
   const pagibigBranchRef = useRef();
   const locIDRef = useRef();
 
+  var setArrCom = {
+    companyCode: "",
+    groupCode: "",
+    companyName: "",
+    companyAddress: "",
+    tin: "",
+    sssnumber: "",
+    dateOpen: "",
+  };
+
+  var setArrLoc = {
+    companyCode: "",
+    pagibigNo: "",
+    philPosition: "",
+    philSignatory: "",
+    pagibigBranch: "",
+    locID: "",
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -46,19 +72,142 @@ export const CompanyList = () => {
         setCompanies(response.data);
         console.log(response.data);
       });
-
-    // axios.defaults.headers.common["Authorization"] =
-    //   "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-    // axios.get("http://localhost:8080/api/company").then((response) => {
-    //   setCompanies(response.data);
-    //   console.log(response.data);
-    // });
   };
 
-  const saveData = () => {};
+  const saveCompany = () => {
+    axios
+      .post("http://localhost:8080/api/company/save", setArrCom, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          // alert("Saved Successfully!");
+          setSuccess(true);
+          // getData();
+          // clearFields();
+        }
+      })
+      .catch((message) => {
+        setSuccess(false);
+        alert(message);
+      });
 
-  const deleteData = () => {};
+    if (success) {
+      axios
+        .post("http://localhost:8080/api/sssLocator/save", setArrLoc, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer " +
+              localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            // alert("Saved Successfully!");
+            setSuccess(true);
+            getData();
+            clearFields();
+          }
+        })
+        .catch((message) => {
+          setSuccess(false);
+          alert(message);
+        });
+    }
+    success && alert("Saved SuccessFully!");
+  };
+
+  const deleteCompany = () => {
+    axios
+      .delete("http://localhost:8080/api/company/delete/" + delId, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setSuccess(true);
+          // clearFields();
+          // getData();
+        }
+      })
+      .catch((message) => {
+        setSuccess(false);
+        alert(message);
+      });
+    if (success) {
+      axios
+        .delete("http://localhost:8080/api/sssLocator/delete/" + delId, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer " +
+              localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setSuccess(true);
+            clearFields();
+            getData();
+          }
+        })
+        .catch((message) => {
+          setSuccess(false);
+          alert(message);
+        });
+    }
+    success && alert("Deleted SuccessFully!");
+  };
+
+  const saveData = () => {
+    setArrCom.companyCode = companyCodeRef.current.value;
+    setArrCom.groupCode = groupCodeRef.current.value;
+    setArrCom.companyName = companyNameRef.current.value;
+    setArrCom.companyAddress = companyAddressRef.current.value;
+    setArrCom.tin = tinRef.current.value;
+    setArrCom.sssnumber = sssnoRef.current.value;
+    setArrCom.dateOpen = dateOpenRef.current.value;
+
+    setArrLoc.companyCode = companyCodeRef.current.value;
+    setArrLoc.pagibigNo = pagibigNoRef.current.value;
+    setArrLoc.philPosition = philPositionRef.current.value;
+    setArrLoc.philSignatory = philSignatoryRef.current.value;
+    setArrLoc.pagibigBranch = pagibigBranchRef.current.value;
+    setArrLoc.locID = locIDRef.current.value;
+    console.log(setArrCom);
+    console.log(setArrLoc);
+    saveCompany();
+  };
+
+  const clearFields = () => {
+    companyCodeRef.current.value = "";
+    groupCodeRef.current.value = "";
+    companyNameRef.current.value = "";
+    companyAddressRef.current.value = "";
+    tinRef.current.value = "";
+    sssnoRef.current.value = "";
+    dateOpenRef.current.value = "";
+
+    pagibigNoRef.current.value = "";
+    philPositionRef.current.value = "";
+    philSignatoryRef.current.value = "";
+    pagibigBranchRef.current.value = "";
+    locIDRef.current.value = "";
+  };
 
   function setRowCompany(row) {
     setCompany(row);
@@ -68,20 +217,36 @@ export const CompanyList = () => {
     companyAddressRef.current.value = row.companyAddress;
     tinRef.current.value = row.tin;
     sssnoRef.current.value = row.sssnumber;
-    pagibigNoRef.current.value = row.pagibigNumber;
+    // pagibigNoRef.current.value = row.pagibigNumber;
     dateOpenRef.current.value = row.dateOpen;
+
+    pagibigNoRef.current.value = row.pagibigNo;
     philPositionRef.current.value = row.philPosition;
     philSignatoryRef.current.value = row.philSignatory;
     pagibigBranchRef.current.value = row.pagibigBranch;
     locIDRef.current.value = row.locID;
   }
 
+  const deleteData = () => {
+    setAction("DELETE");
+    setShowMod(true);
+  };
+
+  const handleClose = (deleteAtt) => {
+    if (deleteAtt) {
+      deleteCompany();
+      setShowMod(false);
+    } else {
+      setShowMod(false);
+    }
+  };
+
   const selectRowProp = {
     mode: "radio",
     clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       setRowCompany(row);
-      // setId(row.employeeNo);
+      setDelId(row.companyCode);
       return true;
     },
     // style: { width: "20px" },
@@ -393,7 +558,7 @@ export const CompanyList = () => {
                 sizePerPageList: [
                   {
                     text: "12",
-                    value: 3,
+                    value: 5,
                   },
                   {
                     text: "15",
@@ -431,6 +596,11 @@ export const CompanyList = () => {
           </div>
         </Card.Footer>
       </Card>
+      {showMod ? (
+        <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
+      ) : (
+        <a></a>
+      )}
     </div>
   );
 };
