@@ -1,5 +1,7 @@
-import { render } from "@testing-library/react";
 import React, { useRef } from "react";
+import { useState } from "react";
+import axios from "axios";
+import ReactDatePicker from "react-datepicker";
 import {
   Card,
   FormControl,
@@ -9,8 +11,16 @@ import {
   Col,
   Form,
 } from "react-bootstrap";
+import { useEffect } from "react";
+import useLocalState from "../Hooks/useLocalState";
 
 export const ChangePayrollPeriod = () => {
+  const [datep, setDatep] = useState(new Date());
+  const [latestPeriod, setLatestPeriod] = useState("");
+  const [payPeriodFrom, setPayPeriodFrom] = useLocalState("PPFrom", "");
+  const [payPeriodTo, setPayPeriodTo] = useLocalState("PPTo", "");
+  const [filerValue, setFilterValue] = useLocalState("FilterValue", "");
+
   const payPeriodFromRef = useRef();
   const payPeriodToRef = useRef();
   const cutPeriodFromRef = useRef();
@@ -21,8 +31,165 @@ export const ChangePayrollPeriod = () => {
   const yearEndTaxAdjRef = useRef();
   const collectPeriodRef = useRef();
   const bonus13thRef = useRef();
+  const sample = useRef();
+  const filterValueRef = useRef();
 
-  const saveData = () => {};
+  const saveData = () => {
+    setPayPeriodFrom(payPeriodFromRef.current.value);
+    setFilterValue(filterValueRef.current.value);
+    setPayPeriodTo(payPeriodToRef.current.value);
+    alert("Saved");
+  };
+
+  var month = 0;
+  var year = 0;
+  var sDay = 0;
+  var eDay = 0;
+  var periodTo = "";
+  var cpYear = "";
+  var cpMonth = "";
+  // var cptYear = "";
+  // var cptMonth = "";
+  // var d = new Date(2009, month + 1, 0);
+  var toggle = true;
+
+  useEffect(() => {
+    if (toggle) {
+      getLatestperiod();
+      if (latestPeriod) {
+        computeDates2(new Date(latestPeriod).toLocaleDateString("en-CA"));
+      }
+    }
+    toggle = false;
+  }, [latestPeriod]);
+
+  useEffect(() => {}, []);
+
+  const getLatestperiod = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get("http://localhost:8080/api/period/latest")
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        setLatestPeriod(data);
+        payPeriodFromRef.current.value = new Date(
+          latestPeriod
+        )?.toLocaleDateString("en-CA");
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  var computeEndDay = (y, m) => {
+    return new Date(y, m, 0);
+  };
+
+  var addPadZero = (m) => {
+    return m.length > 1 ? m : "0" + m;
+  };
+
+  var computeStartCutPeriod = () => {
+    if (sDay === "01") {
+      if (month === "01") {
+        cpMonth = "12";
+        cpYear = year - 1;
+        return cpYear + "-" + addPadZero(cpMonth) + "-" + "16";
+      } else {
+        cpMonth = month - 1;
+        cpYear = year;
+        return cpYear + "-" + addPadZero(cpMonth) + "-" + "16";
+      }
+    } else {
+      cpMonth = month;
+      cpYear = year;
+      return cpYear + "-" + addPadZero(cpMonth) + "-" + "01";
+    }
+  };
+
+  var computeEndCutPeriod = () => {
+    if (sDay === "01") {
+      return (
+        cpYear +
+        "-" +
+        addPadZero(cpMonth) +
+        "-" +
+        String(computeEndDay(cpYear, cpMonth)).substring(8, 10)
+      );
+    } else {
+      return cpYear + "-" + addPadZero(cpMonth) + "-" + "15";
+    }
+  };
+
+  const computeDates = (e) => {
+    var date = e.target.value;
+    sDay = date.substr(8);
+    month = date.substring(5, 7);
+    year = date.substring(0, 4);
+    eDay = String(computeEndDay(year, month)).substring(8, 10);
+    if (sDay === "01") {
+      periodTo = year + "-" + month + "-" + "15";
+      payPeriodToRef.current.value = periodTo;
+      cutPeriodFromRef.current.value = computeStartCutPeriod();
+      cutPeriodToRef.current.value = computeEndCutPeriod();
+      actualNumDaysCodeRef.current.value = "15";
+    } else if (sDay === "16") {
+      periodTo = year + "-" + month + "-" + eDay;
+      payPeriodToRef.current.value = periodTo;
+      cutPeriodFromRef.current.value = computeStartCutPeriod();
+      cutPeriodToRef.current.value = computeEndCutPeriod();
+      actualNumDaysCodeRef.current.value = eDay - 15;
+    } else {
+      alert("invalid period");
+      payPeriodFromRef.current.value = "";
+      payPeriodToRef.current.value = "";
+      cutPeriodFromRef.current.value = "";
+      cutPeriodToRef.current.value = "";
+      actualNumDaysCodeRef.current.value = "";
+    }
+  };
+
+  const computeDates2 = (date) => {
+    // alert(date);
+    if (date) {
+      sDay = date.substr(8);
+      month = date.substring(5, 7);
+      year = date.substring(0, 4);
+      eDay = String(computeEndDay(year, month)).substring(8, 10);
+      if (sDay === "01") {
+        periodTo = year + "-" + month + "-" + "15";
+        payPeriodToRef.current.value = periodTo;
+        cutPeriodFromRef.current.value = computeStartCutPeriod();
+        cutPeriodToRef.current.value = computeEndCutPeriod();
+        actualNumDaysCodeRef.current.value = "15";
+      } else if (sDay === "16") {
+        periodTo = year + "-" + month + "-" + eDay;
+        payPeriodToRef.current.value = periodTo;
+        cutPeriodFromRef.current.value = computeStartCutPeriod();
+        cutPeriodToRef.current.value = computeEndCutPeriod();
+        actualNumDaysCodeRef.current.value = eDay - 15;
+      } else {
+        alert("invalid period!");
+        alert(date);
+        payPeriodFromRef.current.value = "";
+        payPeriodToRef.current.value = "";
+        cutPeriodFromRef.current.value = "";
+        cutPeriodToRef.current.value = "";
+      }
+      // setDate(new Date(date));
+    }
+  };
+
+  // const setDate = (e) => {
+  //   setDatep(e);
+  //   computeDates3(e);
+  // };
+
+  // const computeDates3 = (date) => {
+  //   alert(date);
+  // };
 
   return (
     <div
@@ -42,6 +209,7 @@ export const ChangePayrollPeriod = () => {
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             PRESENT PAYROLL PERIOD
           </label>
+          <label className="separator"></label>
           <FormGroup as={Row}>
             <FormGroup as={Col}>
               <FormGroup as={Row}>
@@ -52,11 +220,16 @@ export const ChangePayrollPeriod = () => {
                   <FormControl
                     ref={payPeriodFromRef}
                     className="inpHeightXs"
-                    type="Date"
-                    // onChange={(event) =>
-                    //   (empData.paddress = event.target.value)
-                    // }
+                    type="date"
+                    format="MM/dd/yyyy"
+                    onChange={(e) => computeDates(e)}
                   ></FormControl>
+                  {/* <input
+                    ref={payPeriodFromRef}
+                    className="inpHeightXs"
+                    type="date"
+                    onChange={(e) => computeDates(e)}
+                  ></input> */}
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
@@ -68,6 +241,7 @@ export const ChangePayrollPeriod = () => {
                     ref={cutPeriodFromRef}
                     className="inpHeightXs"
                     type="Date"
+                    disabled
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -137,7 +311,7 @@ export const ChangePayrollPeriod = () => {
                 <Col>
                   <Form.Check
                     ref={bonus13thRef}
-                    style={{ "padding-top": "5px" }}
+                    style={{ paddingTop: "5px" }}
                   ></Form.Check>
                 </Col>
               </FormGroup>
@@ -153,6 +327,7 @@ export const ChangePayrollPeriod = () => {
                     ref={payPeriodToRef}
                     className="inpHeightXs"
                     type="Date"
+                    disabled
                     // onChange={(event) =>
                     //   (empData.paddress = event.target.value)
                     // }
@@ -168,6 +343,7 @@ export const ChangePayrollPeriod = () => {
                     ref={cutPeriodToRef}
                     className="inpHeightXs"
                     type="Date"
+                    disabled
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -191,8 +367,33 @@ export const ChangePayrollPeriod = () => {
                   ></FormControl>
                 </Col>
               </FormGroup>
+              {/* <ReactDatePicker
+                selected={datep}
+                dateFormat="MM/dd/yyyy"
+                ref={sample}
+                // placeholderText="mm/dd/yyyy"
+                onChange={(e) => setDate(e)}
+              ></ReactDatePicker> */}
             </FormGroup>
           </FormGroup>
+          <label className="asHeader" style={{ paddingLeft: "5px" }}>
+            FILTER RECORDS
+          </label>
+          <FormGroup as={Row}>
+            <Col sm="2"></Col>
+            <FormLabel column className="noWrapText" sm="5">
+              Please input group/ company/ baranch code to filter
+            </FormLabel>
+            <Col sm="2">
+              <FormControl
+                ref={filterValueRef}
+                defaultValue={""}
+                placeholder="Group..."
+                className="inpHeightXs"
+              ></FormControl>
+            </Col>
+          </FormGroup>
+          <label className="separator"></label>
         </Card.Body>
         <Card.Footer>
           <div style={{ display: "flex" }}>

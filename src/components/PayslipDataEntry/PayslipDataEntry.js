@@ -14,11 +14,21 @@ import {
   Row,
   Col,
   Button,
+  Modal,
+  Container,
 } from "react-bootstrap";
 
 export const PaySlipDataEntry = () => {
+  const [show, setShow] = useState(true);
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState([]);
+  const [toggle, setToggle] = useState(true);
+  const [payslips, setPayslips] = useState([]);
+  const [payslip, setPayslip] = useState([]);
+  const [index, setIndex] = useState(0);
+  var per1 = localStorage.getItem("PPFrom");
+  var per2 = localStorage.getItem("PPTo");
+  var gcode = localStorage.getItem("FilterValue");
 
   const periodRef = useRef();
   const employeeNoRef = useRef();
@@ -70,23 +80,62 @@ export const PaySlipDataEntry = () => {
   const restSunRef = useRef();
   const vacLeaveRef = useRef();
 
+  // let toggle = true;
+
   useEffect(() => {
-    getData();
-  }, []);
+    if (toggle) {
+      getData();
+    }
+    setToggle(false);
+  }, [show]);
 
   const getData = () => {
+    // axios.defaults.headers.common["Authorization"] =
+    //   "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    // axios.get("http://localhost:8080/api/masemployees").then((response) => {
+    //   setEmployees(response.data);
+    //   console.log(response.data);
+    // });
+
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/masemployees").then((response) => {
-      setEmployees(response.data);
-      console.log(response.data);
-    });
+    axios
+      .get(
+        "http://localhost:8080/api/vpayslip/" + per1 + "/" + per2 + "/" + gcode
+      )
+      .then((response) => {
+        // setEmployees(response.data);
+        setPayslips(response.data);
+        console.log(response.data);
+      });
   };
 
-  function setRowEmployee() {
-    alert("");
-  }
+  const showOnDetails = () => {
+    employeeNoRef.current.value = employee.employeeNo;
+    branchRef.current.value = employee.abranchCode;
+    lastNameRef.current.value = employee.lastName;
+    firstNameRef.current.value = employee.firstName;
+    middleNameRef.current.value = employee.middleName;
+    positionRef.current.value = employee.workPosition;
+    companyRef.current.value = employee.acompanyCode;
+    periodRef.current.value = per1 + " to " + per2;
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    showOnDetails();
+  };
+  const handleShow = () => {
+    setShow(true);
+    setToggle(true);
+  };
+
+  const nextEmp = () => {
+    employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    setIndex(index + 1);
+  };
 
   const nameFormatter = (data, row) => {
     return (
@@ -95,6 +144,7 @@ export const PaySlipDataEntry = () => {
       </span>
     );
   };
+
   function nameFilterFormatter(cell, row) {
     return row.firstName + row.lastName;
   }
@@ -103,22 +153,16 @@ export const PaySlipDataEntry = () => {
     mode: "radio",
     clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
-      setRowEmployee(row);
+      setEmployee(row);
+      setIndex(rowIndex);
+      alert(rowIndex);
       return true;
     },
   };
+
   const columns = [
     {
-      dataField: "employeeNo",
-      text: "Filter",
-      sort: true,
-      filter: textFilter({
-        style: { padding: "1px" },
-        placeholder: "Employee No.",
-      }),
-      style: { width: "100px", textAlign: "center", padding: "0px" },
-    },
-    {
+      // dataField: "username",
       dataField: "lastName",
       formatter: nameFormatter,
       text: "Filter",
@@ -126,19 +170,19 @@ export const PaySlipDataEntry = () => {
       filterValue: (cell, row) => nameFilterFormatter(cell, row),
       filter: textFilter({
         style: { padding: "1px" },
-        placeholder: "Name",
+        placeholder: "Name...",
       }),
-      style: { width: "100px", padding: "0px" },
     },
     {
+      // dataField: "currentGroup",
       dataField: "ogroupCode",
       text: "Filter",
       sort: true,
       filter: textFilter({
         style: { padding: "1px" },
-        placeholder: "Group Code",
+        placeholder: "Group...",
       }),
-      style: { width: "100px", textAlign: "center", padding: "0px" },
+      style: { width: "75px", textAlign: "center" },
     },
   ];
 
@@ -156,39 +200,79 @@ export const PaySlipDataEntry = () => {
         className={" border-dark bg-dark text-white floatTop"}
         style={{ width: "80rem" }}
       >
-        <Card.Header>
-          <label style={{ width: "200px" }}>PAYSLIP DATA ENTRY</label>
-        </Card.Header>
         <Card.Body>
-          <BootstrapTable
-            id="bsTable"
-            // keyField="userId"
-            keyField="employeeNo"
-            data={employees}
-            columns={columns}
-            striped
-            hover
-            condensed
-            pagination={paginationFactory({
-              paginationSize: 3,
-              hideSizePerPage: true,
-              withFirstAndLast: true,
-              sizePerPageList: [
-                {
-                  text: "12",
-                  value: 3,
-                },
-                {
-                  text: "15",
-                  value: 10,
-                },
-              ],
-            })}
-            filter={filterFactory()}
-            rowStyle={{ padding: "1px" }}
-            headerClasses="empTableHeader"
-            selectRow={selectRowProp}
-          ></BootstrapTable>
+          <Modal
+            show={show}
+            onHide={handleClose}
+            dialogClassName="my-modal"
+            backdrop="static"
+          >
+            <Modal.Header
+              closeButton
+              className="border-dark bg-dark text-white"
+            >
+              <Modal.Title>Employee List</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="border-dark bg-dark text-white">
+              <Card
+                style={{
+                  maxWidth: "25rem",
+                  minWidth: "25rem",
+                  height: "auto",
+                }}
+                className={" border-dark bg-dark text-white"}
+              >
+                <Container>
+                  <BootstrapTable
+                    id="bsTable"
+                    // keyField="userId"
+                    keyField="id"
+                    data={payslips}
+                    columns={columns}
+                    striped
+                    hover
+                    condensed
+                    pagination={paginationFactory({
+                      paginationSize: 3,
+                      hideSizePerPage: true,
+                      withFirstAndLast: true,
+                      sizePerPageList: [
+                        {
+                          text: "12",
+                          value: 10,
+                        },
+                        {
+                          text: "15",
+                          value: 20,
+                        },
+                      ],
+                    })}
+                    filter={filterFactory()}
+                    rowStyle={{ padding: "1px" }}
+                    rowClasses="empTableRow"
+                    headerClasses="empTableHeader"
+                    selectRow={selectRowProp}
+                    // rowEvents={ rowEvents }
+                  ></BootstrapTable>
+                </Container>
+              </Card>
+            </Modal.Body>
+            <Modal.Footer className={" border-dark bg-dark text-white"}>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleClose}>
+                Show Employee Loans
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <label
+            className="asHeader"
+            style={{ paddingLeft: "5px", backgroundColor: "red" }}
+            onClick={handleShow}
+          >
+            CLICK TO SHOW EMPLOYEE LIST ▲
+          </label>
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             EMPLOYEE PAYSLIP INFORMATION
           </label>
@@ -312,6 +396,7 @@ export const PaySlipDataEntry = () => {
                   <FormControl
                     ref={basicPayRef}
                     className="inpHeightXs"
+                    // value={}
                     disabled
                   ></FormControl>
                 </Col>
@@ -1014,7 +1099,7 @@ export const PaySlipDataEntry = () => {
                   <Button
                     className="setButtonMargin"
                     variant="success"
-                    // onClick={() => deleteUser()}
+                    onClick={() => nextEmp()}
                   >
                     Next
                   </Button>
