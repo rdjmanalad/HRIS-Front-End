@@ -207,3 +207,13 @@ input[type="radio"]:checked:after {
   filter: invert(100%);
   font-weight: bold;
 }
+
+.asLabel {
+  border-style: none;
+  background-color: yellow;
+}
+
+.currency2 {
+  text-align: right;
+  font-weight: bold;
+}

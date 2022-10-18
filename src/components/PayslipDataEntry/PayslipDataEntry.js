@@ -21,11 +21,12 @@ import {
 export const PaySlipDataEntry = () => {
   const [show, setShow] = useState(true);
   const [employees, setEmployees] = useState([]);
-  const [employee, setEmployee] = useState([]);
+  const [employee, setEmployee] = useState("");
   const [toggle, setToggle] = useState(true);
   const [payslips, setPayslips] = useState([]);
   const [payslip, setPayslip] = useState([]);
   const [index, setIndex] = useState(0);
+  const [len, setLen] = useState(0);
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
@@ -53,6 +54,7 @@ export const PaySlipDataEntry = () => {
   const allow2Ref = useRef();
   const allow1Ref = useRef();
   const basicPayRef = useRef();
+  const grossRef = useRef();
 
   const otherDeducRef = useRef();
   const cspsmcsRef = useRef();
@@ -79,6 +81,14 @@ export const PaySlipDataEntry = () => {
   const legHolRef = useRef();
   const restSunRef = useRef();
   const vacLeaveRef = useRef();
+  const totalDeductionRef = useRef();
+  const netRef = useRef();
+
+  const basicPayAdjRef = useRef();
+  const perCutOffRef = useRef();
+  const perDayRef = useRef();
+  const perHourRef = useRef();
+  const perMinRef = useRef();
 
   // let toggle = true;
 
@@ -88,6 +98,10 @@ export const PaySlipDataEntry = () => {
     }
     setToggle(false);
   }, [show]);
+
+  useEffect(() => {
+    showOnDetails();
+  }, [employee]);
 
   const getData = () => {
     // axios.defaults.headers.common["Authorization"] =
@@ -113,14 +127,66 @@ export const PaySlipDataEntry = () => {
   };
 
   const showOnDetails = () => {
-    employeeNoRef.current.value = employee.employeeNo;
-    branchRef.current.value = employee.abranchCode;
-    lastNameRef.current.value = employee.lastName;
-    firstNameRef.current.value = employee.firstName;
-    middleNameRef.current.value = employee.middleName;
-    positionRef.current.value = employee.workPosition;
-    companyRef.current.value = employee.acompanyCode;
-    periodRef.current.value = per1 + " to " + per2;
+    if (employee) {
+      employeeNoRef.current.value = employee.employeeNo;
+      branchRef.current.value = employee.abranchCode;
+      lastNameRef.current.value = employee.lastName;
+      firstNameRef.current.value = employee.firstName;
+      middleNameRef.current.value = employee.middleName;
+      positionRef.current.value = employee.workPosition;
+      companyRef.current.value = employee.acompanyCode;
+      periodRef.current.value = per1 + " to " + per2;
+      basicPayRef.current.value = numberFormat(employee.basicPay);
+      allow1Ref.current.value = numberFormat(employee.allowance1);
+      allow2Ref.current.value = numberFormat(employee.allowance2);
+      colaRef.current.value = numberFormat(employee.cola);
+      incentiveRef.current.value = numberFormat(employee.incentive);
+      bonusRef.current.value = numberFormat(employee.bonus13);
+      otpayRef.current.value = numberFormat(employee.otamount);
+      srHolidayPayRef.current.value = numberFormat(employee.specialAmount);
+      legHolidayPayRef.current.value = numberFormat(employee.legalAmount);
+      restOTPayRef.current.value = numberFormat(employee.sundayAmount);
+      lateDeducRef.current.value = numberFormat(employee.lateAmount);
+      absDeducRef.current.value = numberFormat(employee.absentAmount);
+      otherCompRef.current.value = numberFormat(employee.otherAmount);
+      grossRef.current.value = numberFormat(employee.gross);
+
+      withHoldTaxRef.current.value = numberFormat(employee.tax);
+      sssPremRef.current.value = numberFormat(employee.sss);
+      philhealthPremRef.current.value = numberFormat(employee.philHealth);
+      pagibigPremRef.current.value = numberFormat(employee.pagibig);
+      fakeOverRef.current.value = numberFormat(employee.fakeOver);
+      hmoRef.current.value = numberFormat(0);
+      promisoryRef.current.value = numberFormat(employee.promisoryNote);
+      promisoryNoteRef.current.value = numberFormat(0);
+      sssLoanRef.current.value = numberFormat(employee.sssloan);
+      pagibigRef.current.value = numberFormat(employee.pagibigLoan);
+      storageRef.current.value = numberFormat(employee.storageLoan);
+      stPeterRef.current.value = numberFormat(employee.calamityLoan);
+      emergencyRef.current.value = numberFormat(employee.emergencyLoan);
+      layAwayRef.current.value = numberFormat(employee.housingLoan);
+      personalRef.current.value = numberFormat(employee.cashBondLoan);
+      lifeInsRef.current.value = numberFormat(employee.coop);
+      cspsmcsRef.current.value = numberFormat(employee.coopLoan);
+      otherDeducRef.current.value = numberFormat(employee.otherDeduction);
+      totalDeductionRef.current.value = numberFormat(employee.deduction);
+
+      vacLeaveRef.current.value = numberFormat(employee.vacationLeave);
+      netRef.current.value = numberFormat(employee.net);
+      //     lateRef.current.value = numberFormat(employee.
+      //     absentRef.current.value = numberFormat(employee.
+      //     overTimeRef.current.value = numberFormat(employee.
+      //     srHolRef.current.value = numberFormat(employee.
+      // legHolRef.current.value = numberFormat(employee.
+      // restSunRef.current.value = numberFormat(employee.
+
+      basicPayAdjRef.current.value = numberFormat(employee.basicPay * 2);
+      perCutOffRef.current.value = numberFormat(employee.basicPay);
+      perHourRef.current.value = numberFormat(employee.basicPay / 13 / 8);
+      perDayRef.current.value = numberFormat(employee.basicPay / 13);
+      perMinRef.current.value = numberFormat(employee.basicPay / 13 / 8 / 60);
+      setLen(payslips.length);
+    }
   };
 
   const handleClose = () => {
@@ -133,8 +199,49 @@ export const PaySlipDataEntry = () => {
   };
 
   const nextEmp = () => {
-    employeeNoRef.current.value = payslips[index + 1].employeeNo;
-    setIndex(index + 1);
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    if (index < len - 1) {
+      setEmployee(payslips[index + 1]);
+      setIndex(index + 1);
+      // showOnDetails();
+    }
+  };
+
+  const prevEmp = () => {
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    if (index > 0) {
+      setEmployee(payslips[index - 1]);
+      setIndex(index - 1);
+      // showOnDetails();
+    }
+  };
+
+  const firstEmp = () => {
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    setEmployee(payslips[0]);
+    setIndex(0);
+    showOnDetails();
+  };
+
+  const lastEmp = () => {
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    setEmployee(payslips[len - 1]);
+    setEmployee(payslips[len - 1]);
+    setIndex(len - 1);
+    showOnDetails();
+  };
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "PHP",
+    }).format(value);
+
+  const normalizeCurrency = (value) => {
+    return value
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1")
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
 
   const nameFormatter = (data, row) => {
@@ -155,8 +262,14 @@ export const PaySlipDataEntry = () => {
     onSelect: (row, isSelect, rowIndex, e) => {
       setEmployee(row);
       setIndex(rowIndex);
-      alert(rowIndex);
       return true;
+    },
+  };
+
+  const rowEvents = {
+    clickToSelect: true,
+    onDoubleClick: (row, isSelect, rowIndex, e) => {
+      handleClose();
     },
   };
 
@@ -252,6 +365,7 @@ export const PaySlipDataEntry = () => {
                     rowClasses="empTableRow"
                     headerClasses="empTableHeader"
                     selectRow={selectRowProp}
+                    rowEvents={rowEvents}
                     // rowEvents={ rowEvents }
                   ></BootstrapTable>
                 </Container>
@@ -395,9 +509,13 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={basicPayRef}
-                    className="inpHeightXs"
-                    // value={}
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
+                    // disabled
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -408,8 +526,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={allow1Ref}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -420,8 +542,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={allow2Ref}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -432,8 +558,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={colaRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -444,8 +574,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={incentiveRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -456,8 +590,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={bonusRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -468,8 +606,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={otpayRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -480,8 +622,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={srHolidayPayRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -492,8 +638,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={legHolidayPayRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -504,8 +654,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={restOTPayRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -516,8 +670,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={lateDeducRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -528,8 +686,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={absDeducRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -540,8 +702,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={leaveCreditsRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -552,8 +718,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={otherCompRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -569,8 +739,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={withHoldTaxRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -581,8 +755,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={sssPremRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -593,8 +771,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={philhealthPremRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -605,8 +787,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={pagibigPremRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -617,8 +803,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={hmoRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -629,8 +819,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={fakeOverRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -641,8 +835,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={promisoryRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -653,8 +851,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={sssLoanRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -665,8 +867,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={promisoryNoteRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -677,8 +883,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={pagibigRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -689,8 +899,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={storageRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -701,8 +915,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={stPeterRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -713,8 +931,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={emergencyRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -725,8 +947,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={layAwayRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -737,8 +963,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={personalRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -749,8 +979,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={lifeInsRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -761,8 +995,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={cspsmcsRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -773,8 +1011,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={otherDeducRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -815,13 +1057,22 @@ export const PaySlipDataEntry = () => {
                   <FormGroup as={Row}>
                     <FormLabel
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       BASIC PAY
                     </FormLabel>
                     <Col sm="1">
-                      <label className="blackText3">0000</label>
+                      {/* <label className="blackText3">0000</label> */}
+                      <input
+                        ref={basicPayAdjRef}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <label className="separator2"></label>
@@ -829,52 +1080,88 @@ export const PaySlipDataEntry = () => {
                     <FormLabel
                       style={{ padding: "0px 0px 0px 10px" }}
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       Per Cut-off
                     </FormLabel>
                     <Col sm="1">
-                      <label className="blackText2">0000</label>
+                      {/* <label className="blackText2">0000</label> */}
+                      <input
+                        ref={perCutOffRef}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <FormGroup as={Row}>
                     <FormLabel
                       style={{ padding: "0px 0px 0px 10px" }}
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       Per Day
                     </FormLabel>
                     <Col sm="2">
-                      <label className={"blackText2"}>0000</label>
+                      {/* <label className={"blackText2"}>0000</label> */}
+                      <input
+                        ref={perDayRef}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <FormGroup as={Row}>
                     <FormLabel
                       style={{ padding: "0px 0px 0px 10px" }}
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       Per Hour
                     </FormLabel>
                     <Col sm="2">
-                      <label className={"blackText2"}>0000</label>
+                      {/* <label className={"blackText2"}>0000</label> */}
+                      <input
+                        ref={perHourRef}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <FormGroup as={Row}>
                     <FormLabel
                       style={{ padding: "0px 0px 0px 10px" }}
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       Per Minute
                     </FormLabel>
                     <Col sm="2">
-                      <label className={"blackText2"}>0000</label>
+                      {/* <label className={"blackText2"}>0000</label> */}
+                      <input
+                        ref={perMinRef}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <FormGroup as={Row}>
@@ -931,8 +1218,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={vacLeaveRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -943,8 +1234,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={lateRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -955,8 +1250,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={absentRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -967,8 +1266,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={overTimeRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -979,8 +1282,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={srHolRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -991,8 +1298,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={legHolRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -1003,8 +1314,12 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={restSunRef}
-                    className="inpHeightXs"
-                    disabled
+                    className="inpHeightXs currency2"
+                    style={{ fontWeight: "bolder" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = normalizeCurrency(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -1016,13 +1331,24 @@ export const PaySlipDataEntry = () => {
                   <FormGroup as={Row}>
                     <FormLabel
                       column
-                      sm="8"
+                      sm="5"
                       className={("noWrapText", "greenText")}
                     >
                       TOTAL GROSS PAY:
                     </FormLabel>
-                    <Col sm="1">
-                      <label className="blackText3">0000</label>
+                    <Col sm="2">
+                      {/* <label className="blackText3" ref={grossRef}></label> */}
+                      <input
+                        ref={grossRef}
+                        className={"asLabel currency2"}
+                        style={{
+                          fontWeight: "bolder",
+                          marginTop: "2px",
+                          paddingRight: "10px",
+                          fontSize: "medium",
+                          width: "175px",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                 </FormGroup>
@@ -1030,13 +1356,24 @@ export const PaySlipDataEntry = () => {
                   <FormGroup as={Row}>
                     <FormLabel
                       column
-                      sm="8"
+                      sm="6"
                       className={("noWrapText", "redText")}
                     >
                       TOTAL DEDUCTIONS:
                     </FormLabel>
                     <Col sm="1">
-                      <label className="blackText3">0000</label>
+                      {/* <label className="blackText3">0000</label> */}
+                      <input
+                        ref={totalDeductionRef}
+                        className={"asLabel currency2"}
+                        style={{
+                          fontWeight: "bolder",
+                          marginTop: "2px",
+                          paddingRight: "10px",
+                          fontSize: "medium",
+                          width: "145px",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                 </FormGroup>
@@ -1044,13 +1381,24 @@ export const PaySlipDataEntry = () => {
                   <FormGroup as={Row}>
                     <FormLabel
                       column
-                      sm="8"
+                      sm="5"
                       className={("noWrapText", "blackText")}
                     >
                       TOTAL NET PAY:
                     </FormLabel>
                     <Col sm="1">
-                      <label className="blackText3">0000</label>
+                      {/* <label className="blackText3">0000</label> */}
+                      <input
+                        ref={netRef}
+                        className={"asLabel currency2"}
+                        style={{
+                          fontWeight: "bolder",
+                          marginTop: "2px",
+                          paddingRight: "10px",
+                          fontSize: "medium",
+                          width: "165px",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                 </FormGroup>
@@ -1058,7 +1406,7 @@ export const PaySlipDataEntry = () => {
             </Card>
             <Card className={" border-dark bg-dark text-white asButtonPart"}>
               <FormGroup as={Row}>
-                <Col sm="5"></Col>
+                <Col sm="4"></Col>
                 <Col sm="2">
                   <Button
                     className="setButtonMargin"
@@ -1072,6 +1420,7 @@ export const PaySlipDataEntry = () => {
                 <Col sm="1">
                   <Button
                     className="setButtonMargin"
+                    variant="success"
                     // onClick={() => newUser()}
                   >
                     Edit
@@ -1080,28 +1429,38 @@ export const PaySlipDataEntry = () => {
                 <Col sm="1">
                   <Button
                     className="setButtonMargin"
-                    variant="danger"
-                    // onClick={() => deleteUser()}
+                    variant="secondary"
+                    onClick={() => firstEmp()}
                   >
-                    Remove
+                    &lt;&lt;
+                  </Button>
+                </Col>
+
+                <Col sm="1">
+                  <Button
+                    className="setButtonMargin"
+                    variant="primary"
+                    onClick={() => prevEmp()}
+                  >
+                    Prev
                   </Button>
                 </Col>
                 <Col sm="1">
                   <Button
                     className="setButtonMargin"
-                    variant="success"
-                    // onClick={() => deleteUser()}
-                  >
-                    Back
-                  </Button>
-                </Col>
-                <Col sm="1">
-                  <Button
-                    className="setButtonMargin"
-                    variant="success"
+                    variant="primary"
                     onClick={() => nextEmp()}
                   >
                     Next
+                  </Button>
+                </Col>
+                <Col sm="1">
+                  <Button
+                    className="setButtonMargin"
+                    variant="secondary"
+                    onClick={() => lastEmp()}
+                  >
+                    &gt;&gt;
                   </Button>
                 </Col>
               </FormGroup>
