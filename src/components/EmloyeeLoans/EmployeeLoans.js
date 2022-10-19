@@ -22,6 +22,12 @@ export const EmployeeLoans = () => {
   const [show, setShow] = useState(true);
   const [employees, setEmployees] = useState([]);
   const [employee, setEmployee] = useState([]);
+  const [loans, setLoans] = useState("");
+
+  const [index, setIndex] = useState(0);
+  const [len, setLen] = useState(0);
+  var per1 = localStorage.getItem("PPFrom");
+  var per2 = localStorage.getItem("PPTo");
 
   const periodRef = useRef();
   const employeeNoRef = useRef();
@@ -108,19 +114,19 @@ export const EmployeeLoans = () => {
   const cpmAmorRef = useRef();
   const cpmBalRef = useRef();
 
-  const handleClose = () => {
-    setShow(false);
-    showOnDetails();
-  };
-  const handleShow = () => setShow(true);
-
   function showOnDetails() {
     employeeNoRef.current.value = employee.employeeNo;
     branchRef.current.value = employee.abranchCode;
     lastNameRef.current.value = employee.lastName;
     firstNameRef.current.value = employee.firstName;
     middleNameRef.current.value = employee.middleName;
+    periodRef.current.value = per1 + " to " + per2;
+    setLen(loans.length);
   }
+
+  useEffect(() => {
+    showOnDetails();
+  }, [employee]);
 
   useEffect(() => {
     getData();
@@ -130,29 +136,94 @@ export const EmployeeLoans = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/masemployees").then((response) => {
-      setEmployees(response.data);
+    axios.get("http://localhost:8080/api/vloan").then((response) => {
+      setLoans(response.data);
       console.log(response.data);
     });
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    showOnDetails();
+  };
+  const handleShow = () => {
+    setShow(true);
+    // setToggle(true);
+  };
+
+  const nextEmp = () => {
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    if (index < len - 1) {
+      setEmployee(loans[index + 1]);
+      setIndex(index + 1);
+      // showOnDetails();
+    }
+  };
+
+  const prevEmp = () => {
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    if (index > 0) {
+      setEmployee(loans[index - 1]);
+      setIndex(index - 1);
+      // showOnDetails();
+    }
+  };
+
+  const firstEmp = () => {
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    setEmployee(loans[0]);
+    setIndex(0);
+    showOnDetails();
+  };
+
+  const lastEmp = () => {
+    // employeeNoRef.current.value = payslips[index + 1].employeeNo;
+    setEmployee(loans[len - 1]);
+    setEmployee(loans[len - 1]);
+    setIndex(len - 1);
+    showOnDetails();
+  };
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "PHP",
+    }).format(value);
+
+  const normalizeCurrency = (value) => {
+    return value
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1")
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
 
   const nameFormatter = (data, row) => {
     return (
       <span>
-        {row.firstName} {row.lastName}
+        {row.lastName}, {row.firstName}
+        {"   "}
+        <a style={{ color: "blue" }}>{row.employeeNo}</a>
       </span>
     );
   };
 
   function nameFilterFormatter(cell, row) {
-    return row.firstName + row.lastName;
+    return row.lastName + row.firstName + row.employeeNo;
   }
+
+  const rowEvents = {
+    clickToSelect: true,
+    onDoubleClick: (row, isSelect, rowIndex, e) => {
+      handleClose();
+    },
+  };
 
   const selectRowProp = {
     mode: "radio",
     clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       setEmployee(row);
+      setIndex(rowIndex);
       return true;
     },
   };
@@ -172,7 +243,7 @@ export const EmployeeLoans = () => {
     },
     {
       // dataField: "currentGroup",
-      dataField: "ogroupCode",
+      dataField: "agroupCode",
       text: "Filter",
       sort: true,
       filter: textFilter({
@@ -197,8 +268,8 @@ export const EmployeeLoans = () => {
         <Modal.Body className="border-dark bg-dark text-white">
           <Card
             style={{
-              "max-width": "25rem",
-              "min-width": "25rem",
+              maxWidth: "25rem",
+              minWidth: "25rem",
               height: "auto",
             }}
             className={" border-dark bg-dark text-white"}
@@ -207,8 +278,8 @@ export const EmployeeLoans = () => {
               <BootstrapTable
                 id="bsTable"
                 // keyField="userId"
-                keyField="employeeNo"
-                data={employees}
+                keyField="id"
+                data={loans}
                 columns={columns}
                 striped
                 hover
@@ -233,6 +304,7 @@ export const EmployeeLoans = () => {
                 rowClasses="empTableRow"
                 headerClasses="empTableHeader"
                 selectRow={selectRowProp}
+                rowEvents={rowEvents}
                 // rowEvents={ rowEvents }
               ></BootstrapTable>
             </Container>
@@ -910,27 +982,44 @@ export const EmployeeLoans = () => {
             </FormGroup>
             <label className="separator"></label>
             <FormGroup as={Row}>
-              <Col sm="5"></Col>
+              <Col sm="7"></Col>
+              <Col sm="1">
+                <Button
+                  className="setButtonMargin"
+                  variant="secondary"
+                  onClick={() => firstEmp()}
+                >
+                  &lt;&lt;
+                </Button>
+              </Col>
 
               <Col sm="1">
                 <Button
                   className="setButtonMargin"
-                  variant="success"
-                  // onClick={() => deleteUser()}
+                  variant="primary"
+                  onClick={() => prevEmp()}
                 >
-                  Back
+                  Prev
                 </Button>
               </Col>
               <Col sm="1">
                 <Button
                   className="setButtonMargin"
-                  variant="success"
-                  // onClick={() => deleteUser()}
+                  variant="primary"
+                  onClick={() => nextEmp()}
                 >
                   Next
                 </Button>
               </Col>
-              <Col sm="4"></Col>
+              <Col sm="1">
+                <Button
+                  className="setButtonMargin"
+                  variant="secondary"
+                  onClick={() => lastEmp()}
+                >
+                  &gt;&gt;
+                </Button>
+              </Col>
             </FormGroup>
           </Card.Body>
         </Card>

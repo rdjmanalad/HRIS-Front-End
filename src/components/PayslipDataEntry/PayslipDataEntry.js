@@ -247,13 +247,15 @@ export const PaySlipDataEntry = () => {
   const nameFormatter = (data, row) => {
     return (
       <span>
-        {row.firstName} {row.lastName}
+        {row.lastName}, {row.firstName}
+        {"   "}
+        <a style={{ color: "blue" }}>{row.employeeNo}</a>
       </span>
     );
   };
 
   function nameFilterFormatter(cell, row) {
-    return row.firstName + row.lastName;
+    return row.lastName + row.firstName + row.employeeNo;
   }
 
   const selectRowProp = {
@@ -283,12 +285,12 @@ export const PaySlipDataEntry = () => {
       filterValue: (cell, row) => nameFilterFormatter(cell, row),
       filter: textFilter({
         style: { padding: "1px" },
-        placeholder: "Name...",
+        placeholder: "Name...or...Employee number",
       }),
     },
     {
       // dataField: "currentGroup",
-      dataField: "ogroupCode",
+      dataField: "agroupCode",
       text: "Filter",
       sort: true,
       filter: textFilter({

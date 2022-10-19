@@ -380,9 +380,9 @@ export const ChangePayrollPeriod = () => {
             FILTER RECORDS
           </label>
           <FormGroup as={Row}>
-            <Col sm="2"></Col>
-            <FormLabel column className="noWrapText" sm="5">
-              Please input group/ company/ baranch code to filter
+            <Col sm="4"></Col>
+            <FormLabel column className="noWrapText" sm="2">
+              Filter Actual Group
             </FormLabel>
             <Col sm="2">
               <FormControl
@@ -392,6 +392,7 @@ export const ChangePayrollPeriod = () => {
                 className="inpHeightXs"
               ></FormControl>
             </Col>
+            <Col sm="3"></Col>
           </FormGroup>
           <label className="separator"></label>
         </Card.Body>
