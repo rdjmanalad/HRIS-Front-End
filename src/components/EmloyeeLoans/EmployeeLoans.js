@@ -28,6 +28,7 @@ export const EmployeeLoans = () => {
   const [len, setLen] = useState(0);
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
+  var gcode = localStorage.getItem("FilterValue");
 
   const periodRef = useRef();
   const employeeNoRef = useRef();
@@ -121,6 +122,292 @@ export const EmployeeLoans = () => {
     firstNameRef.current.value = employee.firstName;
     middleNameRef.current.value = employee.middleName;
     periodRef.current.value = per1 + " to " + per2;
+    var len = employee.loan?.length;
+    var loanArr = employee.loan;
+    if (len > 0) {
+      for (var i = 0; i < len; i++) {
+        if (employee.loan[i].loanType === "HOUSING") {
+          cpmSDRef.current.value = loanArr[i].startDate;
+          cpmEDRef.current.value = loanArr[i].endDate;
+          cpmCapRef.current.value = numberFormat(loanArr[i].capital);
+          cpmAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          cpmBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          cpmSDRef.current.value = "";
+          cpmEDRef.current.value = "";
+          cpmCapRef.current.value = "";
+          cpmAmorRef.current.value = "";
+          cpmBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "SSS") {
+          sssSDRef.current.value = loanArr[i].startDate;
+          sssEDRef.current.value = loanArr[i].endDate;
+          sssCapRef.current.value = numberFormat(loanArr[i].capital);
+          sssAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          sssBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          sssSDRef.current.value = "";
+          sssEDRef.current.value = "";
+          sssCapRef.current.value = "";
+          sssAmorRef.current.value = "";
+          sssBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          pagSDRef.current.value = loanArr[i].startDate;
+          pagEDRef.current.value = loanArr[i].endDate;
+          pagCapRef.current.value = numberFormat(loanArr[i].capital);
+          pagAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          pagBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          pagSDRef.current.value = "";
+          pagEDRef.current.value = "";
+          pagCapRef.current.value = "";
+          pagAmorRef.current.value = "";
+          pagBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          spSDRef.current.value = loanArr[i].startDate;
+          spEDRef.current.value = loanArr[i].endDate;
+          spCapRef.current.value = numberFormat(loanArr[i].capital);
+          spAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          spBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          spSDRef.current.value = "";
+          spEDRef.current.value = "";
+          spCapRef.current.value = "";
+          spAmorRef.current.value = "";
+          spBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          plSDRef.current.value = loanArr[i].startDate;
+          plEDRef.current.value = loanArr[i].endDate;
+          plCapRef.current.value = numberFormat(loanArr[i].capital);
+          plAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          plBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          plSDRef.current.value = "";
+          plEDRef.current.value = "";
+          plCapRef.current.value = "";
+          plAmorRef.current.value = "";
+          plBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          emerSDRef.current.value = loanArr[i].startDate;
+          emerEDRef.current.value = loanArr[i].endDate;
+          emerCapRef.current.value = numberFormat(loanArr[i].capital);
+          emerAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          emerBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          emerSDRef.current.value = "";
+          emerEDRef.current.value = "";
+          emerCapRef.current.value = "";
+          emerAmorRef.current.value = "";
+          emerBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          foSDRef.current.value = loanArr[i].startDate;
+          foEDRef.current.value = loanArr[i].endDate;
+          foCapRef.current.value = numberFormat(loanArr[i].capital);
+          foAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          foBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          foSDRef.current.value = "";
+          foEDRef.current.value = "";
+          foCapRef.current.value = "";
+          foAmorRef.current.value = "";
+          foBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          storSDRef.current.value = loanArr[i].startDate;
+          storEDRef.current.value = loanArr[i].endDate;
+          storCapRef.current.value = numberFormat(loanArr[i].capital);
+          storAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          storBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          storSDRef.current.value = "";
+          storEDRef.current.value = "";
+          storCapRef.current.value = "";
+          storAmorRef.current.value = "";
+          storBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          pnSDRef.current.value = loanArr[i].startDate;
+          pnEDRef.current.value = loanArr[i].endDate;
+          pnCapRef.current.value = numberFormat(loanArr[i].capital);
+          pnAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          pnBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          pnSDRef.current.value = "";
+          pnEDRef.current.value = "";
+          pnCapRef.current.value = "";
+          pnAmorRef.current.value = "";
+          pnBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          lapSDRef.current.value = loanArr[i].startDate;
+          lapEDRef.current.value = loanArr[i].endDate;
+          lapCapRef.current.value = numberFormat(loanArr[i].capital);
+          lapAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          lapBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          lapSDRef.current.value = "";
+          lapEDRef.current.value = "";
+          lapCapRef.current.value = "";
+          lapAmorRef.current.value = "";
+          lapBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          perSDRef.current.value = loanArr[i].startDate;
+          perEDRef.current.value = loanArr[i].endDate;
+          perCapRef.current.value = numberFormat(loanArr[i].capital);
+          perAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          perBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          perSDRef.current.value = "";
+          perEDRef.current.value = "";
+          perCapRef.current.value = "";
+          perAmorRef.current.value = "";
+          perBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          liSDRef.current.value = loanArr[i].startDate;
+          liEDRef.current.value = loanArr[i].endDate;
+          liCapRef.current.value = numberFormat(loanArr[i].capital);
+          liAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          liBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          liSDRef.current.value = "";
+          liEDRef.current.value = "";
+          liCapRef.current.value = "";
+          liAmorRef.current.value = "";
+          liBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          hmoSDRef.current.value = loanArr[i].startDate;
+          hmoEDRef.current.value = loanArr[i].endDate;
+          hmoCapRef.current.value = numberFormat(loanArr[i].capital);
+          hmoAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          hmoBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          hmoSDRef.current.value = "";
+          hmoEDRef.current.value = "";
+          hmoCapRef.current.value = "";
+          hmoAmorRef.current.value = "";
+          hmoBalRef.current.value = "";
+        }
+
+        if (employee.loan[i].loanType === "HOUSING") {
+          cpmSDRef.current.value = loanArr[i].startDate;
+          cpmEDRef.current.value = loanArr[i].endDate;
+          cpmCapRef.current.value = numberFormat(loanArr[i].capital);
+          cpmAmorRef.current.value = numberFormat(loanArr[i].amortization);
+          cpmBalRef.current.value = numberFormat(loanArr[i].balance);
+        } else {
+          cpmSDRef.current.value = "";
+          cpmEDRef.current.value = "";
+          cpmCapRef.current.value = "";
+          cpmAmorRef.current.value = "";
+          cpmBalRef.current.value = "";
+        }
+      }
+    } else {
+      sssSDRef.current.value = "";
+      sssEDRef.current.value = "";
+      sssCapRef.current.value = "";
+      sssAmorRef.current.value = "";
+      sssBalRef.current.value = "";
+
+      pagSDRef.current.value = "";
+      pagEDRef.current.value = "";
+      pagCapRef.current.value = "";
+      pagAmorRef.current.value = "";
+      pagBalRef.current.value = "";
+
+      spSDRef.current.value = "";
+      spEDRef.current.value = "";
+      spCapRef.current.value = "";
+      spAmorRef.current.value = "";
+      spBalRef.current.value = "";
+
+      plSDRef.current.value = "";
+      plEDRef.current.value = "";
+      plCapRef.current.value = "";
+      plAmorRef.current.value = "";
+      plBalRef.current.value = "";
+
+      emerSDRef.current.value = "";
+      emerEDRef.current.value = "";
+      emerCapRef.current.value = "";
+      emerAmorRef.current.value = "";
+      emerBalRef.current.value = "";
+
+      storSDRef.current.value = "";
+      storEDRef.current.value = "";
+      storCapRef.current.value = "";
+      storAmorRef.current.value = "";
+      storBalRef.current.value = "";
+
+      foSDRef.current.value = "";
+      foEDRef.current.value = "";
+      foCapRef.current.value = "";
+      foAmorRef.current.value = "";
+      foBalRef.current.value = "";
+
+      pnSDRef.current.value = "";
+      pnEDRef.current.value = "";
+      pnCapRef.current.value = "";
+      pnAmorRef.current.value = "";
+      pnBalRef.current.value = "";
+
+      lapSDRef.current.value = "";
+      lapEDRef.current.value = "";
+      lapCapRef.current.value = "";
+      lapAmorRef.current.value = "";
+      lapBalRef.current.value = "";
+
+      perSDRef.current.value = "";
+      perEDRef.current.value = "";
+      perCapRef.current.value = "";
+      perAmorRef.current.value = "";
+      perBalRef.current.value = "";
+
+      liSDRef.current.value = "";
+      liEDRef.current.value = "";
+      liCapRef.current.value = "";
+      liAmorRef.current.value = "";
+      liBalRef.current.value = "";
+
+      hmoSDRef.current.value = "";
+      hmoEDRef.current.value = "";
+      hmoCapRef.current.value = "";
+      hmoAmorRef.current.value = "";
+      hmoBalRef.current.value = "";
+
+      cpmSDRef.current.value = "";
+      cpmEDRef.current.value = "";
+      cpmCapRef.current.value = "";
+      cpmAmorRef.current.value = "";
+      cpmBalRef.current.value = "";
+
+      cpmSDRef.current.value = "";
+      cpmEDRef.current.value = "";
+      cpmCapRef.current.value = "";
+      cpmAmorRef.current.value = "";
+      cpmBalRef.current.value = "";
+    }
+
     setLen(loans.length);
   }
 
@@ -132,16 +419,37 @@ export const EmployeeLoans = () => {
     getData();
   }, []);
 
+  // const getData = () => {
+  //   axios.defaults.headers.common["Authorization"] =
+  //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+  //   axios.get("http://localhost:8080/api/vloan").then((response) => {
+  //     setLoans(response.data);
+  //     console.log(response.data);
+  //   });
+  // };
+
   const getData = () => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    if (gcode) {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/vloan").then((response) => {
-      setLoans(response.data);
-      console.log(response.data);
-    });
+      axios
+        .get("http://localhost:8080/api/loan/emploan/" + gcode)
+        .then((response) => {
+          setLoans(response.data);
+          console.log(response.data);
+        });
+    } else {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+      axios.get("http://localhost:8080/api/loan/emploan").then((response) => {
+        setLoans(response.data);
+        console.log(response.data);
+      });
+    }
   };
-
   const handleClose = () => {
     setShow(false);
     showOnDetails();
@@ -212,7 +520,7 @@ export const EmployeeLoans = () => {
   }
 
   const rowEvents = {
-    clickToSelect: true,
+    // clickToSelect: true,
     onDoubleClick: (row, isSelect, rowIndex, e) => {
       handleClose();
     },
@@ -278,7 +586,7 @@ export const EmployeeLoans = () => {
               <BootstrapTable
                 id="bsTable"
                 // keyField="userId"
-                keyField="id"
+                keyField="employeeNo"
                 data={loans}
                 columns={columns}
                 striped
@@ -466,7 +774,14 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={sssSDRef}
                       className="inpHeightXs"
+                      placeholder=" "
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -474,6 +789,12 @@ export const EmployeeLoans = () => {
                       ref={sssEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -481,6 +802,11 @@ export const EmployeeLoans = () => {
                       ref={sssCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -488,6 +814,11 @@ export const EmployeeLoans = () => {
                       ref={sssAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -495,6 +826,11 @@ export const EmployeeLoans = () => {
                       ref={sssBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -507,6 +843,12 @@ export const EmployeeLoans = () => {
                       ref={pagSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -514,6 +856,12 @@ export const EmployeeLoans = () => {
                       ref={pagEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -521,6 +869,11 @@ export const EmployeeLoans = () => {
                       ref={pagCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -528,6 +881,11 @@ export const EmployeeLoans = () => {
                       ref={pagAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -535,6 +893,11 @@ export const EmployeeLoans = () => {
                       ref={pagBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -547,6 +910,12 @@ export const EmployeeLoans = () => {
                       ref={spSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -554,6 +923,12 @@ export const EmployeeLoans = () => {
                       ref={spEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -561,6 +936,11 @@ export const EmployeeLoans = () => {
                       ref={spCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -568,6 +948,11 @@ export const EmployeeLoans = () => {
                       ref={spAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -575,6 +960,11 @@ export const EmployeeLoans = () => {
                       ref={spBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -587,6 +977,12 @@ export const EmployeeLoans = () => {
                       ref={plSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -594,6 +990,12 @@ export const EmployeeLoans = () => {
                       ref={plEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -601,6 +1003,11 @@ export const EmployeeLoans = () => {
                       ref={plCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -608,6 +1015,11 @@ export const EmployeeLoans = () => {
                       ref={plAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -615,6 +1027,11 @@ export const EmployeeLoans = () => {
                       ref={plBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -627,6 +1044,12 @@ export const EmployeeLoans = () => {
                       ref={emerSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -634,6 +1057,12 @@ export const EmployeeLoans = () => {
                       ref={emerEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -641,6 +1070,11 @@ export const EmployeeLoans = () => {
                       ref={emerCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -648,6 +1082,11 @@ export const EmployeeLoans = () => {
                       ref={emerAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -655,6 +1094,11 @@ export const EmployeeLoans = () => {
                       ref={emerBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -667,6 +1111,12 @@ export const EmployeeLoans = () => {
                       ref={foSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -674,6 +1124,12 @@ export const EmployeeLoans = () => {
                       ref={foEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -681,6 +1137,11 @@ export const EmployeeLoans = () => {
                       ref={foCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -688,6 +1149,11 @@ export const EmployeeLoans = () => {
                       ref={foAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -695,6 +1161,11 @@ export const EmployeeLoans = () => {
                       ref={foBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -707,6 +1178,12 @@ export const EmployeeLoans = () => {
                       ref={storSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -714,6 +1191,12 @@ export const EmployeeLoans = () => {
                       ref={storEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -721,6 +1204,11 @@ export const EmployeeLoans = () => {
                       ref={storCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -728,6 +1216,11 @@ export const EmployeeLoans = () => {
                       ref={storAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -735,6 +1228,11 @@ export const EmployeeLoans = () => {
                       ref={storBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -747,6 +1245,12 @@ export const EmployeeLoans = () => {
                       ref={pnSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -754,6 +1258,12 @@ export const EmployeeLoans = () => {
                       ref={pnEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -761,6 +1271,11 @@ export const EmployeeLoans = () => {
                       ref={pnCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -768,6 +1283,11 @@ export const EmployeeLoans = () => {
                       ref={pnAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -775,6 +1295,11 @@ export const EmployeeLoans = () => {
                       ref={pnBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -787,6 +1312,12 @@ export const EmployeeLoans = () => {
                       ref={lapSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -794,6 +1325,12 @@ export const EmployeeLoans = () => {
                       ref={lapEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -801,6 +1338,11 @@ export const EmployeeLoans = () => {
                       ref={lapCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -808,6 +1350,11 @@ export const EmployeeLoans = () => {
                       ref={lapAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -815,6 +1362,11 @@ export const EmployeeLoans = () => {
                       ref={lapBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -827,6 +1379,12 @@ export const EmployeeLoans = () => {
                       ref={perSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -834,6 +1392,12 @@ export const EmployeeLoans = () => {
                       ref={perEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -841,6 +1405,11 @@ export const EmployeeLoans = () => {
                       ref={perCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -848,6 +1417,11 @@ export const EmployeeLoans = () => {
                       ref={perAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -855,6 +1429,11 @@ export const EmployeeLoans = () => {
                       ref={perBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -867,6 +1446,12 @@ export const EmployeeLoans = () => {
                       ref={liSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -874,6 +1459,12 @@ export const EmployeeLoans = () => {
                       ref={liEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -881,6 +1472,11 @@ export const EmployeeLoans = () => {
                       ref={liCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -888,6 +1484,11 @@ export const EmployeeLoans = () => {
                       ref={liAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -895,6 +1496,11 @@ export const EmployeeLoans = () => {
                       ref={liBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -907,6 +1513,12 @@ export const EmployeeLoans = () => {
                       ref={hmoSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -914,6 +1526,12 @@ export const EmployeeLoans = () => {
                       ref={hmoEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -921,6 +1539,11 @@ export const EmployeeLoans = () => {
                       ref={hmoCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -928,6 +1551,11 @@ export const EmployeeLoans = () => {
                       ref={hmoAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -935,6 +1563,11 @@ export const EmployeeLoans = () => {
                       ref={hmoBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -947,6 +1580,12 @@ export const EmployeeLoans = () => {
                       ref={cpmSDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -954,6 +1593,12 @@ export const EmployeeLoans = () => {
                       ref={cpmEDRef}
                       className="inpHeightXs"
                       disabled
+                      type="Date"
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -961,6 +1606,11 @@ export const EmployeeLoans = () => {
                       ref={cpmCapRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -968,6 +1618,11 @@ export const EmployeeLoans = () => {
                       ref={cpmAmorRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -975,6 +1630,11 @@ export const EmployeeLoans = () => {
                       ref={cpmBalRef}
                       className="inpHeightXs"
                       disabled
+                      style={{
+                        fontWeight: "bolder",
+                        textAlign: "right",
+                        fontSize: "14px",
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
