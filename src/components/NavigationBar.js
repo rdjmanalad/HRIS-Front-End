@@ -45,7 +45,7 @@ function NavigationBar() {
               <NavDropdown.Item href="ChangePayrollPeriod">
                 Change Payroll Period
               </NavDropdown.Item>
-              <NavDropdown.Item>Filter Actual Group</NavDropdown.Item>
+              {/* <NavDropdown.Item>Filter Actual Group</NavDropdown.Item> */}
               <NavDropdown.Divider />
               <NavDropdown.Item href="UserManagement">
                 User Accounts
@@ -86,7 +86,7 @@ function NavigationBar() {
             >
               Reports
             </Nav.Link>
-            <NavDropdown
+            {/* <NavDropdown
               className="fs-med"
               title="Test"
               id="basic-nav-dropdown"
@@ -102,7 +102,7 @@ function NavigationBar() {
               <NavDropdown.Item href="EmployeeTopList">
                 Separated link
               </NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
           </Nav>
           <Nav>
             <label

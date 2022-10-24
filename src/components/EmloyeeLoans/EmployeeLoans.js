@@ -4,6 +4,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
+import { ColorRing } from "react-loader-spinner";
 import axios from "axios";
 import {
   Container,
@@ -26,6 +27,7 @@ export const EmployeeLoans = () => {
 
   const [index, setIndex] = useState(0);
   const [len, setLen] = useState(0);
+  const [loading, setL] = useState(true);
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
@@ -115,6 +117,8 @@ export const EmployeeLoans = () => {
   const cpmAmorRef = useRef();
   const cpmBalRef = useRef();
 
+  var sssb = false;
+
   function showOnDetails() {
     employeeNoRef.current.value = employee.employeeNo;
     branchRef.current.value = employee.abranchCode;
@@ -126,21 +130,8 @@ export const EmployeeLoans = () => {
     var loanArr = employee.loan;
     if (len > 0) {
       for (var i = 0; i < len; i++) {
-        if (employee.loan[i].loanType === "HOUSING") {
-          cpmSDRef.current.value = loanArr[i].startDate;
-          cpmEDRef.current.value = loanArr[i].endDate;
-          cpmCapRef.current.value = numberFormat(loanArr[i].capital);
-          cpmAmorRef.current.value = numberFormat(loanArr[i].amortization);
-          cpmBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          cpmSDRef.current.value = "";
-          cpmEDRef.current.value = "";
-          cpmCapRef.current.value = "";
-          cpmAmorRef.current.value = "";
-          cpmBalRef.current.value = "";
-        }
-
         if (employee.loan[i].loanType === "SSS") {
+          sssb = true;
           sssSDRef.current.value = loanArr[i].startDate;
           sssEDRef.current.value = loanArr[i].endDate;
           sssCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -149,9 +140,14 @@ export const EmployeeLoans = () => {
         } else {
           sssSDRef.current.value = "";
           sssEDRef.current.value = "";
-          sssCapRef.current.value = "";
-          sssAmorRef.current.value = "";
-          sssBalRef.current.value = "";
+          sssCapRef.current.value = numberFormat(0);
+          sssAmorRef.current.value = numberFormat(0);
+          sssBalRef.current.value = numberFormat(0);
+          sssSDRef.current.style.color = "grey";
+          sssEDRef.current.style.color = "grey";
+          sssCapRef.current.style.color = "grey";
+          sssAmorRef.current.style.color = "grey";
+          sssBalRef.current.style.color = "grey";
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -163,9 +159,14 @@ export const EmployeeLoans = () => {
         } else {
           pagSDRef.current.value = "";
           pagEDRef.current.value = "";
-          pagCapRef.current.value = "";
-          pagAmorRef.current.value = "";
-          pagBalRef.current.value = "";
+          pagCapRef.current.value = numberFormat(0);
+          pagAmorRef.current.value = numberFormat(0);
+          pagBalRef.current.value = numberFormat(0);
+          pagEDRef.current.style.color = "grey";
+          pagSDRef.current.style.color = "grey";
+          pagCapRef.current.style.color = "grey";
+          pagAmorRef.current.style.color = "grey";
+          pagBalRef.current.style.color = "grey";
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -177,9 +178,9 @@ export const EmployeeLoans = () => {
         } else {
           spSDRef.current.value = "";
           spEDRef.current.value = "";
-          spCapRef.current.value = "";
-          spAmorRef.current.value = "";
-          spBalRef.current.value = "";
+          spCapRef.current.value = numberFormat(0);
+          spAmorRef.current.value = numberFormat(0);
+          spBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -191,9 +192,9 @@ export const EmployeeLoans = () => {
         } else {
           plSDRef.current.value = "";
           plEDRef.current.value = "";
-          plCapRef.current.value = "";
-          plAmorRef.current.value = "";
-          plBalRef.current.value = "";
+          plCapRef.current.value = numberFormat(0);
+          plAmorRef.current.value = numberFormat(0);
+          plBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -205,9 +206,9 @@ export const EmployeeLoans = () => {
         } else {
           emerSDRef.current.value = "";
           emerEDRef.current.value = "";
-          emerCapRef.current.value = "";
-          emerAmorRef.current.value = "";
-          emerBalRef.current.value = "";
+          emerCapRef.current.value = numberFormat(0);
+          emerAmorRef.current.value = numberFormat(0);
+          emerBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -219,9 +220,9 @@ export const EmployeeLoans = () => {
         } else {
           foSDRef.current.value = "";
           foEDRef.current.value = "";
-          foCapRef.current.value = "";
-          foAmorRef.current.value = "";
-          foBalRef.current.value = "";
+          foCapRef.current.value = numberFormat(0);
+          foAmorRef.current.value = numberFormat(0);
+          foBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -233,9 +234,9 @@ export const EmployeeLoans = () => {
         } else {
           storSDRef.current.value = "";
           storEDRef.current.value = "";
-          storCapRef.current.value = "";
-          storAmorRef.current.value = "";
-          storBalRef.current.value = "";
+          storCapRef.current.value = numberFormat(0);
+          storAmorRef.current.value = numberFormat(0);
+          storBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -247,9 +248,9 @@ export const EmployeeLoans = () => {
         } else {
           pnSDRef.current.value = "";
           pnEDRef.current.value = "";
-          pnCapRef.current.value = "";
-          pnAmorRef.current.value = "";
-          pnBalRef.current.value = "";
+          pnCapRef.current.value = numberFormat(0);
+          pnAmorRef.current.value = numberFormat(0);
+          pnBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -261,9 +262,9 @@ export const EmployeeLoans = () => {
         } else {
           lapSDRef.current.value = "";
           lapEDRef.current.value = "";
-          lapCapRef.current.value = "";
-          lapAmorRef.current.value = "";
-          lapBalRef.current.value = "";
+          lapCapRef.current.value = numberFormat(0);
+          lapAmorRef.current.value = numberFormat(0);
+          lapBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -275,9 +276,9 @@ export const EmployeeLoans = () => {
         } else {
           perSDRef.current.value = "";
           perEDRef.current.value = "";
-          perCapRef.current.value = "";
-          perAmorRef.current.value = "";
-          perBalRef.current.value = "";
+          perCapRef.current.value = numberFormat(0);
+          perAmorRef.current.value = numberFormat(0);
+          perBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -289,9 +290,9 @@ export const EmployeeLoans = () => {
         } else {
           liSDRef.current.value = "";
           liEDRef.current.value = "";
-          liCapRef.current.value = "";
-          liAmorRef.current.value = "";
-          liBalRef.current.value = "";
+          liCapRef.current.value = numberFormat(0);
+          liAmorRef.current.value = numberFormat(0);
+          liBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -303,9 +304,9 @@ export const EmployeeLoans = () => {
         } else {
           hmoSDRef.current.value = "";
           hmoEDRef.current.value = "";
-          hmoCapRef.current.value = "";
-          hmoAmorRef.current.value = "";
-          hmoBalRef.current.value = "";
+          hmoCapRef.current.value = numberFormat(0);
+          hmoAmorRef.current.value = numberFormat(0);
+          hmoBalRef.current.value = numberFormat(0);
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
@@ -317,101 +318,229 @@ export const EmployeeLoans = () => {
         } else {
           cpmSDRef.current.value = "";
           cpmEDRef.current.value = "";
-          cpmCapRef.current.value = "";
-          cpmAmorRef.current.value = "";
-          cpmBalRef.current.value = "";
+          cpmCapRef.current.value = numberFormat(0);
+          cpmAmorRef.current.value = numberFormat(0);
+          cpmBalRef.current.value = numberFormat(0);
         }
       }
     } else {
       sssSDRef.current.value = "";
       sssEDRef.current.value = "";
-      sssCapRef.current.value = "";
-      sssAmorRef.current.value = "";
-      sssBalRef.current.value = "";
+      sssCapRef.current.value = numberFormat(0);
+      sssAmorRef.current.value = numberFormat(0);
+      sssBalRef.current.value = numberFormat(0);
+      sssSDRef.current.style.color = "grey";
+      sssEDRef.current.style.color = "grey";
+      sssCapRef.current.style.color = "grey";
+      sssAmorRef.current.style.color = "grey";
+      sssBalRef.current.style.color = "grey";
 
       pagSDRef.current.value = "";
       pagEDRef.current.value = "";
-      pagCapRef.current.value = "";
-      pagAmorRef.current.value = "";
-      pagBalRef.current.value = "";
+      pagCapRef.current.value = numberFormat(0);
+      pagAmorRef.current.value = numberFormat(0);
+      pagBalRef.current.value = numberFormat(0);
+      pagEDRef.current.style.color = "grey";
+      pagSDRef.current.style.color = "grey";
+      pagCapRef.current.style.color = "grey";
+      pagAmorRef.current.style.color = "grey";
+      pagBalRef.current.style.color = "grey";
 
       spSDRef.current.value = "";
       spEDRef.current.value = "";
-      spCapRef.current.value = "";
-      spAmorRef.current.value = "";
-      spBalRef.current.value = "";
+      spCapRef.current.value = numberFormat(0);
+      spAmorRef.current.value = numberFormat(0);
+      spBalRef.current.value = numberFormat(0);
+      spEDRef.current.style.color = "grey";
+      spSDRef.current.style.color = "grey";
+      spCapRef.current.style.color = "grey";
+      spAmorRef.current.style.color = "grey";
+      spBalRef.current.style.color = "grey";
 
       plSDRef.current.value = "";
       plEDRef.current.value = "";
-      plCapRef.current.value = "";
-      plAmorRef.current.value = "";
-      plBalRef.current.value = "";
+      plCapRef.current.value = numberFormat(0);
+      plAmorRef.current.value = numberFormat(0);
+      plBalRef.current.value = numberFormat(0);
+      plEDRef.current.style.color = "grey";
+      plSDRef.current.style.color = "grey";
+      plCapRef.current.style.color = "grey";
+      plAmorRef.current.style.color = "grey";
+      plBalRef.current.style.color = "grey";
 
       emerSDRef.current.value = "";
       emerEDRef.current.value = "";
-      emerCapRef.current.value = "";
-      emerAmorRef.current.value = "";
-      emerBalRef.current.value = "";
+      emerCapRef.current.value = numberFormat(0);
+      emerAmorRef.current.value = numberFormat(0);
+      emerBalRef.current.value = numberFormat(0);
+      emerEDRef.current.style.color = "grey";
+      emerSDRef.current.style.color = "grey";
+      emerCapRef.current.style.color = "grey";
+      emerAmorRef.current.style.color = "grey";
+      emerBalRef.current.style.color = "grey";
 
       storSDRef.current.value = "";
       storEDRef.current.value = "";
-      storCapRef.current.value = "";
-      storAmorRef.current.value = "";
-      storBalRef.current.value = "";
+      storCapRef.current.value = numberFormat(0);
+      storAmorRef.current.value = numberFormat(0);
+      storBalRef.current.value = numberFormat(0);
+      storEDRef.current.style.color = "grey";
+      storSDRef.current.style.color = "grey";
+      storCapRef.current.style.color = "grey";
+      storAmorRef.current.style.color = "grey";
+      storBalRef.current.style.color = "grey";
 
       foSDRef.current.value = "";
       foEDRef.current.value = "";
-      foCapRef.current.value = "";
-      foAmorRef.current.value = "";
-      foBalRef.current.value = "";
+      foCapRef.current.value = numberFormat(0);
+      foAmorRef.current.value = numberFormat(0);
+      foBalRef.current.value = numberFormat(0);
+      foEDRef.current.style.color = "grey";
+      foSDRef.current.style.color = "grey";
+      foCapRef.current.style.color = "grey";
+      foAmorRef.current.style.color = "grey";
+      foBalRef.current.style.color = "grey";
 
       pnSDRef.current.value = "";
       pnEDRef.current.value = "";
-      pnCapRef.current.value = "";
-      pnAmorRef.current.value = "";
-      pnBalRef.current.value = "";
+      pnCapRef.current.value = numberFormat(0);
+      pnAmorRef.current.value = numberFormat(0);
+      pnBalRef.current.value = numberFormat(0);
+      pnEDRef.current.style.color = "grey";
+      pnSDRef.current.style.color = "grey";
+      pnCapRef.current.style.color = "grey";
+      pnAmorRef.current.style.color = "grey";
+      pnBalRef.current.style.color = "grey";
 
       lapSDRef.current.value = "";
       lapEDRef.current.value = "";
-      lapCapRef.current.value = "";
-      lapAmorRef.current.value = "";
-      lapBalRef.current.value = "";
+      lapCapRef.current.value = numberFormat(0);
+      lapAmorRef.current.value = numberFormat(0);
+      lapBalRef.current.value = numberFormat(0);
+      lapEDRef.current.style.color = "grey";
+      lapSDRef.current.style.color = "grey";
+      lapCapRef.current.style.color = "grey";
+      lapAmorRef.current.style.color = "grey";
+      lapBalRef.current.style.color = "grey";
 
       perSDRef.current.value = "";
       perEDRef.current.value = "";
-      perCapRef.current.value = "";
-      perAmorRef.current.value = "";
-      perBalRef.current.value = "";
+      perCapRef.current.value = numberFormat(0);
+      perAmorRef.current.value = numberFormat(0);
+      perBalRef.current.value = numberFormat(0);
+      perEDRef.current.style.color = "grey";
+      perSDRef.current.style.color = "grey";
+      perCapRef.current.style.color = "grey";
+      perAmorRef.current.style.color = "grey";
+      perBalRef.current.style.color = "grey";
 
       liSDRef.current.value = "";
       liEDRef.current.value = "";
-      liCapRef.current.value = "";
-      liAmorRef.current.value = "";
-      liBalRef.current.value = "";
+      liCapRef.current.value = numberFormat(0);
+      liAmorRef.current.value = numberFormat(0);
+      liBalRef.current.value = numberFormat(0);
+      liEDRef.current.style.color = "grey";
+      liSDRef.current.style.color = "grey";
+      liCapRef.current.style.color = "grey";
+      liAmorRef.current.style.color = "grey";
+      liBalRef.current.style.color = "grey";
 
       hmoSDRef.current.value = "";
       hmoEDRef.current.value = "";
-      hmoCapRef.current.value = "";
-      hmoAmorRef.current.value = "";
-      hmoBalRef.current.value = "";
+      hmoCapRef.current.value = numberFormat(0);
+      hmoAmorRef.current.value = numberFormat(0);
+      hmoBalRef.current.value = numberFormat(0);
+      hmoEDRef.current.style.color = "grey";
+      hmoSDRef.current.style.color = "grey";
+      hmoCapRef.current.style.color = "grey";
+      hmoAmorRef.current.style.color = "grey";
+      hmoBalRef.current.style.color = "grey";
 
       cpmSDRef.current.value = "";
       cpmEDRef.current.value = "";
-      cpmCapRef.current.value = "";
-      cpmAmorRef.current.value = "";
-      cpmBalRef.current.value = "";
-
-      cpmSDRef.current.value = "";
-      cpmEDRef.current.value = "";
-      cpmCapRef.current.value = "";
-      cpmAmorRef.current.value = "";
-      cpmBalRef.current.value = "";
+      cpmCapRef.current.value = numberFormat(0);
+      cpmAmorRef.current.value = numberFormat(0);
+      cpmBalRef.current.value = numberFormat(0);
+      cpmEDRef.current.style.color = "grey";
+      cpmSDRef.current.style.color = "grey";
+      cpmCapRef.current.style.color = "grey";
+      cpmAmorRef.current.style.color = "grey";
+      cpmBalRef.current.style.color = "grey";
     }
 
     setLen(loans.length);
   }
 
+  const resetToBlack = () => {
+    cpmEDRef.current.style.color = "black";
+    cpmSDRef.current.style.color = "black";
+    cpmCapRef.current.style.color = "black";
+    cpmAmorRef.current.style.color = "black";
+    cpmBalRef.current.style.color = "black";
+    hmoEDRef.current.style.color = "black";
+    hmoSDRef.current.style.color = "black";
+    hmoCapRef.current.style.color = "black";
+    hmoAmorRef.current.style.color = "black";
+    hmoBalRef.current.style.color = "black";
+    liEDRef.current.style.color = "black";
+    liSDRef.current.style.color = "black";
+    liCapRef.current.style.color = "black";
+    liAmorRef.current.style.color = "black";
+    liBalRef.current.style.color = "black";
+    perEDRef.current.style.color = "black";
+    perSDRef.current.style.color = "black";
+    perCapRef.current.style.color = "black";
+    perAmorRef.current.style.color = "black";
+    perBalRef.current.style.color = "black";
+    lapEDRef.current.style.color = "black";
+    lapSDRef.current.style.color = "black";
+    lapCapRef.current.style.color = "black";
+    lapAmorRef.current.style.color = "black";
+    lapBalRef.current.style.color = "black";
+    pnEDRef.current.style.color = "black";
+    pnSDRef.current.style.color = "black";
+    pnCapRef.current.style.color = "black";
+    pnAmorRef.current.style.color = "black";
+    pnBalRef.current.style.color = "black";
+    foEDRef.current.style.color = "black";
+    foSDRef.current.style.color = "black";
+    foCapRef.current.style.color = "black";
+    foAmorRef.current.style.color = "black";
+    foBalRef.current.style.color = "black";
+    storEDRef.current.style.color = "black";
+    storSDRef.current.style.color = "black";
+    storCapRef.current.style.color = "black";
+    storAmorRef.current.style.color = "black";
+    storBalRef.current.style.color = "black";
+    emerEDRef.current.style.color = "black";
+    emerSDRef.current.style.color = "black";
+    emerCapRef.current.style.color = "black";
+    emerAmorRef.current.style.color = "black";
+    emerBalRef.current.style.color = "black";
+    plEDRef.current.style.color = "black";
+    plSDRef.current.style.color = "black";
+    plCapRef.current.style.color = "black";
+    plAmorRef.current.style.color = "black";
+    plBalRef.current.style.color = "black";
+    spEDRef.current.style.color = "black";
+    spSDRef.current.style.color = "black";
+    spCapRef.current.style.color = "black";
+    spAmorRef.current.style.color = "black";
+    spBalRef.current.style.color = "black";
+    pagEDRef.current.style.color = "black";
+    pagSDRef.current.style.color = "black";
+    pagCapRef.current.style.color = "black";
+    pagAmorRef.current.style.color = "black";
+    pagBalRef.current.style.color = "black";
+    sssSDRef.current.style.color = "black";
+    sssEDRef.current.style.color = "black";
+    sssCapRef.current.style.color = "black";
+    sssAmorRef.current.style.color = "black";
+    sssBalRef.current.style.color = "black";
+  };
+
   useEffect(() => {
+    resetToBlack();
     showOnDetails();
   }, [employee]);
 
@@ -437,6 +566,7 @@ export const EmployeeLoans = () => {
       axios
         .get("http://localhost:8080/api/loan/emploan/" + gcode)
         .then((response) => {
+          setL(false);
           setLoans(response.data);
           console.log(response.data);
         });
@@ -445,6 +575,7 @@ export const EmployeeLoans = () => {
         "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
       axios.get("http://localhost:8080/api/loan/emploan").then((response) => {
+        setL(false);
         setLoans(response.data);
         console.log(response.data);
       });
@@ -583,38 +714,57 @@ export const EmployeeLoans = () => {
             className={" border-dark bg-dark text-white"}
           >
             <Container>
-              <BootstrapTable
-                id="bsTable"
-                // keyField="userId"
-                keyField="employeeNo"
-                data={loans}
-                columns={columns}
-                striped
-                hover
-                condensed
-                pagination={paginationFactory({
-                  paginationSize: 3,
-                  hideSizePerPage: true,
-                  withFirstAndLast: true,
-                  sizePerPageList: [
-                    {
-                      text: "12",
-                      value: 10,
-                    },
-                    {
-                      text: "15",
-                      value: 20,
-                    },
-                  ],
-                })}
-                filter={filterFactory()}
-                rowStyle={{ padding: "1px" }}
-                rowClasses="empTableRow"
-                headerClasses="empTableHeader"
-                selectRow={selectRowProp}
-                rowEvents={rowEvents}
-                // rowEvents={ rowEvents }
-              ></BootstrapTable>
+              {loading ? (
+                <ColorRing
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="blocks-loading"
+                  // wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
+                  wrapperStyle={{ margin: "auto" }}
+                  wrapperClass="blocks-wrapper, centerLoading"
+                  colors={[
+                    "#e15b64",
+                    "#f47e60",
+                    "#f8b26a",
+                    "#abbd81",
+                    "#849b87",
+                  ]}
+                />
+              ) : (
+                <BootstrapTable
+                  id="bsTable"
+                  // keyField="userId"
+                  keyField="employeeNo"
+                  data={loans}
+                  columns={columns}
+                  striped
+                  hover
+                  condensed
+                  pagination={paginationFactory({
+                    paginationSize: 3,
+                    hideSizePerPage: true,
+                    withFirstAndLast: true,
+                    sizePerPageList: [
+                      {
+                        text: "12",
+                        value: 10,
+                      },
+                      {
+                        text: "15",
+                        value: 20,
+                      },
+                    ],
+                  })}
+                  filter={filterFactory()}
+                  rowStyle={{ padding: "1px" }}
+                  rowClasses="empTableRow"
+                  headerClasses="empTableHeader"
+                  selectRow={selectRowProp}
+                  rowEvents={rowEvents}
+                  // rowEvents={ rowEvents }
+                ></BootstrapTable>
+              )}
             </Container>
           </Card>
         </Modal.Body>
@@ -766,7 +916,7 @@ export const EmployeeLoans = () => {
             </Card>
             <FormGroup as={Row}>
               <FormGroup as={Col}>
-                <FormGroup as={Row}>
+                <FormGroup as={Row} className={"loansRowColor"}>
                   <FormLabel column sm="2" className="noWrapText">
                     SSS Loan
                   </FormLabel>
@@ -774,7 +924,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={sssSDRef}
                       className="inpHeightXs"
-                      placeholder=" "
                       disabled
                       type="Date"
                       style={{

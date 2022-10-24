@@ -109,7 +109,7 @@ const LoginApp = () => {
         <br />
         <br />
         <div className="rfp">
-          <a href="registration.html">Forgot Password?</a>
+          {/* <a href="registration.html">Forgot Password?</a> */}
         </div>
       </form>
     </div>

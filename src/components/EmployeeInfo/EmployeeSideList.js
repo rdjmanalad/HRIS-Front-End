@@ -106,7 +106,8 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   const nameFormatter = (data, row) => {
     return (
       <span>
-        {row.lastName} {row.firstName} {row.employeeNo}
+        {row.lastName}, {row.firstName}{" "}
+        <a style={{ color: "blue" }}>{row.employeeNo}</a>
       </span>
     );
   };
@@ -183,8 +184,9 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
             height="80"
             width="80"
             ariaLabel="blocks-loading"
-            wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
-            wrapperClass="blocks-wrapper"
+            // wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
+            wrapperStyle={{ margin: "auto" }}
+            wrapperClass="blocks-wrapper, centerLoading"
             colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         ) : (

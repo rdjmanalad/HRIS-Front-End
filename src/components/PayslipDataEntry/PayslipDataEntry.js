@@ -6,6 +6,7 @@ import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import axios from "axios";
 import "../../css/paySlipDataEntry.css";
+import { ColorRing } from "react-loader-spinner";
 import {
   Card,
   FormControl,
@@ -27,6 +28,7 @@ export const PaySlipDataEntry = () => {
   const [payslip, setPayslip] = useState([]);
   const [index, setIndex] = useState(0);
   const [len, setLen] = useState(0);
+  const [loading, setL] = useState(true);
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
@@ -120,7 +122,7 @@ export const PaySlipDataEntry = () => {
         "http://localhost:8080/api/vpayslip/" + per1 + "/" + per2 + "/" + gcode
       )
       .then((response) => {
-        // setEmployees(response.data);
+        setL(false);
         setPayslips(response.data);
         console.log(response.data);
       });
@@ -338,38 +340,57 @@ export const PaySlipDataEntry = () => {
                 className={" border-dark bg-dark text-white"}
               >
                 <Container>
-                  <BootstrapTable
-                    id="bsTable"
-                    // keyField="userId"
-                    keyField="id"
-                    data={payslips}
-                    columns={columns}
-                    striped
-                    hover
-                    condensed
-                    pagination={paginationFactory({
-                      paginationSize: 3,
-                      hideSizePerPage: true,
-                      withFirstAndLast: true,
-                      sizePerPageList: [
-                        {
-                          text: "12",
-                          value: 10,
-                        },
-                        {
-                          text: "15",
-                          value: 20,
-                        },
-                      ],
-                    })}
-                    filter={filterFactory()}
-                    rowStyle={{ padding: "1px" }}
-                    rowClasses="empTableRow"
-                    headerClasses="empTableHeader"
-                    selectRow={selectRowProp}
-                    rowEvents={rowEvents}
-                    // rowEvents={ rowEvents }
-                  ></BootstrapTable>
+                  {loading ? (
+                    <ColorRing
+                      visible={true}
+                      height="80"
+                      width="80"
+                      ariaLabel="blocks-loading"
+                      // wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
+                      wrapperStyle={{ margin: "auto" }}
+                      wrapperClass="blocks-wrapper, centerLoading"
+                      colors={[
+                        "#e15b64",
+                        "#f47e60",
+                        "#f8b26a",
+                        "#abbd81",
+                        "#849b87",
+                      ]}
+                    />
+                  ) : (
+                    <BootstrapTable
+                      id="bsTable"
+                      // keyField="userId"
+                      keyField="id"
+                      data={payslips}
+                      columns={columns}
+                      striped
+                      hover
+                      condensed
+                      pagination={paginationFactory({
+                        paginationSize: 3,
+                        hideSizePerPage: true,
+                        withFirstAndLast: true,
+                        sizePerPageList: [
+                          {
+                            text: "12",
+                            value: 10,
+                          },
+                          {
+                            text: "15",
+                            value: 20,
+                          },
+                        ],
+                      })}
+                      filter={filterFactory()}
+                      rowStyle={{ padding: "1px" }}
+                      rowClasses="empTableRow"
+                      headerClasses="empTableHeader"
+                      selectRow={selectRowProp}
+                      rowEvents={rowEvents}
+                      // rowEvents={ rowEvents }
+                    ></BootstrapTable>
+                  )}
                 </Container>
               </Card>
             </Modal.Body>

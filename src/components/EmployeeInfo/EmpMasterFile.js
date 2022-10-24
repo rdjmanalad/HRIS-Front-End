@@ -12,18 +12,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 
-// class EmpMasterFile extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { empData: this.props.empData, address: "" };
-//   }
-
-//   alertUser() {
-//     alert("You clicked!");
-//   }
-//   render() {
 function EmpMasterFile({ empData, refreshPage }) {
-  // const { empData, address } = this.state;
   const [masEmployee, setEmp] = useState([]);
   const [empNo, setEmpNo] = useState(false);
   const [address, setAddress] = useState("");
@@ -50,7 +39,7 @@ function EmpMasterFile({ empData, refreshPage }) {
   const philhealthNoRef = useRef();
 
   useEffect(() => {
-    setAddress(empData.address);
+    // setAddress(empData.address);
     setEmp(empData);
   });
 
@@ -535,47 +524,47 @@ function EmpMasterFile({ empData, refreshPage }) {
                 </FormGroup>
               </FormGroup>
             </FormGroup>
-            {/* <Card>
-              <Card.Body style={{ height: "10px", marginTop: "2px" }}>
-                END
-              </Card.Body>
-            </Card> */}
-            <FormGroup as={Row} className="mb-1" style={{ marginTop: "8px" }}>
-              <Col sm="6">
-                <Button
-                  className="setButtonMargin"
-                  variant="success"
-                  onClick={() => newDetails()}
-                >
-                  New
-                </Button>
-                <Button
+          </Form>
+        </Card.Body>
+        <Card.Footer>
+          <div style={{ display: "flex" }}>
+            <Button
+              className="btn btn-primary btn-md buttonRight"
+              style={{
+                width: "80px",
+                marginTop: "0px",
+                marginRight: "5px",
+              }}
+              onClick={() => newDetails()}
+            >
+              New
+            </Button>
+
+            <Button
+              // className="setButtonMargin2"
+              className="btn btn-success btn-md "
+              style={{ width: "80px", marginTop: "0px" }}
+              onClick={() => saveDetails()}
+            >
+              Save
+            </Button>
+            {/* <Button
                   className="setButtonMargin"
                   variant="warning"
                   onClick={() => editDetails()}
                 >
                   Edit
-                </Button>
-                {/* <Button
+                </Button> */}
+            {/* <Button
                   className="setButtonMargin"
                   variant="danger"
                   onClick={() => deleteEmployee()}
                 >
                   Remove
                 </Button> */}
-              </Col>
-              <Col sm="2"></Col>
-              <Col>
-                <Button
-                  className="setButtonMargin2"
-                  onClick={() => saveDetails()}
-                >
-                  Save
-                </Button>
-              </Col>
-            </FormGroup>
-          </Form>
-        </Card.Body>
+            {/* <Col sm="2"></Col> */}
+          </div>
+        </Card.Footer>
       </Card>
     </div>
   );

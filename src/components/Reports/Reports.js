@@ -37,6 +37,34 @@ export const Reports = () => {
     });
   };
 
+  const printReport = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .post("http://localhost:8080/api/reports/sample", {
+        headers: {
+          contentType: "application/json",
+          accept: "application/pdf",
+        },
+        responseType: "blob",
+      })
+      .then((response) => {
+        const file = new Blob([response.data], { type: "application/pdf" });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
+
+        // const arr = new Uint8Array(response.data);
+        // console.log(arr);
+        // const file = new Blob([arr], { type: "application/pdf" });
+        // console.log(file);
+        // const fileURL = URL.createObjectURL(file);
+        // window.open(fileURL);
+        // new File([response.data], fileName);
+        console.log(response.data);
+      });
+  };
+
   const nameFormatter = (data, row) => {
     return (
       <span>
@@ -146,13 +174,13 @@ export const Reports = () => {
             <Col sm="3">
               <Button
                 className="setButtonMargin"
-                variant="success"
-                onClick={() => newUser()}
+                variant="primary"
+                onClick={() => printReport()}
               >
                 New
               </Button>
             </Col>
-            <Col sm="3">
+            {/* <Col sm="3">
               <Button
                 className="setButtonMargin"
                 variant="danger"
@@ -160,7 +188,7 @@ export const Reports = () => {
               >
                 Remove
               </Button>
-            </Col>
+            </Col> */}
             <Col sm="3"></Col>
           </FormGroup>
         </Card.Footer>

@@ -147,3 +147,10 @@
 .textCenter {
   text-align: center;
 }
+
+.centerLoading {
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
