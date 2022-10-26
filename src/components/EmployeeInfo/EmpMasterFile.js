@@ -46,7 +46,7 @@ function EmpMasterFile({ empData, refreshPage }) {
   function saveDetails() {
     console.log(masEmployee);
     setEmpNo(empData.employeeNo);
-
+    // if (empNo.length > 0) {
     axios
       .post("http://localhost:8080/api/masemployeeSave", masEmployee, {
         headers: {
@@ -65,22 +65,29 @@ function EmpMasterFile({ empData, refreshPage }) {
       .catch((message) => {
         alert(message);
       });
-    //   } else {
-    //     alert("empno :"+empNo)
-    //     axios
-    //     .put("http://localhost:8080/api/masemployeeSave"+ empNo, MasEmployee, {
-    //       headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "application/json",
-    //         Authorization:
-    //           "Bearer " +
-    //           localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
-    //       },
-    //     })
+    // } else {
+    //   alert("empno :" + empNo);
+    //   axios
+    //     .put(
+    //       "http://localhost:8080/api/masemployeeSave/" + empNo,
+    //       masEmployee,
+    //       {
+    //         headers: {
+    //           Accept: "application/json",
+    //           "Content-Type": "application/json",
+    //           Authorization:
+    //             "Bearer " +
+    //             localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+    //         },
+    //       }
+    //     )
     //     .then((response) => {
-    //       alert(response.status);
-    //       // setData(response.data);
-    //       // console.log(response.data);
+    //       if (response.status === 200) {
+    //         alert("Successfully Saved!");
+    //       }
+    //     })
+    //     .catch((message) => {
+    //       alert(message);
     //     });
     // }
   }

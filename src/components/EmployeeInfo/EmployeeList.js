@@ -154,7 +154,7 @@ class EmployeeList extends React.Component {
                     ref={this.empNoRef}
                     type="text"
                     className="inpHeightXs"
-                    // disabled
+                    disabled
                     onChange={(event) =>
                       (employee.employeeNo = event.target.value)
                     }

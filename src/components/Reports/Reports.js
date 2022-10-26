@@ -19,6 +19,7 @@ import {
 export const Reports = () => {
   const [reports, setReports] = useState([]);
   const [report, setReport] = useState([]);
+  const [data, setData] = useState("");
   function newUser() {}
 
   function deleteUser() {}
@@ -40,16 +41,16 @@ export const Reports = () => {
   const printReport = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
     axios
       .post("http://localhost:8080/api/reports/sample", {
         headers: {
           contentType: "application/json",
           accept: "application/pdf",
         },
-        responseType: "blob",
+        responseType: "arraybuffer",
       })
       .then((response) => {
+        setData(response.data);
         const file = new Blob([response.data], { type: "application/pdf" });
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
@@ -122,6 +123,7 @@ export const Reports = () => {
         justifyContent: "center",
       }}
     >
+      <object type="application/pdf" data={data}></object>
       <Card
         className={" border-dark bg-dark text-white floatTop"}
         style={{ width: "40rem" }}
@@ -149,7 +151,7 @@ export const Reports = () => {
                 sizePerPageList: [
                   {
                     text: "12",
-                    value: 15,
+                    value: 12,
                   },
                   {
                     text: "15",
@@ -166,18 +168,18 @@ export const Reports = () => {
             ></BootstrapTable>
           </Container>
 
-          <label className="separator"> </label>
+          {/* <label className="separator"> </label>   */}
         </Card.Body>
         <Card.Footer>
           <FormGroup as={Row}>
-            <Col sm="3"></Col>
-            <Col sm="3">
+            <Col sm="9"></Col>
+            <Col sm="2">
               <Button
                 className="setButtonMargin"
                 variant="primary"
                 onClick={() => printReport()}
               >
-                New
+                Print
               </Button>
             </Col>
             {/* <Col sm="3">

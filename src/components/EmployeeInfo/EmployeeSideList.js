@@ -7,6 +7,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
+import ModalConfirm from "../ModalAlerts/ModalConfirm";
+
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
@@ -14,6 +16,9 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   const [selectedId, setId] = useState("");
   const [employee, setRowEmp] = useState([]);
   const [emptyEmp, setEmptyEmp] = useState([]);
+
+  var [showMod, setShowMod] = useState(false);
+  var [action, setAction] = useState("");
   var count = 1;
 
   const [loading, setL] = useState(true);
@@ -107,7 +112,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
     return (
       <span>
         {row.lastName}, {row.firstName}{" "}
-        <a style={{ color: "blue" }}>{row.employeeNo}</a>
+        <a style={{ color: "blue" }}>{addZero(row.employeeNo)}</a>
       </span>
     );
   };
@@ -124,8 +129,31 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   }, [employee]);
 
   function nameFilterFormatter(cell, row) {
-    return row.lastName + row.firstName + row.employeeNo;
+    return row.lastName + row.firstName + addZero(row.employeeNo);
   }
+
+  const deleteData = () => {
+    setAction("DELETE");
+    setShowMod(true);
+  };
+
+  const handleClose = (deleteAtt) => {
+    if (deleteAtt) {
+      deleteEmployee();
+      setShowMod(false);
+    } else {
+      setShowMod(false);
+    }
+  };
+
+  const addZero = (empNo) => {
+    var empString = String(empNo);
+    var length = empString.length;
+    for (let i = length; i < 4; i++) {
+      empString = "0" + empString;
+    }
+    return empString;
+  };
 
   // const rowEvents = {
   //   onClick: (e, row, rowIndex) => {
@@ -230,7 +258,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
             variant="danger"
             size="sm"
             className="buttonMargin"
-            onClick={() => deleteEmployee()}
+            onClick={() => deleteData()}
           >
             Remove
           </Button>
@@ -239,6 +267,11 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
           </Button> */}
         </div>
       </Container>
+      {showMod ? (
+        <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
+      ) : (
+        <a></a>
+      )}
     </Card>
   );
 }
