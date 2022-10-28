@@ -15,14 +15,12 @@ import {
   Form,
   Container,
 } from "react-bootstrap";
+import { jsPDF } from "jspdf-react";
 
 export const Reports = () => {
   const [reports, setReports] = useState([]);
   const [report, setReport] = useState([]);
   const [data, setData] = useState("");
-  function newUser() {}
-
-  function deleteUser() {}
 
   useEffect(() => {
     getData();
@@ -53,6 +51,8 @@ export const Reports = () => {
         setData(response.data);
         const file = new Blob([response.data], { type: "application/pdf" });
         const fileURL = URL.createObjectURL(file);
+        // var doc = new jsPDF();
+        // doc.output(response.data);
         window.open(fileURL);
 
         // const arr = new Uint8Array(response.data);
@@ -123,7 +123,6 @@ export const Reports = () => {
         justifyContent: "center",
       }}
     >
-      <object type="application/pdf" data={data}></object>
       <Card
         className={" border-dark bg-dark text-white floatTop"}
         style={{ width: "40rem" }}
