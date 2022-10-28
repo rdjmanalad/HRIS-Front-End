@@ -9,13 +9,19 @@ import {
   Col,
   Image,
   Button,
+  FormSelect,
+  Modal,
+  ModalFooter,
 } from "react-bootstrap";
 import axios from "axios";
+import ModalAddress from "./ModalAddress";
 
 function EmpMasterFile({ empData, refreshPage }) {
   const [masEmployee, setEmp] = useState([]);
   const [empNo, setEmpNo] = useState(false);
   const [address, setAddress] = useState("");
+  const [show, setShow] = useState(false);
+  const [regions, setRegions] = useState("");
 
   const addressRef = useRef();
   const paddressRef = useRef();
@@ -37,11 +43,24 @@ function EmpMasterFile({ empData, refreshPage }) {
   const tinnoRef = useRef();
   const pagibigNoRef = useRef();
   const philhealthNoRef = useRef();
+  const regionRef = useRef();
+  const provRef = useRef();
+  const cityMunRef = useRef();
+  const brgyRef = useRef();
+  const otherDetailsRef = useRef();
 
   useEffect(() => {
     // setAddress(empData.address);
     setEmp(empData);
   });
+
+  const handleClose = () => {
+    setShow(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+  };
 
   function saveDetails() {
     console.log(masEmployee);
@@ -91,6 +110,20 @@ function EmpMasterFile({ empData, refreshPage }) {
     //     });
     // }
   }
+
+  useEffect(() => {
+    getAddress();
+  }, []);
+
+  const getAddress = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios.get("http://localhost:8080/api/address/regions").then((response) => {
+      setRegions(response.data);
+      console.log(response.data);
+    });
+  };
 
   function newDetails() {
     window.location.reload(false);
@@ -215,6 +248,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={addressRef}
                       // defaultValue={address}
                       className="inpHeightXs"
+                      onClick={handleShow}
                       onChange={(event) =>
                         (empData.address = event.target.value)
                       }
@@ -573,6 +607,133 @@ function EmpMasterFile({ empData, refreshPage }) {
           </div>
         </Card.Footer>
       </Card>
+      {/* <ModalAddress></ModalAddress> */}
+      <Modal
+        show={show}
+        onHide={handleClose}
+        // dialogClassName="my-modal"
+        backdrop="static"
+        className="modal-md"
+      >
+        <Modal.Header closeButton className="border-dark bg-dark text-white">
+          <Modal.Title>Input Address</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="border-dark bg-dark text-white">
+          <FormGroup as={Row}>
+            <FormLabel column sm="4" className="noWrapText">
+              Region
+            </FormLabel>
+            <Col>
+              <FormSelect
+                ref={regionRef}
+                className="dropDownList"
+                style={{ padding: "0px 0px 0px 5px" }}
+                // onChange={(event) => (user.role = event.target.value)}
+              >
+                <option></option>
+                {regions.map((region) => (
+                  <option value={region.id} key={region.id}>
+                    {region.name}
+                  </option>
+                ))}
+              </FormSelect>
+            </Col>
+          </FormGroup>
+          <FormGroup as={Row} style={{ marginTop: "10px" }}>
+            <FormLabel column sm="4" className="noWrapText">
+              Province
+            </FormLabel>
+            <Col>
+              <FormSelect
+                ref={provRef}
+                className="dropDownList"
+                style={{ padding: "0px 0px 0px 5px" }}
+                // onChange={(event) => (user.role = event.target.value)}
+              >
+                <option></option>
+                {/* {roles.map((role) => (
+                      <option value={role.id} key={role.id}>
+                        {role.name}
+                      </option>
+                    ))} */}
+              </FormSelect>
+            </Col>
+          </FormGroup>
+          <FormGroup as={Row} style={{ marginTop: "10px" }}>
+            <FormLabel column sm="4" className="noWrapText">
+              City/Municipality
+            </FormLabel>
+            <Col>
+              <FormSelect
+                ref={cityMunRef}
+                className="dropDownList"
+                style={{ padding: "0px 0px 0px 5px" }}
+                // onChange={(event) => (user.role = event.target.value)}
+              >
+                <option></option>
+                {/* {roles.map((role) => (
+                      <option value={role.id} key={role.id}>
+                        {role.name}
+                      </option>
+                    ))} */}
+              </FormSelect>
+            </Col>
+          </FormGroup>
+          <FormGroup as={Row} style={{ marginTop: "10px" }}>
+            <FormLabel column sm="4" className="noWrapText">
+              Barangay
+            </FormLabel>
+            <Col>
+              <FormSelect
+                ref={brgyRef}
+                className="dropDownList"
+                style={{ padding: "0px 0px 0px 5px" }}
+                // onChange={(event) => (user.role = event.target.value)}
+              >
+                <option></option>
+                {/* {roles.map((role) => (
+                      <option value={role.id} key={role.id}>
+                        {role.name}
+                      </option>
+                    ))} */}
+              </FormSelect>
+            </Col>
+          </FormGroup>
+          <FormGroup as={Row} style={{ marginTop: "10px" }}>
+            <FormLabel column sm="4" className="noWrapText">
+              House No./Street/Building...
+            </FormLabel>
+            <Col>
+              <FormControl
+                ref={otherDetailsRef}
+                className="dropDownList"
+                style={{ padding: "0px 0px 0px 5px" }}
+                // onChange={(event) => (user.role = event.target.value)}
+              ></FormControl>
+            </Col>
+          </FormGroup>
+        </Modal.Body>
+        <ModalFooter className="border-dark bg-dark text-white">
+          <div style={{ display: "flex" }}>
+            <button
+              type="submit"
+              className="btn btn-secondary btn-md buttonRight"
+              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
+              // onClick={() => deleteData()}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary btn-md "
+              style={{ width: "80px", marginTop: "0px" }}
+              // onClick={() => saveData()}
+            >
+              Ok
+            </button>
+          </div>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 }
