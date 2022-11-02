@@ -22,6 +22,12 @@ function EmpMasterFile({ empData, refreshPage }) {
   const [address, setAddress] = useState("");
   const [show, setShow] = useState(false);
   const [regions, setRegions] = useState("");
+  const [provinces, setProvinces] = useState("");
+  const [cities, setCities] = useState("");
+  const [barangays, setBarangays] = useState("");
+  const [region, setRegion] = useState("");
+  const [province, setProvince] = useState("");
+  const [city, setCity] = useState("");
 
   const addressRef = useRef();
   const paddressRef = useRef();
@@ -49,6 +55,12 @@ function EmpMasterFile({ empData, refreshPage }) {
   const brgyRef = useRef();
   const otherDetailsRef = useRef();
 
+  const [vregion, setVregion] = useState("");
+  const [vprovince, setVprovince] = useState("");
+  const [vcity, setVcity] = useState("");
+  const [vbarangay, setVbarangay] = useState("");
+  const [tag, setTag] = useState("H");
+
   useEffect(() => {
     // setAddress(empData.address);
     setEmp(empData);
@@ -59,11 +71,67 @@ function EmpMasterFile({ empData, refreshPage }) {
   };
 
   const handleShow = () => {
+    setVregion("");
+    setVprovince("");
+    setVcity("");
+    setVbarangay("");
     setShow(true);
   };
 
+  const setProv = (e) => {
+    setRegion(e.target.value);
+    // alert(e.target.options[e.target.selectedIndex].text);
+    setVregion(e.target.options[e.target.selectedIndex].text);
+    provRef.current.value = "";
+    cityMunRef.current.value = "";
+    brgyRef.current.value = "";
+    setCities("");
+    setBarangays("");
+  };
+
+  const setCit = (e) => {
+    setProvince(e.target.value);
+    setVprovince(e.target.options[e.target.selectedIndex].text + ",");
+    brgyRef.current.value = "";
+    setBarangays("");
+  };
+
+  const setBrgy = (e) => {
+    setVcity(e.target.options[e.target.selectedIndex].text + ", ");
+    setCity(e.target.value);
+  };
+
+  const setHouse = (e) => {
+    setVbarangay(e.target.options[e.target.selectedIndex].text + ", ");
+  };
+
+  const putAddress = () => {
+    var add =
+      (otherDetailsRef.current.value
+        ? otherDetailsRef.current.value + ", "
+        : "") +
+      vbarangay +
+      vcity +
+      vregion;
+    if (tag === "H") {
+      addressRef.current.value = add;
+    } else if (tag === "P") {
+      paddressRef.current.value = add;
+    } else {
+      caddressRef.current.value = add;
+    }
+    setShow(false);
+  };
+
+  // const filterProv = provinces.filter(function (result) {
+  //   return result.region_id === region;
+  // });
+
   function saveDetails() {
     console.log(masEmployee);
+    masEmployee.address = addressRef.current.value;
+    masEmployee.paddress = paddressRef.current.value;
+    masEmployee.caddress = caddressRef.current.value;
     setEmpNo(empData.employeeNo);
     // if (empNo.length > 0) {
     axios
@@ -84,38 +152,31 @@ function EmpMasterFile({ empData, refreshPage }) {
       .catch((message) => {
         alert(message);
       });
-    // } else {
-    //   alert("empno :" + empNo);
-    //   axios
-    //     .put(
-    //       "http://localhost:8080/api/masemployeeSave/" + empNo,
-    //       masEmployee,
-    //       {
-    //         headers: {
-    //           Accept: "application/json",
-    //           "Content-Type": "application/json",
-    //           Authorization:
-    //             "Bearer " +
-    //             localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
-    //         },
-    //       }
-    //     )
-    //     .then((response) => {
-    //       if (response.status === 200) {
-    //         alert("Successfully Saved!");
-    //       }
-    //     })
-    //     .catch((message) => {
-    //       alert(message);
-    //     });
-    // }
   }
 
   useEffect(() => {
-    getAddress();
+    getRegions();
   }, []);
 
-  const getAddress = () => {
+  useEffect(() => {
+    if (regions) {
+      getProvinces();
+    }
+  }, [region]);
+
+  useEffect(() => {
+    if (provinces) {
+      getCities();
+    }
+  }, [province]);
+
+  useEffect(() => {
+    if (cities) {
+      getBarangays();
+    }
+  }, [city]);
+
+  const getRegions = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
@@ -123,6 +184,38 @@ function EmpMasterFile({ empData, refreshPage }) {
       setRegions(response.data);
       console.log(response.data);
     });
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+  };
+  const getProvinces = () => {
+    axios
+      .get("http://localhost:8080/api/address/provinces/" + region)
+      .then((response) => {
+        setProvinces(response.data);
+        console.log(response.data);
+      });
+  };
+  const getCities = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .get("http://localhost:8080/api/address/cities/" + province)
+      .then((response) => {
+        setCities(response.data);
+        console.log(response.data);
+      });
+  };
+  const getBarangays = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .get("http://localhost:8080/api/address/barangays/" + city)
+      .then((response) => {
+        setBarangays(response.data);
+        console.log(response.data);
+      });
   };
 
   function newDetails() {
@@ -135,6 +228,7 @@ function EmpMasterFile({ empData, refreshPage }) {
 
   useEffect(() => {
     // alert(masEmployee.length);
+    cphoneRef.current.value = "";
     if (masEmployee.length !== 0) {
       console.log(masEmployee.cphone);
       addressRef.current.value = masEmployee.address;
@@ -142,7 +236,7 @@ function EmpMasterFile({ empData, refreshPage }) {
       phoneRef.current.value = masEmployee.phone;
       cpersonRef.current.value = masEmployee.cperson;
       caddressRef.current.value = masEmployee.caddress;
-      cphoneRef.current.value = masEmployee.cphone;
+      cphoneRef.current.value = masEmployee.cphone ? masEmployee.cphone : "";
       genderRef.current.value = masEmployee.gender;
       birthdayRef.current.value = new Date(
         masEmployee.birthday
@@ -163,13 +257,13 @@ function EmpMasterFile({ empData, refreshPage }) {
       tinnoRef.current.value = masEmployee.tinno;
       pagibigNoRef.current.value = masEmployee.pagibigNo;
       philhealthNoRef.current.value = masEmployee.philhealthNo;
+      calcAge(new Date(masEmployee.birthday));
     }
-    // addressRef.current.dafaultValue=masEmployee.address;
-  }, [masEmployee]);
 
-  // function newDetails() {
-  //   window.location.reload(false);
-  // }
+    ageRef.current.value = isNaN(ageRef.current.value)
+      ? (ageRef.current.value = "")
+      : ageRef.current.value;
+  }, [masEmployee]);
 
   function clearDetails() {
     addressRef.current.value = "";
@@ -227,6 +321,40 @@ function EmpMasterFile({ empData, refreshPage }) {
     e.target.checked ? (empData.leave = 1) : (empData.leave = 0);
   };
 
+  const setHomeAdd = () => {
+    setTag("H");
+    handleShow();
+  };
+
+  const setProvAdd = () => {
+    setTag("P");
+    handleShow();
+  };
+
+  const setContAdd = () => {
+    setTag("C");
+    handleShow();
+  };
+
+  const calculateAge = (e) => {
+    empData.birthday = new Date(e.target.value).toLocaleDateString("en-CA");
+
+    calcAge(new Date(e.target.value));
+  };
+
+  const calcAge = (dob1) => {
+    var today = new Date();
+    var birthDate = new Date(dob1); // create a date object directly from `dob1` argument
+    var age_now = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age_now--;
+    }
+    console.log(age_now);
+    ageRef.current.value = age_now;
+    // return age_now;
+  };
+
   return (
     <div>
       {/* {this.props.parentToChild} */}
@@ -248,7 +376,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={addressRef}
                       // defaultValue={address}
                       className="inpHeightXs"
-                      onClick={handleShow}
+                      onClick={() => setHomeAdd()}
                       onChange={(event) =>
                         (empData.address = event.target.value)
                       }
@@ -263,7 +391,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={paddressRef}
                       className="inpHeightXs"
-                      // defaultValue={masEmployee.paddress}
+                      onClick={() => setProvAdd()}
                       onChange={(event) =>
                         (empData.paddress = event.target.value)
                       }
@@ -323,7 +451,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={caddressRef}
                       className={"inpHeightXs"}
-                      // defaultValue={empData.caddress}
+                      onClick={() => setContAdd()}
                       onChange={(event) =>
                         (empData.caddress = event.target.value)
                       }
@@ -356,14 +484,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={birthdayRef}
                       className={"inpHeightXs"}
                       type="date"
-                      // value={new Date(empData.birthday).toLocaleDateString(
-                      //   "en-CA"
-                      // )}
-                      onChange={(event) =>
-                        (empData.birthday = new Date(
-                          event.target.value
-                        ).toLocaleDateString("en-CA"))
-                      }
+                      onChange={(event) => calculateAge(event)}
+                      // onChange={(event) =>
+                      //   (empData.birthday = new Date(
+                      //     event.target.value
+                      //   ).toLocaleDateString("en-CA"))
+                      // }
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
@@ -628,14 +754,18 @@ function EmpMasterFile({ empData, refreshPage }) {
                 ref={regionRef}
                 className="dropDownList"
                 style={{ padding: "0px 0px 0px 5px" }}
-                // onChange={(event) => (user.role = event.target.value)}
+                onChange={(event) => setProv(event)}
               >
                 <option></option>
-                {regions.map((region) => (
-                  <option value={region.id} key={region.id}>
-                    {region.name}
-                  </option>
-                ))}
+                {regions ? (
+                  regions.map((region) => (
+                    <option value={region.region_id} key={region.id}>
+                      {region.name}
+                    </option>
+                  ))
+                ) : (
+                  <option />
+                )}
               </FormSelect>
             </Col>
           </FormGroup>
@@ -648,14 +778,18 @@ function EmpMasterFile({ empData, refreshPage }) {
                 ref={provRef}
                 className="dropDownList"
                 style={{ padding: "0px 0px 0px 5px" }}
-                // onChange={(event) => (user.role = event.target.value)}
+                onChange={(event) => setCit(event)}
               >
                 <option></option>
-                {/* {roles.map((role) => (
-                      <option value={role.id} key={role.id}>
-                        {role.name}
-                      </option>
-                    ))} */}
+                {provinces ? (
+                  provinces.map((province) => (
+                    <option value={province.province_id} key={province.id}>
+                      {province.name}
+                    </option>
+                  ))
+                ) : (
+                  <option />
+                )}
               </FormSelect>
             </Col>
           </FormGroup>
@@ -668,14 +802,18 @@ function EmpMasterFile({ empData, refreshPage }) {
                 ref={cityMunRef}
                 className="dropDownList"
                 style={{ padding: "0px 0px 0px 5px" }}
-                // onChange={(event) => (user.role = event.target.value)}
+                onChange={(event) => setBrgy(event)}
               >
                 <option></option>
-                {/* {roles.map((role) => (
-                      <option value={role.id} key={role.id}>
-                        {role.name}
-                      </option>
-                    ))} */}
+                {cities ? (
+                  cities.map((city) => (
+                    <option value={city.city_id} key={city.id}>
+                      {city.name}
+                    </option>
+                  ))
+                ) : (
+                  <option />
+                )}
               </FormSelect>
             </Col>
           </FormGroup>
@@ -688,14 +826,18 @@ function EmpMasterFile({ empData, refreshPage }) {
                 ref={brgyRef}
                 className="dropDownList"
                 style={{ padding: "0px 0px 0px 5px" }}
-                // onChange={(event) => (user.role = event.target.value)}
+                onChange={(event) => setHouse(event)}
               >
                 <option></option>
-                {/* {roles.map((role) => (
-                      <option value={role.id} key={role.id}>
-                        {role.name}
-                      </option>
-                    ))} */}
+                {barangays ? (
+                  barangays.map((barangay) => (
+                    <option value={barangay.id} key={barangay.id}>
+                      {barangay.name}
+                    </option>
+                  ))
+                ) : (
+                  <option />
+                )}
               </FormSelect>
             </Col>
           </FormGroup>
@@ -719,7 +861,7 @@ function EmpMasterFile({ empData, refreshPage }) {
               type="submit"
               className="btn btn-secondary btn-md buttonRight"
               style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
-              // onClick={() => deleteData()}
+              onClick={() => handleClose()}
             >
               Cancel
             </button>
@@ -727,7 +869,7 @@ function EmpMasterFile({ empData, refreshPage }) {
               type="submit"
               className="btn btn-primary btn-md "
               style={{ width: "80px", marginTop: "0px" }}
-              // onClick={() => saveData()}
+              onClick={() => putAddress()}
             >
               Ok
             </button>
