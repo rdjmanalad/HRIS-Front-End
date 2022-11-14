@@ -77,7 +77,9 @@ function NavigationBar() {
                 Bank Upload Report
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>Mass Computation</NavDropdown.Item>
+              <NavDropdown.Item href="MassCompute">
+                Mass Computation
+              </NavDropdown.Item>
             </NavDropdown>
 
             <Nav.Link

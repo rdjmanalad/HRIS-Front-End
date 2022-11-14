@@ -34,11 +34,28 @@ export const ChangePayrollPeriod = () => {
   const sample = useRef();
   const filterValueRef = useRef();
 
+  var setArray = {
+    id: "",
+    userID: "",
+    period1: "",
+    period2: "",
+    cutPeriod1: "",
+    cutPeriod2: "",
+    actualNOD: "",
+    transportationRate: "",
+    unionDues: "",
+    yearEndTaxAdj: "",
+    ctp: "",
+    bonus13: "",
+  };
+
   const saveData = () => {
     setPayPeriodFrom(payPeriodFromRef.current.value);
     setFilterValue(filterValueRef.current.value);
     setPayPeriodTo(payPeriodToRef.current.value);
-    alert("Saved");
+    putData();
+    // console.log(setArray);
+    savePeriod();
   };
 
   var month = 0;
@@ -64,6 +81,24 @@ export const ChangePayrollPeriod = () => {
   }, [latestPeriod]);
 
   useEffect(() => {}, []);
+
+  function savePeriod() {
+    axios
+      .post("http://localhost:8080/api/period/save", setArray, {
+        headers: {
+          // Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Save Success!");
+        }
+      });
+  }
 
   const getLatestperiod = () => {
     axios.defaults.headers.common["Authorization"] =
@@ -128,26 +163,28 @@ export const ChangePayrollPeriod = () => {
     sDay = date.substr(8);
     month = date.substring(5, 7);
     year = date.substring(0, 4);
+    actualNumDaysCodeRef.current.value = 13;
+    collectPeriodRef.current.value = "Y";
     eDay = String(computeEndDay(year, month)).substring(8, 10);
     if (sDay === "01") {
       periodTo = year + "-" + month + "-" + "15";
       payPeriodToRef.current.value = periodTo;
       cutPeriodFromRef.current.value = computeStartCutPeriod();
       cutPeriodToRef.current.value = computeEndCutPeriod();
-      actualNumDaysCodeRef.current.value = "15";
+      // actualNumDaysCodeRef.current.value = "15";
     } else if (sDay === "16") {
       periodTo = year + "-" + month + "-" + eDay;
       payPeriodToRef.current.value = periodTo;
       cutPeriodFromRef.current.value = computeStartCutPeriod();
       cutPeriodToRef.current.value = computeEndCutPeriod();
-      actualNumDaysCodeRef.current.value = eDay - 15;
+      // actualNumDaysCodeRef.current.value = eDay - 15;
     } else {
       alert("invalid period");
       payPeriodFromRef.current.value = "";
       payPeriodToRef.current.value = "";
       cutPeriodFromRef.current.value = "";
       cutPeriodToRef.current.value = "";
-      actualNumDaysCodeRef.current.value = "";
+      // actualNumDaysCodeRef.current.value = "";
     }
   };
 
@@ -158,18 +195,20 @@ export const ChangePayrollPeriod = () => {
       month = date.substring(5, 7);
       year = date.substring(0, 4);
       eDay = String(computeEndDay(year, month)).substring(8, 10);
+      actualNumDaysCodeRef.current.value = 13;
+      collectPeriodRef.current.value = "Y";
       if (sDay === "01") {
         periodTo = year + "-" + month + "-" + "15";
         payPeriodToRef.current.value = periodTo;
         cutPeriodFromRef.current.value = computeStartCutPeriod();
         cutPeriodToRef.current.value = computeEndCutPeriod();
-        actualNumDaysCodeRef.current.value = "15";
+        // actualNumDaysCodeRef.current.value = "15";
       } else if (sDay === "16") {
         periodTo = year + "-" + month + "-" + eDay;
         payPeriodToRef.current.value = periodTo;
         cutPeriodFromRef.current.value = computeStartCutPeriod();
         cutPeriodToRef.current.value = computeEndCutPeriod();
-        actualNumDaysCodeRef.current.value = eDay - 15;
+        // actualNumDaysCodeRef.current.value = eDay - 15;
       } else {
         alert("invalid period!");
         alert(date);
@@ -180,6 +219,28 @@ export const ChangePayrollPeriod = () => {
       }
       // setDate(new Date(date));
     }
+  };
+
+  const putData = (date) => {
+    alert(localStorage.getItem("userId"));
+    setArray.id = 0;
+    setArray.userID = localStorage.getItem("userId");
+    setArray.period1 = payPeriodFromRef.current.value;
+    setArray.period2 = payPeriodToRef.current.value;
+    setArray.cutPeriod1 = cutPeriodToRef.current.value;
+    setArray.cutPeriod2 = cutPeriodFromRef.current.value;
+    setArray.actualNOD = actualNumDaysCodeRef.current.value;
+    setArray.transportationRate = 0;
+    setArray.unionDues = 0;
+    setArray.yearEndTaxAdj = 0;
+    setArray.ctp = collectPeriodRef.current.value;
+    setArray.bonus13 = bonus13thRef.current.checked ? 1 : 0;
+  };
+
+  const checkToggle = (e) => {
+    e.target.checked
+      ? (setArray.bonus13thRef = 1)
+      : (setArray.bonus13thRef = 0);
   };
 
   // const setDate = (e) => {
@@ -312,6 +373,7 @@ export const ChangePayrollPeriod = () => {
                   <Form.Check
                     ref={bonus13thRef}
                     style={{ paddingTop: "5px" }}
+                    onChange={(event) => checkToggle(event)}
                   ></Form.Check>
                 </Col>
               </FormGroup>

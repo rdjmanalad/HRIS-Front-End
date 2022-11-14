@@ -3,6 +3,7 @@ import "../css/login.css";
 import useLocalState from "./Hooks/useLocalState";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginApp = () => {
   const [username, setUsername] = useState("");
@@ -10,6 +11,7 @@ const LoginApp = () => {
 
   const [jwt, setJwt] = useLocalState("jwt", "jwt");
   const [user, setUser] = useLocalState("user", "");
+  const [userId, setUserId] = useLocalState("userId", "");
 
   const navi = useNavigate();
 
@@ -49,7 +51,6 @@ const LoginApp = () => {
       body: JSON.stringify(reqBody),
     })
       .then((response) => {
-        // alert(response.status);
         if (response.status === 200)
           return Promise.all([
             response.json(),
@@ -60,12 +61,12 @@ const LoginApp = () => {
       })
 
       .then(([data, headers, json]) => {
-        console.log(data["accessToken"]);
-        // alert(data["accessToken"]);
+        // console.log(data["accessToken"]);
         setJwt(data["accessToken"]);
         window.sessionStorage.setItem("jwt", data["accessToken"]);
         // alert(localStorage.getItem("jwt"));
         setUser(username);
+        getId();
         navi("");
         window.location.reload();
       })
@@ -73,6 +74,18 @@ const LoginApp = () => {
         alert(message);
       });
   }
+
+  const getId = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .get("http://localhost:8080/api/getUserId/" + username)
+      .then((response) => {
+        setUserId(response.data);
+        alert(response.data);
+      });
+  };
   return (
     <div className="div-form">
       <form className="loginForm">

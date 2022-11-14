@@ -23,6 +23,7 @@ import { EmployersDeduction } from "./EmployersDeduction/EmployersDeduction";
 import { APCDataEntry } from "./APCDataEntry/APCDataEntry";
 import { BankUploadReport } from "./BankUploadReport/BankUploadReport";
 import { Reports } from "./Reports/Reports";
+import { MassCompute } from "./MassCompute";
 
 function App() {
   if (window.sessionStorage.getItem("jwt") == null) {
@@ -94,6 +95,7 @@ function App() {
                     <Route path="/EmployeeLoans" element={<EmployeeLoans />} />
                     <Route path="/ListUsers" element={<ListUsers />} />
                     <Route path="/EmployeeList" element={<EmployeeList />} />
+                    <Route path="/MassCompute" element={<MassCompute />} />
                   </Routes>
                 </Col>
               </Row>
