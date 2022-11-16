@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const MassCompute = () => {
   const callMassCompute = () => {
-    // alert(localStorage.getItem("PPFrom"));
+    // alert(localStorage.getItem("userId"));
     // alert(localStorage.getItem("FilterValue"));
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");

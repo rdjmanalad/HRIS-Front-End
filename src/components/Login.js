@@ -66,9 +66,10 @@ const LoginApp = () => {
         window.sessionStorage.setItem("jwt", data["accessToken"]);
         // alert(localStorage.getItem("jwt"));
         setUser(username);
-        getId();
+
         navi("");
         window.location.reload();
+        getId();
       })
       .catch((message) => {
         alert(message);
