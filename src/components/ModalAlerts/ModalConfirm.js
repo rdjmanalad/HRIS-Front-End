@@ -43,6 +43,11 @@ function ModalConfirm({ handleClose, action }) {
             ) : (
               <a />
             )}
+            {action === "MASS COMPUTATION" ? (
+              <BsFillExclamationCircleFill className="infoWarningIcon" />
+            ) : (
+              <a />
+            )}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="border-dark bg-dark text-white">

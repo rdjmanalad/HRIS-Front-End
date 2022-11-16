@@ -211,7 +211,6 @@ export const ChangePayrollPeriod = () => {
         // actualNumDaysCodeRef.current.value = eDay - 15;
       } else {
         alert("invalid period!");
-        alert(date);
         payPeriodFromRef.current.value = "";
         payPeriodToRef.current.value = "";
         cutPeriodFromRef.current.value = "";
@@ -222,13 +221,14 @@ export const ChangePayrollPeriod = () => {
   };
 
   const putData = (date) => {
-    alert(localStorage.getItem("userId"));
+    // alert(localStorage.getItem("userId"));
+    // alert(latestPeriod.id);
     setArray.id = 0;
     setArray.userID = localStorage.getItem("userId");
     setArray.period1 = payPeriodFromRef.current.value;
     setArray.period2 = payPeriodToRef.current.value;
-    setArray.cutPeriod1 = cutPeriodToRef.current.value;
-    setArray.cutPeriod2 = cutPeriodFromRef.current.value;
+    setArray.cutPeriod1 = cutPeriodFromRef.current.value;
+    setArray.cutPeriod2 = cutPeriodToRef.current.value;
     setArray.actualNOD = actualNumDaysCodeRef.current.value;
     setArray.transportationRate = 0;
     setArray.unionDues = 0;
