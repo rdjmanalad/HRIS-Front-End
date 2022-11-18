@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useState } from "react";
 import axios from "axios";
 import ModalConfirm from "./ModalAlerts/ModalConfirm";
+import LoadingScreen from "./ModalAlerts/LoadingScreen";
 import {
   Card,
   FormControl,
@@ -13,6 +14,7 @@ import {
 } from "react-bootstrap";
 import { useEffect } from "react";
 import useLocalState from "./Hooks/useLocalState";
+import ShowMsg from "./ModalAlerts/ShowMsg";
 
 export const MassCompute = () => {
   const [datep, setDatep] = useState(new Date());
@@ -22,6 +24,9 @@ export const MassCompute = () => {
   const [filerValue, setFilterValue] = useLocalState("FilterValue", "");
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
+  var [showLoading, setShowLoading] = useState(false);
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
 
   const payPeriodFromRef = useRef();
   const payPeriodToRef = useRef();
@@ -84,7 +89,7 @@ export const MassCompute = () => {
 
   useEffect(() => {}, []);
 
-  const callMassCompute = () => {
+  const callMassCompute = async () => {
     // alert(localStorage.getItem("userId"));
     // alert(localStorage.getItem("FilterValue"));
     axios.defaults.headers.common["Authorization"] =
@@ -100,7 +105,17 @@ export const MassCompute = () => {
           localStorage.getItem("FilterValue")
       )
       .then((response) => {
+        setShowLoading(false);
         console.log(response.data);
+        if (response.status === 200) {
+          // alert("Save Success!");
+          setMessage("SUCCESS");
+          setShowMsg(true);
+        } else {
+          // alert("Error on Mass Compute");
+          setMessage("ERROR");
+          setShowMsg(true);
+        }
       });
   };
 
@@ -208,6 +223,7 @@ export const MassCompute = () => {
       cutPeriodToRef.current.value = "";
       // actualNumDaysCodeRef.current.value = "";
     }
+    filterValueRef.current.value = "Z";
   };
 
   const computeDates2 = (date) => {
@@ -238,6 +254,7 @@ export const MassCompute = () => {
         cutPeriodFromRef.current.value = "";
         cutPeriodToRef.current.value = "";
       }
+      filterValueRef.current.value = "Z";
       // setDate(new Date(date));
     }
   };
@@ -273,10 +290,23 @@ export const MassCompute = () => {
   const handleClose = (continueCompute) => {
     if (continueCompute) {
       callMassCompute();
+      setShowLoading(true);
       setShowMod(false);
     } else {
       setShowMod(false);
     }
+  };
+
+  const handleEnd = (close) => {
+    setShowLoading(false);
+  };
+
+  const showLoad = () => {
+    setShowLoading(true);
+  };
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
   };
 
   // const setDate = (e) => {
@@ -512,11 +542,31 @@ export const MassCompute = () => {
             >
               Mass Compute
             </button>
+            {/* <button
+              type="submit"
+              className="btn btn-primary btn-md "
+              style={{ width: "80px", marginTop: "0px" }}
+              onClick={() => showLoad()}
+            >
+              Load
+            </button> */}
           </div>
         </Card.Footer>
       </Card>
       {showMod ? (
         <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
+      ) : (
+        <a></a>
+      )}
+
+      {showLoading ? (
+        <LoadingScreen handleEnd={handleEnd}></LoadingScreen>
+      ) : (
+        <a></a>
+      )}
+
+      {showMsg ? (
+        <ShowMsg closeMsg={closeMsg} message={message}></ShowMsg>
       ) : (
         <a></a>
       )}

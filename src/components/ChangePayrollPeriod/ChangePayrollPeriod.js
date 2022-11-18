@@ -53,9 +53,10 @@ export const ChangePayrollPeriod = () => {
     setPayPeriodFrom(payPeriodFromRef.current.value);
     setFilterValue(filterValueRef.current.value);
     setPayPeriodTo(payPeriodToRef.current.value);
-    putData();
+    alert("SAVED");
+    //putData();
     // console.log(setArray);
-    savePeriod();
+    //savePeriod();
   };
 
   var month = 0;

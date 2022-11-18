@@ -29,6 +29,7 @@ export const PaySlipDataEntry = () => {
   const [index, setIndex] = useState(0);
   const [len, setLen] = useState(0);
   const [loading, setL] = useState(true);
+  const [gross, setGross] = useState(0);
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
@@ -172,6 +173,9 @@ export const PaySlipDataEntry = () => {
       cspsmcsRef.current.value = numberFormat(employee.coopLoan);
       otherDeducRef.current.value = numberFormat(employee.otherDeduction);
       totalDeductionRef.current.value = numberFormat(employee.deduction);
+      leaveCreditsRef.current.value = numberFormat(
+        employee.leaveAmount ? employee.leaveAmount : 0
+      );
 
       vacLeaveRef.current.value = numberFormat(employee.vacationLeave);
       netRef.current.value = numberFormat(employee.net);
@@ -246,6 +250,44 @@ export const PaySlipDataEntry = () => {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
 
+  const checkChange = (val, val2) => {
+    var ret = 0;
+    // alert(val + "   " + val2);
+    ret =
+      val === numberFormat(val2) ? val : numberFormat(val.replaceAll(",", ""));
+    if (val === numberFormat(val2)) {
+      ret = val;
+    } else {
+      reComputeGross(ret);
+    }
+
+    return ret;
+  };
+
+  const reComputeGross = (val) => {
+    var cur = grossRef.current.value.replaceAll(",", "");
+    cur = cur.substring(1);
+    val = val.substring(1);
+    var grs = 0;
+    grs =
+      parseFloat(employee.gross) +
+      parseFloat(employee.allowance1) +
+      parseFloat(employee.allowance2) +
+      parseFloat(employee.cola) +
+      parseFloat(employee.bonus13) +
+      parseFloat(employee.incentive) +
+      parseFloat(employee.otamount) +
+      parseFloat(employee.specialAmount) +
+      parseFloat(employee.legalAmount) +
+      parseFloat(employee.sundayAmount) -
+      parseFloat(employee.lateAmount) -
+      parseFloat(employee.absentAmount) -
+      // parseFloat(employee.leaveAmount ? employee.leaveAmount : 0)-
+      parseFloat(employee.otherAmount);
+    // grossRef.current.value = numberFormat(cur - val);
+    setGross(grs);
+    grossRef.current.value = numberFormat(grs);
+  };
   const nameFormatter = (data, row) => {
     return (
       <span>
@@ -538,6 +580,12 @@ export const PaySlipDataEntry = () => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
                     }}
+                    onBlur={(event) => {
+                      basicPayRef.current.value = checkChange(
+                        basicPayRef.current.value,
+                        employee.basicPay
+                      );
+                    }}
                     // disabled
                   ></FormControl>
                 </Col>
@@ -554,6 +602,16 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.allowance1 = allow1Ref.current.value;
+                    }}
+                    onBlur={(event) => {
+                      allow1Ref.current.value = checkChange(
+                        allow1Ref.current.value,
+                        employee.allowance1
+                      );
+                      // employee.allowance1 = allow1Ref.current.value
+                      //   .replaceAll(",", "")
+                      //   .substring(1);
                     }}
                   ></FormControl>
                 </Col>
@@ -570,6 +628,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.allowance2 = allow2Ref.current.value;
+                    }}
+                    onBlur={(event) => {
+                      allow2Ref.current.value = checkChange(
+                        allow2Ref.current.value,
+                        employee.allowance2
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -586,6 +651,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.cola = colaRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      colaRef.current.value = checkChange(
+                        colaRef.current.value,
+                        employee.cola
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -602,6 +674,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.incentive = incentiveRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      incentiveRef.current.value = checkChange(
+                        incentiveRef.current.value,
+                        employee.incentive
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -618,6 +697,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.bonus13 = bonusRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      bonusRef.current.value = checkChange(
+                        bonusRef.current.value,
+                        employee.bonus13
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -634,6 +720,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.otamount = otpayRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      otpayRef.current.value = checkChange(
+                        otpayRef.current.value,
+                        employee.otamount
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -650,6 +743,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.specialAmount = srHolidayPayRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      srHolidayPayRef.current.value = checkChange(
+                        srHolidayPayRef.current.value,
+                        employee.specialAmount
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -666,6 +766,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.legalAmount = legHolidayPayRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      legHolidayPayRef.current.value = checkChange(
+                        legHolidayPayRef.current.value,
+                        employee.legalAmount
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -682,6 +789,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.sundayAmount = restOTPayRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      restOTPayRef.current.value = checkChange(
+                        restOTPayRef.current.value,
+                        employee.sundayAmount
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -698,6 +812,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.lateAmount = lateDeducRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      lateDeducRef.current.value = checkChange(
+                        lateDeducRef.current.value,
+                        employee.lateAmount
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -714,6 +835,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.absentAmount = absDeducRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      absDeducRef.current.value = checkChange(
+                        absDeducRef.current.value,
+                        employee.absentAmount
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -730,6 +858,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.leaveAmount = leaveCreditsRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      leaveCreditsRef.current.value = checkChange(
+                        leaveCreditsRef.current.value,
+                        employee.leaveAmount ? employee.leaveAmount : 0
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -746,6 +881,13 @@ export const PaySlipDataEntry = () => {
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.otherAmount = otherCompRef.current.value;
+                    }}
+                    onBlur={(event) => {
+                      otherCompRef.current.value = checkChange(
+                        otherCompRef.current.value,
+                        employee.otherAmount
+                      );
                     }}
                   ></FormControl>
                 </Col>
