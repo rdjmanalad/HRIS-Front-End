@@ -117,6 +117,33 @@ export const EmployeeLoans = () => {
   const cpmAmorRef = useRef();
   const cpmBalRef = useRef();
 
+  var setArray = {
+    loanNO: "",
+    loanType: "",
+    EmployeeNo: "",
+    startDate: "",
+    endDate: "",
+    capital: "",
+    amortization: "",
+    balance: "",
+    transactNo: "",
+    origEndDate: "",
+  };
+
+  var setSSS = setArray;
+  var setPagibig = setArray;
+  var setHousing = setArray; //st peter
+  var setPromisory = setArray; //promisory loan
+  var setEmergency = setArray;
+  var setFake = setArray;
+  var setStorage = setArray;
+  var setCalamity = setArray; // promisory note
+  var setCoop = setArray; //lay away
+  var setPersonal = setArray;
+  var setOther = setArray; // life insurance
+  var setHRM = setArray;
+  var setCash = setArray; //CS/PS/MS
+
   var sssb = false;
 
   function showOnDetails() {
@@ -128,415 +155,410 @@ export const EmployeeLoans = () => {
     periodRef.current.value = per1 + " to " + per2;
     var len = employee.loan?.length;
     var loanArr = employee.loan;
+    setToMute();
     if (len > 0) {
       for (var i = 0; i < len; i++) {
         if (employee.loan[i].loanType === "SSS") {
           sssb = true;
+          setSSS = employee.loan;
           sssSDRef.current.value = loanArr[i].startDate;
           sssEDRef.current.value = loanArr[i].endDate;
           sssCapRef.current.value = numberFormat(loanArr[i].capital);
           sssAmorRef.current.value = numberFormat(loanArr[i].amortization);
           sssBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          sssSDRef.current.value = "";
-          sssEDRef.current.value = "";
-          sssCapRef.current.value = numberFormat(0);
-          sssAmorRef.current.value = numberFormat(0);
-          sssBalRef.current.value = numberFormat(0);
-          sssSDRef.current.style.color = "grey";
-          sssEDRef.current.style.color = "grey";
-          sssCapRef.current.style.color = "grey";
-          sssAmorRef.current.style.color = "grey";
-          sssBalRef.current.style.color = "grey";
+          sssSDRef.current.style.color = "blue";
+          sssEDRef.current.style.color = "blue";
+          sssCapRef.current.style.color = "blue";
+          sssAmorRef.current.style.color = "blue";
+          sssBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "PAGIBIG") {
           pagSDRef.current.value = loanArr[i].startDate;
           pagEDRef.current.value = loanArr[i].endDate;
           pagCapRef.current.value = numberFormat(loanArr[i].capital);
           pagAmorRef.current.value = numberFormat(loanArr[i].amortization);
           pagBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          pagSDRef.current.value = "";
-          pagEDRef.current.value = "";
-          pagCapRef.current.value = numberFormat(0);
-          pagAmorRef.current.value = numberFormat(0);
-          pagBalRef.current.value = numberFormat(0);
-          pagEDRef.current.style.color = "grey";
-          pagSDRef.current.style.color = "grey";
-          pagCapRef.current.style.color = "grey";
-          pagAmorRef.current.style.color = "grey";
-          pagBalRef.current.style.color = "grey";
+          pagEDRef.current.style.color = "blue";
+          pagSDRef.current.style.color = "blue";
+          pagCapRef.current.style.color = "blue";
+          pagAmorRef.current.style.color = "blue";
+          pagBalRef.current.style.color = "blue";
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
+          setHousing = employee.loan;
+          console.log(setHousing);
           spSDRef.current.value = loanArr[i].startDate;
           spEDRef.current.value = loanArr[i].endDate;
           spCapRef.current.value = numberFormat(loanArr[i].capital);
           spAmorRef.current.value = numberFormat(loanArr[i].amortization);
           spBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          spSDRef.current.value = "";
-          spEDRef.current.value = "";
-          spCapRef.current.value = numberFormat(0);
-          spAmorRef.current.value = numberFormat(0);
-          spBalRef.current.value = numberFormat(0);
+          spSDRef.current.style.color = "blue";
+          spEDRef.current.style.color = "blue";
+          spCapRef.current.style.color = "blue";
+          spAmorRef.current.style.color = "blue";
+          spBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "PROMISORY") {
+          setPromisory = employee.loan;
           plSDRef.current.value = loanArr[i].startDate;
           plEDRef.current.value = loanArr[i].endDate;
           plCapRef.current.value = numberFormat(loanArr[i].capital);
           plAmorRef.current.value = numberFormat(loanArr[i].amortization);
           plBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          plSDRef.current.value = "";
-          plEDRef.current.value = "";
-          plCapRef.current.value = numberFormat(0);
-          plAmorRef.current.value = numberFormat(0);
-          plBalRef.current.value = numberFormat(0);
+          plSDRef.current.style.color = "blue";
+          plEDRef.current.style.color = "blue";
+          plCapRef.current.style.color = "blue";
+          plAmorRef.current.style.color = "blue";
+          plBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "EMERGENCY") {
+          setEmergency = employee.loan;
           emerSDRef.current.value = loanArr[i].startDate;
           emerEDRef.current.value = loanArr[i].endDate;
           emerCapRef.current.value = numberFormat(loanArr[i].capital);
           emerAmorRef.current.value = numberFormat(loanArr[i].amortization);
           emerBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          emerSDRef.current.value = "";
-          emerEDRef.current.value = "";
-          emerCapRef.current.value = numberFormat(0);
-          emerAmorRef.current.value = numberFormat(0);
-          emerBalRef.current.value = numberFormat(0);
+          emerSDRef.current.style.color = "blue";
+          emerEDRef.current.style.color = "blue";
+          emerCapRef.current.style.color = "blue";
+          emerAmorRef.current.style.color = "blue";
+          emerBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "FAKE") {
+          setFake = employee.loan;
           foSDRef.current.value = loanArr[i].startDate;
           foEDRef.current.value = loanArr[i].endDate;
           foCapRef.current.value = numberFormat(loanArr[i].capital);
           foAmorRef.current.value = numberFormat(loanArr[i].amortization);
           foBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          foSDRef.current.value = "";
-          foEDRef.current.value = "";
-          foCapRef.current.value = numberFormat(0);
-          foAmorRef.current.value = numberFormat(0);
-          foBalRef.current.value = numberFormat(0);
+          foSDRef.current.style.color = "blue";
+          foEDRef.current.style.color = "blue";
+          foCapRef.current.style.color = "blue";
+          foAmorRef.current.style.color = "blue";
+          foBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "STORAGE") {
+          setStorage = employee.loan;
           storSDRef.current.value = loanArr[i].startDate;
           storEDRef.current.value = loanArr[i].endDate;
           storCapRef.current.value = numberFormat(loanArr[i].capital);
           storAmorRef.current.value = numberFormat(loanArr[i].amortization);
           storBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          storSDRef.current.value = "";
-          storEDRef.current.value = "";
-          storCapRef.current.value = numberFormat(0);
-          storAmorRef.current.value = numberFormat(0);
-          storBalRef.current.value = numberFormat(0);
+          storSDRef.current.style.color = "blue";
+          storEDRef.current.style.color = "blue";
+          storCapRef.current.style.color = "blue";
+          storAmorRef.current.style.color = "blue";
+          storBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "CALAMITY") {
+          setCalamity = employee.loan;
           pnSDRef.current.value = loanArr[i].startDate;
           pnEDRef.current.value = loanArr[i].endDate;
           pnCapRef.current.value = numberFormat(loanArr[i].capital);
           pnAmorRef.current.value = numberFormat(loanArr[i].amortization);
           pnBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          pnSDRef.current.value = "";
-          pnEDRef.current.value = "";
-          pnCapRef.current.value = numberFormat(0);
-          pnAmorRef.current.value = numberFormat(0);
-          pnBalRef.current.value = numberFormat(0);
+          pnSDRef.current.style.color = "blue";
+          pnEDRef.current.style.color = "blue";
+          pnCapRef.current.style.color = "blue";
+          pnAmorRef.current.style.color = "blue";
+          pnBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "COOP") {
+          setCoop = employee.loan;
           lapSDRef.current.value = loanArr[i].startDate;
           lapEDRef.current.value = loanArr[i].endDate;
           lapCapRef.current.value = numberFormat(loanArr[i].capital);
           lapAmorRef.current.value = numberFormat(loanArr[i].amortization);
           lapBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          lapSDRef.current.value = "";
-          lapEDRef.current.value = "";
-          lapCapRef.current.value = numberFormat(0);
-          lapAmorRef.current.value = numberFormat(0);
-          lapBalRef.current.value = numberFormat(0);
+          lapSDRef.current.style.color = "blue";
+          lapEDRef.current.style.color = "blue";
+          lapCapRef.current.style.color = "blue";
+          lapAmorRef.current.style.color = "blue";
+          lapBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "PERSONAL") {
+          setPersonal = employee.loan;
           perSDRef.current.value = loanArr[i].startDate;
           perEDRef.current.value = loanArr[i].endDate;
           perCapRef.current.value = numberFormat(loanArr[i].capital);
           perAmorRef.current.value = numberFormat(loanArr[i].amortization);
           perBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          perSDRef.current.value = "";
-          perEDRef.current.value = "";
-          perCapRef.current.value = numberFormat(0);
-          perAmorRef.current.value = numberFormat(0);
-          perBalRef.current.value = numberFormat(0);
+          perSDRef.current.style.color = "blue";
+          perEDRef.current.style.color = "blue";
+          perCapRef.current.style.color = "blue";
+          perAmorRef.current.style.color = "blue";
+          perBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "OTHER") {
+          setOther = employee.loan;
           liSDRef.current.value = loanArr[i].startDate;
           liEDRef.current.value = loanArr[i].endDate;
           liCapRef.current.value = numberFormat(loanArr[i].capital);
           liAmorRef.current.value = numberFormat(loanArr[i].amortization);
           liBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          liSDRef.current.value = "";
-          liEDRef.current.value = "";
-          liCapRef.current.value = numberFormat(0);
-          liAmorRef.current.value = numberFormat(0);
-          liBalRef.current.value = numberFormat(0);
+          liSDRef.current.style.color = "blue";
+          liEDRef.current.style.color = "blue";
+          liCapRef.current.style.color = "blue";
+          liAmorRef.current.style.color = "blue";
+          liBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "HRM") {
+          setHRM = employee.loan;
           hmoSDRef.current.value = loanArr[i].startDate;
           hmoEDRef.current.value = loanArr[i].endDate;
           hmoCapRef.current.value = numberFormat(loanArr[i].capital);
           hmoAmorRef.current.value = numberFormat(loanArr[i].amortization);
           hmoBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          hmoSDRef.current.value = "";
-          hmoEDRef.current.value = "";
-          hmoCapRef.current.value = numberFormat(0);
-          hmoAmorRef.current.value = numberFormat(0);
-          hmoBalRef.current.value = numberFormat(0);
+          hmoSDRef.current.style.color = "blue";
+          hmoEDRef.current.style.color = "blue";
+          hmoCapRef.current.style.color = "blue";
+          hmoAmorRef.current.style.color = "blue";
+          hmoBalRef.current.style.color = "blue";
         }
 
-        if (employee.loan[i].loanType === "HOUSING") {
+        if (employee.loan[i].loanType === "CASH") {
+          setCash = employee.loan;
           cpmSDRef.current.value = loanArr[i].startDate;
           cpmEDRef.current.value = loanArr[i].endDate;
           cpmCapRef.current.value = numberFormat(loanArr[i].capital);
           cpmAmorRef.current.value = numberFormat(loanArr[i].amortization);
           cpmBalRef.current.value = numberFormat(loanArr[i].balance);
-        } else {
-          cpmSDRef.current.value = "";
-          cpmEDRef.current.value = "";
-          cpmCapRef.current.value = numberFormat(0);
-          cpmAmorRef.current.value = numberFormat(0);
-          cpmBalRef.current.value = numberFormat(0);
+          cpmSDRef.current.style.color = "blue";
+          cpmEDRef.current.style.color = "blue";
+          cpmCapRef.current.style.color = "blue";
+          cpmAmorRef.current.style.color = "blue";
+          cpmBalRef.current.style.color = "blue";
         }
       }
-    } else {
-      sssSDRef.current.value = "";
-      sssEDRef.current.value = "";
-      sssCapRef.current.value = numberFormat(0);
-      sssAmorRef.current.value = numberFormat(0);
-      sssBalRef.current.value = numberFormat(0);
-      sssSDRef.current.style.color = "grey";
-      sssEDRef.current.style.color = "grey";
-      sssCapRef.current.style.color = "grey";
-      sssAmorRef.current.style.color = "grey";
-      sssBalRef.current.style.color = "grey";
-
-      pagSDRef.current.value = "";
-      pagEDRef.current.value = "";
-      pagCapRef.current.value = numberFormat(0);
-      pagAmorRef.current.value = numberFormat(0);
-      pagBalRef.current.value = numberFormat(0);
-      pagEDRef.current.style.color = "grey";
-      pagSDRef.current.style.color = "grey";
-      pagCapRef.current.style.color = "grey";
-      pagAmorRef.current.style.color = "grey";
-      pagBalRef.current.style.color = "grey";
-
-      spSDRef.current.value = "";
-      spEDRef.current.value = "";
-      spCapRef.current.value = numberFormat(0);
-      spAmorRef.current.value = numberFormat(0);
-      spBalRef.current.value = numberFormat(0);
-      spEDRef.current.style.color = "grey";
-      spSDRef.current.style.color = "grey";
-      spCapRef.current.style.color = "grey";
-      spAmorRef.current.style.color = "grey";
-      spBalRef.current.style.color = "grey";
-
-      plSDRef.current.value = "";
-      plEDRef.current.value = "";
-      plCapRef.current.value = numberFormat(0);
-      plAmorRef.current.value = numberFormat(0);
-      plBalRef.current.value = numberFormat(0);
-      plEDRef.current.style.color = "grey";
-      plSDRef.current.style.color = "grey";
-      plCapRef.current.style.color = "grey";
-      plAmorRef.current.style.color = "grey";
-      plBalRef.current.style.color = "grey";
-
-      emerSDRef.current.value = "";
-      emerEDRef.current.value = "";
-      emerCapRef.current.value = numberFormat(0);
-      emerAmorRef.current.value = numberFormat(0);
-      emerBalRef.current.value = numberFormat(0);
-      emerEDRef.current.style.color = "grey";
-      emerSDRef.current.style.color = "grey";
-      emerCapRef.current.style.color = "grey";
-      emerAmorRef.current.style.color = "grey";
-      emerBalRef.current.style.color = "grey";
-
-      storSDRef.current.value = "";
-      storEDRef.current.value = "";
-      storCapRef.current.value = numberFormat(0);
-      storAmorRef.current.value = numberFormat(0);
-      storBalRef.current.value = numberFormat(0);
-      storEDRef.current.style.color = "grey";
-      storSDRef.current.style.color = "grey";
-      storCapRef.current.style.color = "grey";
-      storAmorRef.current.style.color = "grey";
-      storBalRef.current.style.color = "grey";
-
-      foSDRef.current.value = "";
-      foEDRef.current.value = "";
-      foCapRef.current.value = numberFormat(0);
-      foAmorRef.current.value = numberFormat(0);
-      foBalRef.current.value = numberFormat(0);
-      foEDRef.current.style.color = "grey";
-      foSDRef.current.style.color = "grey";
-      foCapRef.current.style.color = "grey";
-      foAmorRef.current.style.color = "grey";
-      foBalRef.current.style.color = "grey";
-
-      pnSDRef.current.value = "";
-      pnEDRef.current.value = "";
-      pnCapRef.current.value = numberFormat(0);
-      pnAmorRef.current.value = numberFormat(0);
-      pnBalRef.current.value = numberFormat(0);
-      pnEDRef.current.style.color = "grey";
-      pnSDRef.current.style.color = "grey";
-      pnCapRef.current.style.color = "grey";
-      pnAmorRef.current.style.color = "grey";
-      pnBalRef.current.style.color = "grey";
-
-      lapSDRef.current.value = "";
-      lapEDRef.current.value = "";
-      lapCapRef.current.value = numberFormat(0);
-      lapAmorRef.current.value = numberFormat(0);
-      lapBalRef.current.value = numberFormat(0);
-      lapEDRef.current.style.color = "grey";
-      lapSDRef.current.style.color = "grey";
-      lapCapRef.current.style.color = "grey";
-      lapAmorRef.current.style.color = "grey";
-      lapBalRef.current.style.color = "grey";
-
-      perSDRef.current.value = "";
-      perEDRef.current.value = "";
-      perCapRef.current.value = numberFormat(0);
-      perAmorRef.current.value = numberFormat(0);
-      perBalRef.current.value = numberFormat(0);
-      perEDRef.current.style.color = "grey";
-      perSDRef.current.style.color = "grey";
-      perCapRef.current.style.color = "grey";
-      perAmorRef.current.style.color = "grey";
-      perBalRef.current.style.color = "grey";
-
-      liSDRef.current.value = "";
-      liEDRef.current.value = "";
-      liCapRef.current.value = numberFormat(0);
-      liAmorRef.current.value = numberFormat(0);
-      liBalRef.current.value = numberFormat(0);
-      liEDRef.current.style.color = "grey";
-      liSDRef.current.style.color = "grey";
-      liCapRef.current.style.color = "grey";
-      liAmorRef.current.style.color = "grey";
-      liBalRef.current.style.color = "grey";
-
-      hmoSDRef.current.value = "";
-      hmoEDRef.current.value = "";
-      hmoCapRef.current.value = numberFormat(0);
-      hmoAmorRef.current.value = numberFormat(0);
-      hmoBalRef.current.value = numberFormat(0);
-      hmoEDRef.current.style.color = "grey";
-      hmoSDRef.current.style.color = "grey";
-      hmoCapRef.current.style.color = "grey";
-      hmoAmorRef.current.style.color = "grey";
-      hmoBalRef.current.style.color = "grey";
-
-      cpmSDRef.current.value = "";
-      cpmEDRef.current.value = "";
-      cpmCapRef.current.value = numberFormat(0);
-      cpmAmorRef.current.value = numberFormat(0);
-      cpmBalRef.current.value = numberFormat(0);
-      cpmEDRef.current.style.color = "grey";
-      cpmSDRef.current.style.color = "grey";
-      cpmCapRef.current.style.color = "grey";
-      cpmAmorRef.current.style.color = "grey";
-      cpmBalRef.current.style.color = "grey";
     }
 
     setLen(loans.length);
   }
 
+  const setToMute = () => {
+    sssSDRef.current.value = "";
+    sssEDRef.current.value = "";
+    sssCapRef.current.value = numberFormat(0);
+    sssAmorRef.current.value = numberFormat(0);
+    sssBalRef.current.value = numberFormat(0);
+    sssSDRef.current.style.color = "grey";
+    sssEDRef.current.style.color = "grey";
+    sssCapRef.current.style.color = "grey";
+    sssAmorRef.current.style.color = "grey";
+    sssBalRef.current.style.color = "grey";
+
+    pagSDRef.current.value = "";
+    pagEDRef.current.value = "";
+    pagCapRef.current.value = numberFormat(0);
+    pagAmorRef.current.value = numberFormat(0);
+    pagBalRef.current.value = numberFormat(0);
+    pagEDRef.current.style.color = "grey";
+    pagSDRef.current.style.color = "grey";
+    pagCapRef.current.style.color = "grey";
+    pagAmorRef.current.style.color = "grey";
+    pagBalRef.current.style.color = "grey";
+
+    spSDRef.current.value = "";
+    spEDRef.current.value = "";
+    spCapRef.current.value = numberFormat(0);
+    spAmorRef.current.value = numberFormat(0);
+    spBalRef.current.value = numberFormat(0);
+    spEDRef.current.style.color = "grey";
+    spSDRef.current.style.color = "grey";
+    spCapRef.current.style.color = "grey";
+    spAmorRef.current.style.color = "grey";
+    spBalRef.current.style.color = "grey";
+
+    plSDRef.current.value = "";
+    plEDRef.current.value = "";
+    plCapRef.current.value = numberFormat(0);
+    plAmorRef.current.value = numberFormat(0);
+    plBalRef.current.value = numberFormat(0);
+    plEDRef.current.style.color = "grey";
+    plSDRef.current.style.color = "grey";
+    plCapRef.current.style.color = "grey";
+    plAmorRef.current.style.color = "grey";
+    plBalRef.current.style.color = "grey";
+
+    emerSDRef.current.value = "";
+    emerEDRef.current.value = "";
+    emerCapRef.current.value = numberFormat(0);
+    emerAmorRef.current.value = numberFormat(0);
+    emerBalRef.current.value = numberFormat(0);
+    emerEDRef.current.style.color = "grey";
+    emerSDRef.current.style.color = "grey";
+    emerCapRef.current.style.color = "grey";
+    emerAmorRef.current.style.color = "grey";
+    emerBalRef.current.style.color = "grey";
+
+    storSDRef.current.value = "";
+    storEDRef.current.value = "";
+    storCapRef.current.value = numberFormat(0);
+    storAmorRef.current.value = numberFormat(0);
+    storBalRef.current.value = numberFormat(0);
+    storEDRef.current.style.color = "grey";
+    storSDRef.current.style.color = "grey";
+    storCapRef.current.style.color = "grey";
+    storAmorRef.current.style.color = "grey";
+    storBalRef.current.style.color = "grey";
+
+    foSDRef.current.value = "";
+    foEDRef.current.value = "";
+    foCapRef.current.value = numberFormat(0);
+    foAmorRef.current.value = numberFormat(0);
+    foBalRef.current.value = numberFormat(0);
+    foEDRef.current.style.color = "grey";
+    foSDRef.current.style.color = "grey";
+    foCapRef.current.style.color = "grey";
+    foAmorRef.current.style.color = "grey";
+    foBalRef.current.style.color = "grey";
+
+    pnSDRef.current.value = "";
+    pnEDRef.current.value = "";
+    pnCapRef.current.value = numberFormat(0);
+    pnAmorRef.current.value = numberFormat(0);
+    pnBalRef.current.value = numberFormat(0);
+    pnEDRef.current.style.color = "grey";
+    pnSDRef.current.style.color = "grey";
+    pnCapRef.current.style.color = "grey";
+    pnAmorRef.current.style.color = "grey";
+    pnBalRef.current.style.color = "grey";
+
+    lapSDRef.current.value = "";
+    lapEDRef.current.value = "";
+    lapCapRef.current.value = numberFormat(0);
+    lapAmorRef.current.value = numberFormat(0);
+    lapBalRef.current.value = numberFormat(0);
+    lapEDRef.current.style.color = "grey";
+    lapSDRef.current.style.color = "grey";
+    lapCapRef.current.style.color = "grey";
+    lapAmorRef.current.style.color = "grey";
+    lapBalRef.current.style.color = "grey";
+
+    perSDRef.current.value = "";
+    perEDRef.current.value = "";
+    perCapRef.current.value = numberFormat(0);
+    perAmorRef.current.value = numberFormat(0);
+    perBalRef.current.value = numberFormat(0);
+    perEDRef.current.style.color = "grey";
+    perSDRef.current.style.color = "grey";
+    perCapRef.current.style.color = "grey";
+    perAmorRef.current.style.color = "grey";
+    perBalRef.current.style.color = "grey";
+
+    liSDRef.current.value = "";
+    liEDRef.current.value = "";
+    liCapRef.current.value = numberFormat(0);
+    liAmorRef.current.value = numberFormat(0);
+    liBalRef.current.value = numberFormat(0);
+    liEDRef.current.style.color = "grey";
+    liSDRef.current.style.color = "grey";
+    liCapRef.current.style.color = "grey";
+    liAmorRef.current.style.color = "grey";
+    liBalRef.current.style.color = "grey";
+
+    hmoSDRef.current.value = "";
+    hmoEDRef.current.value = "";
+    hmoCapRef.current.value = numberFormat(0);
+    hmoAmorRef.current.value = numberFormat(0);
+    hmoBalRef.current.value = numberFormat(0);
+    hmoEDRef.current.style.color = "grey";
+    hmoSDRef.current.style.color = "grey";
+    hmoCapRef.current.style.color = "grey";
+    hmoAmorRef.current.style.color = "grey";
+    hmoBalRef.current.style.color = "grey";
+
+    cpmSDRef.current.value = "";
+    cpmEDRef.current.value = "";
+    cpmCapRef.current.value = numberFormat(0);
+    cpmAmorRef.current.value = numberFormat(0);
+    cpmBalRef.current.value = numberFormat(0);
+    cpmEDRef.current.style.color = "grey";
+    cpmSDRef.current.style.color = "grey";
+    cpmCapRef.current.style.color = "grey";
+    cpmAmorRef.current.style.color = "grey";
+    cpmBalRef.current.style.color = "grey";
+  };
+
   const resetToBlack = () => {
-    cpmEDRef.current.style.color = "black";
-    cpmSDRef.current.style.color = "black";
-    cpmCapRef.current.style.color = "black";
-    cpmAmorRef.current.style.color = "black";
-    cpmBalRef.current.style.color = "black";
-    hmoEDRef.current.style.color = "black";
-    hmoSDRef.current.style.color = "black";
-    hmoCapRef.current.style.color = "black";
-    hmoAmorRef.current.style.color = "black";
-    hmoBalRef.current.style.color = "black";
-    liEDRef.current.style.color = "black";
-    liSDRef.current.style.color = "black";
-    liCapRef.current.style.color = "black";
-    liAmorRef.current.style.color = "black";
-    liBalRef.current.style.color = "black";
-    perEDRef.current.style.color = "black";
-    perSDRef.current.style.color = "black";
-    perCapRef.current.style.color = "black";
-    perAmorRef.current.style.color = "black";
-    perBalRef.current.style.color = "black";
-    lapEDRef.current.style.color = "black";
-    lapSDRef.current.style.color = "black";
-    lapCapRef.current.style.color = "black";
-    lapAmorRef.current.style.color = "black";
-    lapBalRef.current.style.color = "black";
-    pnEDRef.current.style.color = "black";
-    pnSDRef.current.style.color = "black";
-    pnCapRef.current.style.color = "black";
-    pnAmorRef.current.style.color = "black";
-    pnBalRef.current.style.color = "black";
-    foEDRef.current.style.color = "black";
-    foSDRef.current.style.color = "black";
-    foCapRef.current.style.color = "black";
-    foAmorRef.current.style.color = "black";
-    foBalRef.current.style.color = "black";
-    storEDRef.current.style.color = "black";
-    storSDRef.current.style.color = "black";
-    storCapRef.current.style.color = "black";
-    storAmorRef.current.style.color = "black";
-    storBalRef.current.style.color = "black";
-    emerEDRef.current.style.color = "black";
-    emerSDRef.current.style.color = "black";
-    emerCapRef.current.style.color = "black";
-    emerAmorRef.current.style.color = "black";
-    emerBalRef.current.style.color = "black";
-    plEDRef.current.style.color = "black";
-    plSDRef.current.style.color = "black";
-    plCapRef.current.style.color = "black";
-    plAmorRef.current.style.color = "black";
-    plBalRef.current.style.color = "black";
-    spEDRef.current.style.color = "black";
-    spSDRef.current.style.color = "black";
-    spCapRef.current.style.color = "black";
-    spAmorRef.current.style.color = "black";
-    spBalRef.current.style.color = "black";
-    pagEDRef.current.style.color = "black";
-    pagSDRef.current.style.color = "black";
-    pagCapRef.current.style.color = "black";
-    pagAmorRef.current.style.color = "black";
-    pagBalRef.current.style.color = "black";
-    sssSDRef.current.style.color = "black";
-    sssEDRef.current.style.color = "black";
-    sssCapRef.current.style.color = "black";
-    sssAmorRef.current.style.color = "black";
-    sssBalRef.current.style.color = "black";
+    cpmEDRef.current.style.color = "blue";
+    cpmSDRef.current.style.color = "blue";
+    cpmCapRef.current.style.color = "blue";
+    cpmAmorRef.current.style.color = "blue";
+    cpmBalRef.current.style.color = "blue";
+    hmoEDRef.current.style.color = "blue";
+    hmoSDRef.current.style.color = "blue";
+    hmoCapRef.current.style.color = "blue";
+    hmoAmorRef.current.style.color = "blue";
+    hmoBalRef.current.style.color = "blue";
+    liEDRef.current.style.color = "blue";
+    liSDRef.current.style.color = "blue";
+    liCapRef.current.style.color = "blue";
+    liAmorRef.current.style.color = "blue";
+    liBalRef.current.style.color = "blue";
+    perEDRef.current.style.color = "blue";
+    perSDRef.current.style.color = "blue";
+    perCapRef.current.style.color = "blue";
+    perAmorRef.current.style.color = "blue";
+    lapEDRef.current.style.color = "blue";
+    perBalRef.current.style.color = "blue";
+    lapSDRef.current.style.color = "blue";
+    lapCapRef.current.style.color = "blue";
+    lapAmorRef.current.style.color = "blue";
+    lapBalRef.current.style.color = "blue";
+    pnEDRef.current.style.color = "blue";
+    pnSDRef.current.style.color = "blue";
+    pnCapRef.current.style.color = "blue";
+    pnAmorRef.current.style.color = "blue";
+    pnBalRef.current.style.color = "blue";
+    foEDRef.current.style.color = "blue";
+    foSDRef.current.style.color = "blue";
+    foCapRef.current.style.color = "blue";
+    foAmorRef.current.style.color = "blue";
+    foBalRef.current.style.color = "blue";
+    storEDRef.current.style.color = "blue";
+    storSDRef.current.style.color = "blue";
+    storCapRef.current.style.color = "blue";
+    storAmorRef.current.style.color = "blue";
+    storBalRef.current.style.color = "blue";
+    emerEDRef.current.style.color = "blue";
+    emerSDRef.current.style.color = "blue";
+    emerCapRef.current.style.color = "blue";
+    emerAmorRef.current.style.color = "blue";
+    emerBalRef.current.style.color = "blue";
+    plEDRef.current.style.color = "blue";
+    plSDRef.current.style.color = "blue";
+    plCapRef.current.style.color = "blue";
+    plAmorRef.current.style.color = "blue";
+    plBalRef.current.style.color = "blue";
+    spEDRef.current.style.color = "blue";
+    spSDRef.current.style.color = "blue";
+    spCapRef.current.style.color = "blue";
+    spAmorRef.current.style.color = "blue";
+    spBalRef.current.style.color = "blue";
+
+    pagEDRef.current.style.color = "blue";
+    pagSDRef.current.style.color = "blue";
+    pagCapRef.current.style.color = "blue";
+    pagAmorRef.current.style.color = "blue";
+    pagBalRef.current.style.color = "blue";
+
+    sssSDRef.current.style.color = "blue";
+    sssEDRef.current.style.color = "blue";
+    sssCapRef.current.style.color = "blue";
+    sssAmorRef.current.style.color = "blue";
+    sssBalRef.current.style.color = "blue";
   };
 
   useEffect(() => {
@@ -624,7 +646,7 @@ export const EmployeeLoans = () => {
   };
 
   const numberFormat = (value) =>
-    new Intl.NumberFormat("en-IN", {
+    new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "PHP",
     }).format(value);
@@ -635,6 +657,24 @@ export const EmployeeLoans = () => {
       .replace(/(\..*)\./g, "$1")
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
+
+  const checkChange = (val, val2) => {
+    var ret = 0;
+    ret =
+      val === numberFormat(val2) ? val : numberFormat(val.replaceAll(",", ""));
+    if (val === numberFormat(val2)) {
+      ret = val;
+    } else {
+      reComputeLoan(val);
+    }
+    return ret;
+  };
+
+  const removePesoComma = (val) => {
+    return val.substring(1).replaceAll(",", "");
+  };
+
+  const reComputeLoan = (val) => {};
 
   const nameFormatter = (data, row) => {
     return (
@@ -649,6 +689,10 @@ export const EmployeeLoans = () => {
   function nameFilterFormatter(cell, row) {
     return row.lastName + row.firstName + row.employeeNo;
   }
+
+  const save = (type) => {
+    alert(type);
+  };
 
   const rowEvents = {
     // clickToSelect: true,
@@ -801,7 +845,7 @@ export const EmployeeLoans = () => {
           </Card.Header>
           <Card.Body>
             <label className="asHeader" style={{ paddingLeft: "5px" }}>
-              EMPLOYEE PAYSLIP INFORMATION
+              EMPLOYEE LOAN INFORMATION
             </label>
             <FormGroup as={Row}>
               <FormGroup as={Col} sm="1"></FormGroup>
@@ -897,34 +941,36 @@ export const EmployeeLoans = () => {
                 >
                   LOANS
                 </FormLabel>
-                <FormLabel column className="noWrapText textCenter">
+                <FormLabel column sm="2" className="noWrapText textCenter">
                   START DATE
                 </FormLabel>
-                <FormLabel column className="noWrapText textCenter">
+                <FormLabel column sm="2" className="noWrapText textCenter">
                   END DATE
                 </FormLabel>
-                <FormLabel column className="noWrapText textCenter">
+                <FormLabel column sm="1" className="noWrapText textCenter">
                   CAPITAL
                 </FormLabel>
                 <FormLabel column className="noWrapText textCenter">
                   AMORTIZATION
                 </FormLabel>
-                <FormLabel column className="noWrapText textCenter">
+                <FormLabel column sm="1" className="noWrapText textCenter">
                   BALANCE
+                </FormLabel>
+                <FormLabel column sm="1" className="noWrapText textRight">
+                  ACTION
                 </FormLabel>
               </FormGroup>
             </Card>
-            <FormGroup as={Row}>
+            <FormGroup as={Row} style={{ marginTop: "5px" }}>
               <FormGroup as={Col}>
                 <FormGroup as={Row} className={"loansRowColor"}>
                   <FormLabel column sm="2" className="noWrapText">
                     SSS Loan
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={sssSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -937,7 +983,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={sssEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -950,11 +995,34 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={sssCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+
+                        if (!isNaN(parseFloat(value))) {
+                          setSSS.capital = value;
+                          if (value > 0) {
+                            sssCapRef.current.style.color = "blue";
+                          } else {
+                            sssCapRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setSSS.capital = 0;
+                          sssCapRef.current.style.color = "gray";
+                        }
+                        reComputeLoan(value);
+                      }}
+                      onBlur={(event) => {
+                        sssCapRef.current.value = checkChange(
+                          sssCapRef.current.value,
+                          setSSS.capital
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -962,7 +1030,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={sssAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -974,7 +1041,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={sssBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -982,7 +1048,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("SSS")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Pagibig Loan
@@ -991,7 +1067,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pagSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1004,7 +1079,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pagEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1017,7 +1091,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pagCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1029,7 +1102,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pagAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1041,7 +1113,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pagBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1049,7 +1120,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("PAGIBIG")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     St. Peter Loan
@@ -1058,7 +1139,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={spSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1071,7 +1151,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={spEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1084,7 +1163,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={spCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1096,7 +1174,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={spAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1108,7 +1185,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={spBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1116,7 +1192,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("HOUSING")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Promisory Loan
@@ -1125,7 +1211,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={plSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1138,7 +1223,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={plEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1151,7 +1235,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={plCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1163,7 +1246,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={plAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1175,7 +1257,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={plBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1183,7 +1264,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("PROMISORY")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Emergency
@@ -1192,7 +1283,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={emerSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1205,7 +1295,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={emerEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1218,7 +1307,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={emerCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1230,7 +1318,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={emerAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1242,7 +1329,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={emerBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1250,7 +1336,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("EMERGENCY")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Fake / Over
@@ -1259,7 +1355,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={foSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1272,7 +1367,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={foEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1285,7 +1379,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={foCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1297,7 +1390,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={foAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1309,7 +1401,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={foBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1317,7 +1408,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("FAKE")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Storage
@@ -1326,7 +1427,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={storSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1339,7 +1439,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={storEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1352,7 +1451,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={storCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1364,7 +1462,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={storAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1376,7 +1473,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={storBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1384,7 +1480,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("STORAGE")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Promisory Note
@@ -1393,7 +1499,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pnSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1406,7 +1511,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pnEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1419,7 +1523,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pnCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1431,7 +1534,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pnAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1443,7 +1545,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={pnBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1451,7 +1552,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("CALAMITY")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Lay Away Plan
@@ -1460,7 +1571,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={lapSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1473,7 +1583,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={lapEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1486,7 +1595,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={lapCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1498,7 +1606,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={lapAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1510,7 +1617,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={lapBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1518,7 +1624,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("COOP")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Personal
@@ -1527,7 +1643,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={perSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1540,7 +1655,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={perEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1553,7 +1667,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={perCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1565,7 +1678,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={perAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1577,7 +1689,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={perBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1585,7 +1696,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("PERSONAL")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     Life Insurance
@@ -1594,7 +1715,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={liSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1607,7 +1727,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={liEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1620,7 +1739,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={liCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1632,7 +1750,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={liAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1644,7 +1761,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={liBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1652,7 +1768,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("OTHER")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     HMO
@@ -1661,7 +1787,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={hmoSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1674,7 +1799,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={hmoEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1687,7 +1811,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={hmoCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1699,7 +1822,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={hmoAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1711,7 +1833,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={hmoBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1719,7 +1840,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("COOP")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                <label className="separator3"></label>
                 <FormGroup as={Row}>
                   <FormLabel column sm="2" className="noWrapText">
                     CS/PS/MS
@@ -1728,7 +1859,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={cpmSDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1741,7 +1871,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={cpmEDRef}
                       className="inpHeightXs"
-                      disabled
                       type="Date"
                       style={{
                         fontWeight: "bolder",
@@ -1754,7 +1883,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={cpmCapRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1766,7 +1894,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={cpmAmorRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1778,7 +1905,6 @@ export const EmployeeLoans = () => {
                     <FormControl
                       ref={cpmBalRef}
                       className="inpHeightXs"
-                      disabled
                       style={{
                         fontWeight: "bolder",
                         textAlign: "right",
@@ -1786,7 +1912,17 @@ export const EmployeeLoans = () => {
                       }}
                     ></FormControl>
                   </Col>
+                  <Col sm="1">
+                    <Button
+                      className="buttonLoanSave"
+                      variant="success"
+                      onClick={() => save("CASH")}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </FormGroup>
+                {/* <label className="separator3"></label> */}
               </FormGroup>
             </FormGroup>
             <label className="separator"></label>

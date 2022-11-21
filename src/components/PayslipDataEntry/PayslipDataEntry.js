@@ -17,6 +17,7 @@ import {
   Button,
   Modal,
   Container,
+  Form,
 } from "react-bootstrap";
 
 export const PaySlipDataEntry = () => {
@@ -86,6 +87,7 @@ export const PaySlipDataEntry = () => {
   const vacLeaveRef = useRef();
   const totalDeductionRef = useRef();
   const netRef = useRef();
+  const leaveRef = useRef();
 
   const basicPayAdjRef = useRef();
   const perCutOffRef = useRef();
@@ -129,6 +131,27 @@ export const PaySlipDataEntry = () => {
       });
   };
 
+  const saveEmpPayslip = () => {
+    axios
+      .post("http://localhost:8080/api/payslip/save", employee, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Saved Successfully!");
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
   const showOnDetails = () => {
     if (employee) {
       employeeNoRef.current.value = employee.employeeNo;
@@ -159,40 +182,58 @@ export const PaySlipDataEntry = () => {
       philhealthPremRef.current.value = numberFormat(employee.philHealth);
       pagibigPremRef.current.value = numberFormat(employee.pagibig);
       fakeOverRef.current.value = numberFormat(employee.fakeOver);
-      hmoRef.current.value = numberFormat(0);
+      hmoRef.current.value = numberFormat(employee.coop);
       promisoryRef.current.value = numberFormat(employee.promisoryNote);
-      promisoryNoteRef.current.value = numberFormat(0);
+      promisoryNoteRef.current.value = numberFormat(employee.calamityLoan);
       sssLoanRef.current.value = numberFormat(employee.sssloan);
       pagibigRef.current.value = numberFormat(employee.pagibigLoan);
       storageRef.current.value = numberFormat(employee.storageLoan);
-      stPeterRef.current.value = numberFormat(employee.calamityLoan);
+      stPeterRef.current.value = numberFormat(employee.housingLoan);
       emergencyRef.current.value = numberFormat(employee.emergencyLoan);
-      layAwayRef.current.value = numberFormat(employee.housingLoan);
-      personalRef.current.value = numberFormat(employee.cashBondLoan);
-      lifeInsRef.current.value = numberFormat(employee.coop);
-      cspsmcsRef.current.value = numberFormat(employee.coopLoan);
+      layAwayRef.current.value = numberFormat(employee.coopLoan);
+      personalRef.current.value = numberFormat(employee.personalLoan);
+      lifeInsRef.current.value = numberFormat(employee.otherLoan);
+      cspsmcsRef.current.value = numberFormat(employee.cashBondLoan);
       otherDeducRef.current.value = numberFormat(employee.otherDeduction);
       totalDeductionRef.current.value = numberFormat(employee.deduction);
       leaveCreditsRef.current.value = numberFormat(
         employee.leaveAmount ? employee.leaveAmount : 0
       );
-
-      vacLeaveRef.current.value = numberFormat(employee.vacationLeave);
+      leaveRef.current.checked = employee.leave === 1 ? true : false;
+      vacLeaveRef.current.value = 0;
+      lateRef.current.value = employee.late;
+      absentRef.current.value = employee.absent;
+      overTimeRef.current.value = employee.ot;
+      srHolRef.current.value = employee.special;
+      legHolRef.current.value = employee.legal;
+      restSunRef.current.value = employee.sunday;
       netRef.current.value = numberFormat(employee.net);
-      //     lateRef.current.value = numberFormat(employee.
-      //     absentRef.current.value = numberFormat(employee.
-      //     overTimeRef.current.value = numberFormat(employee.
-      //     srHolRef.current.value = numberFormat(employee.
-      // legHolRef.current.value = numberFormat(employee.
-      // restSunRef.current.value = numberFormat(employee.
 
       basicPayAdjRef.current.value = numberFormat(employee.basicPay * 2);
       perCutOffRef.current.value = numberFormat(employee.basicPay);
-      perHourRef.current.value = numberFormat(employee.basicPay / 13 / 8);
-      perDayRef.current.value = numberFormat(employee.basicPay / 13);
-      perMinRef.current.value = numberFormat(employee.basicPay / 13 / 8 / 60);
+      perHourRef.current.value = numberFormat(
+        (((employee.basicPay * 2) / 313) * 12) / 8
+      );
+      perDayRef.current.value = numberFormat(
+        ((employee.basicPay * 2) / 313) * 12
+      );
+      perMinRef.current.value = numberFormat(
+        (((employee.basicPay * 2) / 313) * 12) / 8 / 60
+      );
       setLen(payslips.length);
     }
+  };
+
+  const save = () => {
+    setData();
+    console.log(employee);
+    saveEmpPayslip();
+  };
+
+  const setData = () => {
+    employee.gross = removePesoComma(grossRef.current.value);
+    employee.deduction = removePesoComma(totalDeductionRef.current.value);
+    employee.net = removePesoComma(netRef.current.value);
   };
 
   const handleClose = () => {
@@ -250,6 +291,10 @@ export const PaySlipDataEntry = () => {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
 
+  const removePesoComma = (val) => {
+    return val.substring(1).replaceAll(",", "");
+  };
+
   const checkChange = (val, val2) => {
     var ret = 0;
     // alert(val + "   " + val2);
@@ -258,16 +303,29 @@ export const PaySlipDataEntry = () => {
     if (val === numberFormat(val2)) {
       ret = val;
     } else {
-      reComputeGross(ret);
+      reComputeGross();
+    }
+    return ret;
+  };
+
+  const checkChange2 = (val, val2) => {
+    var ret = 0;
+    // alert(val + "   " + val2);
+    ret =
+      val === numberFormat(val2) ? val : numberFormat(val.replaceAll(",", ""));
+    if (val === numberFormat(val2)) {
+      ret = val;
+    } else {
+      reComputeDeduction();
     }
 
     return ret;
   };
 
-  const reComputeGross = (val) => {
+  const reComputeGross = () => {
     var cur = grossRef.current.value.replaceAll(",", "");
     cur = cur.substring(1);
-    val = val.substring(1);
+    // val = val.substring(1);
     var grs = 0;
     grs =
       parseFloat(employee.gross) +
@@ -282,12 +340,47 @@ export const PaySlipDataEntry = () => {
       parseFloat(employee.sundayAmount) -
       parseFloat(employee.lateAmount) -
       parseFloat(employee.absentAmount) -
-      // parseFloat(employee.leaveAmount ? employee.leaveAmount : 0)-
+      parseFloat(employee.leaveAmount ? employee.leaveAmount : 0) -
       parseFloat(employee.otherAmount);
-    // grossRef.current.value = numberFormat(cur - val);
+
     setGross(grs);
     grossRef.current.value = numberFormat(grs);
+    netRef.current.value = numberFormat(
+      grs - removePesoComma(totalDeductionRef.current.value)
+    );
   };
+
+  const reComputeDeduction = () => {
+    var newDeduction = 0;
+    newDeduction =
+      // parseFloat(employee.deduction) +
+      parseFloat(employee.pagibig) +
+      parseFloat(employee.sss) +
+      parseFloat(employee.cola) +
+      parseFloat(employee.tax) +
+      parseFloat(employee.philHealth) +
+      parseFloat(employee.coop) +
+      parseFloat(employee.fakeOver) +
+      parseFloat(employee.promisoryNote) +
+      parseFloat(employee.sssloan) +
+      parseFloat(employee.calamityLoan) +
+      parseFloat(employee.pagibigLoan) +
+      parseFloat(employee.storageLoan) +
+      parseFloat(employee.housingLoan) +
+      parseFloat(employee.emergencyLoan) +
+      parseFloat(employee.coopLoan) +
+      parseFloat(employee.personalLoan) +
+      parseFloat(employee.otherLoan) +
+      parseFloat(employee.cashBondLoan) +
+      parseFloat(employee.otherDeduction);
+
+    // setGross(grs);
+    totalDeductionRef.current.value = numberFormat(newDeduction);
+    netRef.current.value = numberFormat(
+      removePesoComma(grossRef.current.value) - newDeduction
+    );
+  };
+
   const nameFormatter = (data, row) => {
     return (
       <span>
@@ -574,6 +667,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={basicPayRef}
+                    disabled
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onChange={(event) => {
@@ -599,10 +693,16 @@ export const PaySlipDataEntry = () => {
                     ref={allow1Ref}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.allowance1 = allow1Ref.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.allowance1 = value;
+                      } else {
+                        employee.allowance1 = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       allow1Ref.current.value = checkChange(
@@ -625,10 +725,16 @@ export const PaySlipDataEntry = () => {
                     ref={allow2Ref}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.allowance2 = allow2Ref.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.allowance2 = value;
+                      } else {
+                        employee.allowance2 = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       allow2Ref.current.value = checkChange(
@@ -648,10 +754,16 @@ export const PaySlipDataEntry = () => {
                     ref={colaRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.cola = colaRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.cola = value;
+                      } else {
+                        employee.cola = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       colaRef.current.value = checkChange(
@@ -671,10 +783,16 @@ export const PaySlipDataEntry = () => {
                     ref={incentiveRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.incentive = incentiveRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.incentive = value;
+                      } else {
+                        employee.incentive = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       incentiveRef.current.value = checkChange(
@@ -694,10 +812,16 @@ export const PaySlipDataEntry = () => {
                     ref={bonusRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.bonus13 = bonusRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.bonus13 = value;
+                      } else {
+                        employee.bonus13 = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       bonusRef.current.value = checkChange(
@@ -717,10 +841,16 @@ export const PaySlipDataEntry = () => {
                     ref={otpayRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.otamount = otpayRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.otamount = value;
+                      } else {
+                        employee.otamount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       otpayRef.current.value = checkChange(
@@ -740,10 +870,16 @@ export const PaySlipDataEntry = () => {
                     ref={srHolidayPayRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.specialAmount = srHolidayPayRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.specialAmount = value;
+                      } else {
+                        employee.specialAmount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       srHolidayPayRef.current.value = checkChange(
@@ -763,10 +899,16 @@ export const PaySlipDataEntry = () => {
                     ref={legHolidayPayRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.legalAmount = legHolidayPayRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.legalAmount = value;
+                      } else {
+                        employee.legalAmount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       legHolidayPayRef.current.value = checkChange(
@@ -786,10 +928,16 @@ export const PaySlipDataEntry = () => {
                     ref={restOTPayRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.sundayAmount = restOTPayRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.sundayAmount = value;
+                      } else {
+                        employee.sundayAmount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       restOTPayRef.current.value = checkChange(
@@ -808,11 +956,17 @@ export const PaySlipDataEntry = () => {
                   <FormControl
                     ref={lateDeducRef}
                     className="inpHeightXs currency2"
-                    style={{ fontWeight: "bolder" }}
+                    style={{ fontWeight: "bolder", color: "red" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.lateAmount = lateDeducRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.lateAmount = value;
+                      } else {
+                        employee.lateAmount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       lateDeducRef.current.value = checkChange(
@@ -831,11 +985,17 @@ export const PaySlipDataEntry = () => {
                   <FormControl
                     ref={absDeducRef}
                     className="inpHeightXs currency2"
-                    style={{ fontWeight: "bolder" }}
+                    style={{ fontWeight: "bolder", color: "red" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.absentAmount = absDeducRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.absentAmount = value;
+                      } else {
+                        employee.absentAmount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       absDeducRef.current.value = checkChange(
@@ -855,10 +1015,16 @@ export const PaySlipDataEntry = () => {
                     ref={leaveCreditsRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.leaveAmount = leaveCreditsRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.leaveAmount = value;
+                      } else {
+                        employee.leaveAmount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       leaveCreditsRef.current.value = checkChange(
@@ -877,11 +1043,17 @@ export const PaySlipDataEntry = () => {
                   <FormControl
                     ref={otherCompRef}
                     className="inpHeightXs currency2"
-                    style={{ fontWeight: "bolder" }}
+                    style={{ fontWeight: "bolder", color: "red" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
-                      employee.otherAmount = otherCompRef.current.value;
+                      if (!isNaN(parseFloat(value))) {
+                        employee.otherAmount = value;
+                      } else {
+                        employee.otherAmount = 0;
+                      }
+                      reComputeGross();
                     }}
                     onBlur={(event) => {
                       otherCompRef.current.value = checkChange(
@@ -890,6 +1062,19 @@ export const PaySlipDataEntry = () => {
                       );
                     }}
                   ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row} style={{ marginTop: "20px" }}>
+                <FormLabel column sm="4" className="noWrapText">
+                  On leave
+                </FormLabel>
+                <Col>
+                  <Form.Check
+                    ref={leaveRef}
+                    disabled
+                    style={{ paddingTop: "5px" }}
+                    // onChange={(event) => checkToggle(event)}
+                  ></Form.Check>
                 </Col>
               </FormGroup>
             </FormGroup>
@@ -906,9 +1091,22 @@ export const PaySlipDataEntry = () => {
                     ref={withHoldTaxRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.tax = value;
+                      } else {
+                        employee.tax = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      withHoldTaxRef.current.value = checkChange2(
+                        withHoldTaxRef.current.value,
+                        employee.tax
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -922,9 +1120,22 @@ export const PaySlipDataEntry = () => {
                     ref={sssPremRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.sssLoanRef = value;
+                      } else {
+                        employee.sss = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      sssPremRef.current.value = checkChange2(
+                        sssPremRef.current.value,
+                        employee.sss
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -938,9 +1149,22 @@ export const PaySlipDataEntry = () => {
                     ref={philhealthPremRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.philHealth = value;
+                      } else {
+                        employee.philHealth = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      philhealthPremRef.current.value = checkChange2(
+                        philhealthPremRef.current.value,
+                        employee.philHealth
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -954,9 +1178,22 @@ export const PaySlipDataEntry = () => {
                     ref={pagibigPremRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.pagibig = value;
+                      } else {
+                        employee.pagibig = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      pagibigPremRef.current.value = checkChange2(
+                        pagibigPremRef.current.value,
+                        employee.pagibig
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -970,9 +1207,22 @@ export const PaySlipDataEntry = () => {
                     ref={hmoRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.coop = value;
+                      } else {
+                        employee.coop = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      hmoRef.current.value = checkChange2(
+                        hmoRef.current.value,
+                        employee.coop
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -986,9 +1236,22 @@ export const PaySlipDataEntry = () => {
                     ref={fakeOverRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.fakeOver = value;
+                      } else {
+                        employee.fakeOver = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      fakeOverRef.current.value = checkChange2(
+                        fakeOverRef.current.value,
+                        employee.fakeOver
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1002,9 +1265,22 @@ export const PaySlipDataEntry = () => {
                     ref={promisoryRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.promisoryNote = value;
+                      } else {
+                        employee.promisoryNote = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      promisoryRef.current.value = checkChange2(
+                        promisoryRef.current.value,
+                        employee.promisoryNote
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1018,9 +1294,22 @@ export const PaySlipDataEntry = () => {
                     ref={sssLoanRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.sssloan = value;
+                      } else {
+                        employee.sssloan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      sssLoanRef.current.value = checkChange2(
+                        sssLoanRef.current.value,
+                        employee.sssloan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1034,9 +1323,22 @@ export const PaySlipDataEntry = () => {
                     ref={promisoryNoteRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.calamityLoan = value;
+                      } else {
+                        employee.calamityLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      promisoryNoteRef.current.value = checkChange2(
+                        promisoryNoteRef.current.value,
+                        employee.calamityLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1050,9 +1352,22 @@ export const PaySlipDataEntry = () => {
                     ref={pagibigRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.pagibigLoan = value;
+                      } else {
+                        employee.pagibigLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      pagibigRef.current.value = checkChange2(
+                        pagibigRef.current.value,
+                        employee.pagibigLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1066,9 +1381,22 @@ export const PaySlipDataEntry = () => {
                     ref={storageRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.storageLoan = value;
+                      } else {
+                        employee.storageLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      storageRef.current.value = checkChange2(
+                        storageRef.current.value,
+                        employee.storageLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1082,9 +1410,22 @@ export const PaySlipDataEntry = () => {
                     ref={stPeterRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.housingLoan = value;
+                      } else {
+                        employee.housingLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      stPeterRef.current.value = checkChange2(
+                        stPeterRef.current.value,
+                        employee.housingLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1098,9 +1439,22 @@ export const PaySlipDataEntry = () => {
                     ref={emergencyRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.emergencyLoan = value;
+                      } else {
+                        employee.emergencyLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      emergencyRef.current.value = checkChange2(
+                        emergencyRef.current.value,
+                        employee.emergencyLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1114,9 +1468,22 @@ export const PaySlipDataEntry = () => {
                     ref={layAwayRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.coopLoan = value;
+                      } else {
+                        employee.coopLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      layAwayRef.current.value = checkChange2(
+                        layAwayRef.current.value,
+                        employee.coopLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1130,9 +1497,22 @@ export const PaySlipDataEntry = () => {
                     ref={personalRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.personalLoan = value;
+                      } else {
+                        employee.personalLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      personalRef.current.value = checkChange2(
+                        personalRef.current.value,
+                        employee.personalLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1146,9 +1526,22 @@ export const PaySlipDataEntry = () => {
                     ref={lifeInsRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.otherLoan = value;
+                      } else {
+                        employee.otherLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      lifeInsRef.current.value = checkChange2(
+                        lifeInsRef.current.value,
+                        employee.otherLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1162,9 +1555,22 @@ export const PaySlipDataEntry = () => {
                     ref={cspsmcsRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.cashBondLoan = value;
+                      } else {
+                        employee.cashBondLoan = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      cspsmcsRef.current.value = checkChange2(
+                        cspsmcsRef.current.value,
+                        employee.cashBondLoan
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1178,9 +1584,22 @@ export const PaySlipDataEntry = () => {
                     ref={otherDeducRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      if (!isNaN(parseFloat(value))) {
+                        employee.otherDeduction = value;
+                      } else {
+                        employee.otherDeduction = 0;
+                      }
+                      reComputeDeduction();
+                    }}
+                    onBlur={(event) => {
+                      otherDeducRef.current.value = checkChange2(
+                        otherDeducRef.current.value,
+                        employee.otherDeduction
+                      );
                     }}
                   ></FormControl>
                 </Col>
@@ -1209,13 +1628,22 @@ export const PaySlipDataEntry = () => {
                   <FormGroup as={Row}>
                     <FormLabel
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       SALARY ADJUSTMENT
                     </FormLabel>
                     <Col sm="1">
-                      <label className="blackText3">0000</label>
+                      <input
+                        disabled
+                        value={numberFormat(employee.increase)}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <label className="separator2"></label>
@@ -1230,6 +1658,7 @@ export const PaySlipDataEntry = () => {
                     <Col sm="1">
                       {/* <label className="blackText3">0000</label> */}
                       <input
+                        disabled
                         ref={basicPayAdjRef}
                         className={" currency"}
                         style={{
@@ -1251,8 +1680,8 @@ export const PaySlipDataEntry = () => {
                       Per Cut-off
                     </FormLabel>
                     <Col sm="1">
-                      {/* <label className="blackText2">0000</label> */}
                       <input
+                        disabled
                         ref={perCutOffRef}
                         className={" currency"}
                         style={{
@@ -1273,8 +1702,8 @@ export const PaySlipDataEntry = () => {
                       Per Day
                     </FormLabel>
                     <Col sm="2">
-                      {/* <label className={"blackText2"}>0000</label> */}
                       <input
+                        disabled
                         ref={perDayRef}
                         className={" currency"}
                         style={{
@@ -1295,8 +1724,8 @@ export const PaySlipDataEntry = () => {
                       Per Hour
                     </FormLabel>
                     <Col sm="2">
-                      {/* <label className={"blackText2"}>0000</label> */}
                       <input
+                        disabled
                         ref={perHourRef}
                         className={" currency"}
                         style={{
@@ -1317,8 +1746,8 @@ export const PaySlipDataEntry = () => {
                       Per Minute
                     </FormLabel>
                     <Col sm="2">
-                      {/* <label className={"blackText2"}>0000</label> */}
                       <input
+                        disabled
                         ref={perMinRef}
                         className={" currency"}
                         style={{
@@ -1333,26 +1762,44 @@ export const PaySlipDataEntry = () => {
                     <FormLabel
                       style={{ padding: "0px 0px 0px 10px" }}
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       Leave Balance
                     </FormLabel>
                     <Col sm="2">
-                      <label className={"blackText2"}>0000</label>
+                      <input
+                        disabled
+                        value={employee.presentLeave}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <label className="separator2"></label>
                   <FormGroup as={Row}>
                     <FormLabel
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       COLA (13)
                     </FormLabel>
                     <Col sm="1">
-                      <label className="blackText3">0000</label>
+                      <input
+                        disabled
+                        value={numberFormat(employee.cola)}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                   <label className="separator2"></label>
@@ -1360,13 +1807,22 @@ export const PaySlipDataEntry = () => {
                     <FormLabel
                       style={{ padding: "0px 0px 0px 10px" }}
                       column
-                      sm="8"
+                      sm="7"
                       className={("noWrapText", "blackText")}
                     >
                       Per Day
                     </FormLabel>
                     <Col sm="2">
-                      <label className={"blackText2"}>0000</label>
+                      <input
+                        disabled
+                        value={numberFormat(((employee.cola * 2) / 313) * 12)}
+                        className={" currency"}
+                        style={{
+                          marginTop: "5px",
+                          width: "100px",
+                          borderStyle: "none",
+                        }}
+                      ></input>
                     </Col>
                   </FormGroup>
                 </Card>
@@ -1377,14 +1833,18 @@ export const PaySlipDataEntry = () => {
               {/* ############################################################### */}
 
               <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Vacation Leave (D)
+                <label style={{ color: "yellow" }}>
+                  Please input in Day/s, Hour/s, Minute/s{" "}
+                </label>
+                <FormLabel column sm="5" className="noWrapText">
+                  Vacation Leave (Day/s)
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={vacLeaveRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
@@ -1393,97 +1853,151 @@ export const PaySlipDataEntry = () => {
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Late (M)
+                <FormLabel column sm="5" className="noWrapText">
+                  Late (Minute/s)
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={lateRef}
                     className="inpHeightXs currency2"
-                    style={{ fontWeight: "bolder" }}
+                    style={{ fontWeight: "bolder", color: "red" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.late = value;
+                      lateDeducRef.current.value = numberFormat(
+                        event.target.value *
+                          removePesoComma(perMinRef.current.value)
+                      );
+                      employee.lateAmount = (
+                        event.target.value *
+                        removePesoComma(perMinRef.current.value)
+                      ).toFixed(2);
+                      reComputeGross();
                     }}
                   ></FormControl>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Absent (D)
+                <FormLabel column sm="5" className="noWrapText">
+                  Absent (Day/s)
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={absentRef}
                     className="inpHeightXs currency2"
-                    style={{ fontWeight: "bolder" }}
+                    style={{ fontWeight: "bolder", color: "red" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.absent = value;
+                      employee.absentAmount =
+                        event.target.value *
+                        removePesoComma(perDayRef.current.value);
+                      absDeducRef.current.value = numberFormat(
+                        employee.absentAmount
+                      );
+                      reComputeGross();
                     }}
                   ></FormControl>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Over Time (H)
+                <FormLabel column sm="5" className="noWrapText">
+                  Over Time (Hour/s)
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={overTimeRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.ot = value;
+                      employee.otamount =
+                        event.target.value *
+                        removePesoComma(perHourRef.current.value);
+                      otpayRef.current.value = numberFormat(employee.otamount);
+                      reComputeGross();
                     }}
                   ></FormControl>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Special/Reg. Hol (D)
+                <FormLabel column sm="5" className="noWrapText">
+                  Special/Reg. Hol (Day/s)
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={srHolRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.special = value;
+                      employee.specialAmount =
+                        event.target.value *
+                        removePesoComma(perDayRef.current.value);
+                      srHolidayPayRef.current.value = numberFormat(
+                        employee.specialAmount
+                      );
+                      reComputeGross();
                     }}
                   ></FormControl>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Legal Holiday (D)
+                <FormLabel column sm="5" className="noWrapText">
+                  Legal Holiday (Day/s)
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={legHolRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.legal = value;
+                      employee.legalAmount =
+                        event.target.value *
+                        removePesoComma(perDayRef.current.value);
+                      legHolidayPayRef.current.value = numberFormat(
+                        employee.legalAmount
+                      );
+                      reComputeGross();
                     }}
                   ></FormControl>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Rest Sunday (D)
+                <FormLabel column sm="5" className="noWrapText">
+                  Rest Sunday (Day/s)
                 </FormLabel>
                 <Col>
                   <FormControl
                     ref={restSunRef}
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
+                    onFocus={(event) => event.target.select()}
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
+                      employee.sunday = value;
+                      employee.sundayAmount =
+                        event.target.value *
+                        removePesoComma(perDayRef.current.value);
+                      restOTPayRef.current.value = numberFormat(
+                        employee.sundayAmount
+                      );
+                      reComputeGross();
                     }}
                   ></FormControl>
                 </Col>
@@ -1506,12 +2020,14 @@ export const PaySlipDataEntry = () => {
                       <input
                         ref={grossRef}
                         className={"asLabel currency2"}
+                        disabled
                         style={{
                           fontWeight: "bolder",
                           marginTop: "2px",
                           paddingRight: "10px",
                           fontSize: "medium",
                           width: "175px",
+                          color: "black",
                         }}
                       ></input>
                     </Col>
@@ -1531,12 +2047,14 @@ export const PaySlipDataEntry = () => {
                       <input
                         ref={totalDeductionRef}
                         className={"asLabel currency2"}
+                        disabled
                         style={{
                           fontWeight: "bolder",
                           marginTop: "2px",
                           paddingRight: "10px",
                           fontSize: "medium",
                           width: "145px",
+                          color: "black",
                         }}
                       ></input>
                     </Col>
@@ -1556,12 +2074,14 @@ export const PaySlipDataEntry = () => {
                       <input
                         ref={netRef}
                         className={"asLabel currency2"}
+                        disabled
                         style={{
                           fontWeight: "bolder",
                           marginTop: "2px",
                           paddingRight: "10px",
                           fontSize: "medium",
                           width: "165px",
+                          color: "black",
                         }}
                       ></input>
                     </Col>
@@ -1586,9 +2106,9 @@ export const PaySlipDataEntry = () => {
                   <Button
                     className="setButtonMargin"
                     variant="success"
-                    // onClick={() => newUser()}
+                    onClick={() => save()}
                   >
-                    Edit
+                    Save
                   </Button>
                 </Col>
                 <Col sm="1">

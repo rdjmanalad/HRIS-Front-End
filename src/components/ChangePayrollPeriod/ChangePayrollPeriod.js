@@ -424,6 +424,7 @@ export const ChangePayrollPeriod = () => {
                   <FormControl
                     ref={collectPeriodRef}
                     className="inpHeightXs"
+                    style={{ textTransform: "uppercase" }}
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -450,9 +451,10 @@ export const ChangePayrollPeriod = () => {
             <Col sm="2">
               <FormControl
                 ref={filterValueRef}
-                defaultValue={""}
+                defaultValue={"Z"}
                 placeholder="Group..."
                 className="inpHeightXs"
+                style={{ textTransform: "uppercase" }}
               ></FormControl>
             </Col>
             <Col sm="3"></Col>

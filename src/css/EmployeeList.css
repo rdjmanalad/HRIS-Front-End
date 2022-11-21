@@ -144,10 +144,6 @@
   border-color: gray;
 }
 
-.textCenter {
-  text-align: center;
-}
-
 .centerLoading {
   height: 350px;
   display: flex;

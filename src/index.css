@@ -106,6 +106,14 @@ input[type="radio"]:checked:after {
   margin-top: 0px;
 }
 
+.separator3 {
+  border-color: gray;
+  width: 100%;
+  border-width: 0.5px;
+  border-style: dotted;
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
 .noPaddingLabel {
   padding: 0px;
 }
@@ -225,4 +233,27 @@ input[type="radio"]:checked:after {
 
 .loansRowColor > input {
   color: red;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5);
+}
+
+.buttonLoanSave {
+  width: 55px;
+  height: 29px;
+  margin-top: 2px;
+  margin-bottom: 1px;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.paddedLeft {
+  padding-left: 20px;
 }
