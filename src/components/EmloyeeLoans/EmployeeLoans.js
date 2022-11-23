@@ -117,7 +117,19 @@ export const EmployeeLoans = () => {
   const cpmAmorRef = useRef();
   const cpmBalRef = useRef();
 
-  const [setSSS, setSetSSS] = useState("");
+  const [SSSA, setSSSA] = useState("");
+  const [pagA, setPagA] = useState("");
+  const [houA, setHouA] = useState("");
+  const [proA, setProA] = useState("");
+  const [emeA, setEmeA] = useState("");
+  const [fakA, setFakA] = useState("");
+  const [stoA, setStoA] = useState("");
+  const [calA, setCalA] = useState("");
+  const [cooA, setCooA] = useState("");
+  const [perA, setPerA] = useState("");
+  const [othA, setOthA] = useState("");
+  const [hrmA, setHrmA] = useState("");
+  const [casA, setCasA] = useState("");
 
   var setArray = {
     id: "",
@@ -131,8 +143,7 @@ export const EmployeeLoans = () => {
     transactNo: "",
     origEndDate: "",
   };
-
-  //var setSSS = setArray;
+  var setSSS = setArray;
   var setPagibig = setArray;
   var setHousing = setArray; //st peter
   var setPromisory = setArray; //promisory loan
@@ -162,8 +173,7 @@ export const EmployeeLoans = () => {
       for (var i = 0; i < len; i++) {
         if (employee.loan[i].loanType === "SSS") {
           sssb = true;
-          setSetSSS(employee.loan[i]);
-          console.log(setSSS);
+          setSSSA(employee.loan[i]);
           sssSDRef.current.value = loanArr[i].startDate;
           sssEDRef.current.value = loanArr[i].endDate;
           sssCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -177,6 +187,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "PAGIBIG") {
+          setPagA(employee.loan[i]);
           pagSDRef.current.value = loanArr[i].startDate;
           pagEDRef.current.value = loanArr[i].endDate;
           pagCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -190,8 +201,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "HOUSING") {
-          setHousing = employee.loan;
-          console.log(setHousing);
+          setHouA(employee.loan[i]);
           spSDRef.current.value = loanArr[i].startDate;
           spEDRef.current.value = loanArr[i].endDate;
           spCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -205,7 +215,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "PROMISORY") {
-          setPromisory = employee.loan;
+          setProA(employee.loan[i]);
           plSDRef.current.value = loanArr[i].startDate;
           plEDRef.current.value = loanArr[i].endDate;
           plCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -219,7 +229,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "EMERGENCY") {
-          setEmergency = employee.loan;
+          setEmeA(employee.loan[i]);
           emerSDRef.current.value = loanArr[i].startDate;
           emerEDRef.current.value = loanArr[i].endDate;
           emerCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -233,7 +243,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "FAKE") {
-          setFake = employee.loan;
+          setFakA(employee.loan[i]);
           foSDRef.current.value = loanArr[i].startDate;
           foEDRef.current.value = loanArr[i].endDate;
           foCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -247,7 +257,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "STORAGE") {
-          setStorage = employee.loan;
+          setStoA(employee.loan[i]);
           storSDRef.current.value = loanArr[i].startDate;
           storEDRef.current.value = loanArr[i].endDate;
           storCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -261,7 +271,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "CALAMITY") {
-          setCalamity = employee.loan;
+          setCalA(employee.loan[i]);
           pnSDRef.current.value = loanArr[i].startDate;
           pnEDRef.current.value = loanArr[i].endDate;
           pnCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -275,7 +285,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "COOP") {
-          setCoop = employee.loan;
+          setCooA(employee.loan[i]);
           lapSDRef.current.value = loanArr[i].startDate;
           lapEDRef.current.value = loanArr[i].endDate;
           lapCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -289,7 +299,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "PERSONAL") {
-          setPersonal = employee.loan;
+          setPerA(employee.loan[i]);
           perSDRef.current.value = loanArr[i].startDate;
           perEDRef.current.value = loanArr[i].endDate;
           perCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -303,7 +313,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "OTHER") {
-          setOther = employee.loan;
+          setOthA(employee.loan[i]);
           liSDRef.current.value = loanArr[i].startDate;
           liEDRef.current.value = loanArr[i].endDate;
           liCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -317,7 +327,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "HRM") {
-          setHRM = employee.loan;
+          setHrmA(employee.loan[i]);
           hmoSDRef.current.value = loanArr[i].startDate;
           hmoEDRef.current.value = loanArr[i].endDate;
           hmoCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -331,7 +341,7 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "CASH") {
-          setCash = employee.loan;
+          setCasA(employee.loan[i]);
           cpmSDRef.current.value = loanArr[i].startDate;
           cpmEDRef.current.value = loanArr[i].endDate;
           cpmCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -494,78 +504,7 @@ export const EmployeeLoans = () => {
     cpmBalRef.current.style.color = "grey";
   };
 
-  const resetToBlack = () => {
-    cpmEDRef.current.style.color = "blue";
-    cpmSDRef.current.style.color = "blue";
-    cpmCapRef.current.style.color = "blue";
-    cpmAmorRef.current.style.color = "blue";
-    cpmBalRef.current.style.color = "blue";
-    hmoEDRef.current.style.color = "blue";
-    hmoSDRef.current.style.color = "blue";
-    hmoCapRef.current.style.color = "blue";
-    hmoAmorRef.current.style.color = "blue";
-    hmoBalRef.current.style.color = "blue";
-    liEDRef.current.style.color = "blue";
-    liSDRef.current.style.color = "blue";
-    liCapRef.current.style.color = "blue";
-    liAmorRef.current.style.color = "blue";
-    liBalRef.current.style.color = "blue";
-    perEDRef.current.style.color = "blue";
-    perSDRef.current.style.color = "blue";
-    perCapRef.current.style.color = "blue";
-    perAmorRef.current.style.color = "blue";
-    lapEDRef.current.style.color = "blue";
-    perBalRef.current.style.color = "blue";
-    lapSDRef.current.style.color = "blue";
-    lapCapRef.current.style.color = "blue";
-    lapAmorRef.current.style.color = "blue";
-    lapBalRef.current.style.color = "blue";
-    pnEDRef.current.style.color = "blue";
-    pnSDRef.current.style.color = "blue";
-    pnCapRef.current.style.color = "blue";
-    pnAmorRef.current.style.color = "blue";
-    pnBalRef.current.style.color = "blue";
-    foEDRef.current.style.color = "blue";
-    foSDRef.current.style.color = "blue";
-    foCapRef.current.style.color = "blue";
-    foAmorRef.current.style.color = "blue";
-    foBalRef.current.style.color = "blue";
-    storEDRef.current.style.color = "blue";
-    storSDRef.current.style.color = "blue";
-    storCapRef.current.style.color = "blue";
-    storAmorRef.current.style.color = "blue";
-    storBalRef.current.style.color = "blue";
-    emerEDRef.current.style.color = "blue";
-    emerSDRef.current.style.color = "blue";
-    emerCapRef.current.style.color = "blue";
-    emerAmorRef.current.style.color = "blue";
-    emerBalRef.current.style.color = "blue";
-    plEDRef.current.style.color = "blue";
-    plSDRef.current.style.color = "blue";
-    plCapRef.current.style.color = "blue";
-    plAmorRef.current.style.color = "blue";
-    plBalRef.current.style.color = "blue";
-    spEDRef.current.style.color = "blue";
-    spSDRef.current.style.color = "blue";
-    spCapRef.current.style.color = "blue";
-    spAmorRef.current.style.color = "blue";
-    spBalRef.current.style.color = "blue";
-
-    pagEDRef.current.style.color = "blue";
-    pagSDRef.current.style.color = "blue";
-    pagCapRef.current.style.color = "blue";
-    pagAmorRef.current.style.color = "blue";
-    pagBalRef.current.style.color = "blue";
-
-    sssSDRef.current.style.color = "blue";
-    sssEDRef.current.style.color = "blue";
-    sssCapRef.current.style.color = "blue";
-    sssAmorRef.current.style.color = "blue";
-    sssBalRef.current.style.color = "blue";
-  };
-
   useEffect(() => {
-    resetToBlack();
     showOnDetails();
   }, [employee]);
 
@@ -621,6 +560,11 @@ export const EmployeeLoans = () => {
       .then((response) => {
         if (response.status === 200) {
           alert("Saved Successfully!");
+          alert(response.data);
+          if (setSave.id === "") {
+            setSave.id = response.data;
+            employee.loan.push(setSave);
+          }
         }
       })
       .catch((message) => {
@@ -637,7 +581,24 @@ export const EmployeeLoans = () => {
     // setToggle(true);
   };
 
+  const clear = () => {
+    setSSSA("");
+    setPagA("");
+    setHouA("");
+    setProA("");
+    setEmeA("");
+    setFakA("");
+    setStoA("");
+    setCalA("");
+    setCooA("");
+    setPerA("");
+    setOthA("");
+    setHrmA("");
+    setCasA("");
+  };
+
   const nextEmp = () => {
+    clear();
     // employeeNoRef.current.value = payslips[index + 1].employeeNo;
     if (index < len - 1) {
       setEmployee(loans[index + 1]);
@@ -647,6 +608,7 @@ export const EmployeeLoans = () => {
   };
 
   const prevEmp = () => {
+    clear();
     // employeeNoRef.current.value = payslips[index + 1].employeeNo;
     if (index > 0) {
       setEmployee(loans[index - 1]);
@@ -656,6 +618,7 @@ export const EmployeeLoans = () => {
   };
 
   const firstEmp = () => {
+    clear();
     // employeeNoRef.current.value = payslips[index + 1].employeeNo;
     setEmployee(loans[0]);
     setIndex(0);
@@ -663,6 +626,7 @@ export const EmployeeLoans = () => {
   };
 
   const lastEmp = () => {
+    clear();
     // employeeNoRef.current.value = payslips[index + 1].employeeNo;
     setEmployee(loans[len - 1]);
     setEmployee(loans[len - 1]);
@@ -704,6 +668,7 @@ export const EmployeeLoans = () => {
 
   const reComputeLoan = (type) => {
     if (type === "SSS") {
+      // setSetSSS(setArray);
       if (
         setSSS.startDate != "" &&
         setSSS.endDate != "" &&
@@ -711,6 +676,8 @@ export const EmployeeLoans = () => {
       ) {
         var months = monthDiff(setSSS.startDate, setSSS.endDate);
         var cap = setSSS.capital;
+        setSSS.amortization = cap.replaceAll(",", "") / (months * 2);
+        setSSS.balance = cap.replaceAll(",", "");
         // sssBalRef.current.value = setSSS.capital;
         sssBalRef.current.value = numberFormat(cap.replaceAll(",", ""));
         sssAmorRef.current.value = numberFormat(
@@ -718,6 +685,24 @@ export const EmployeeLoans = () => {
         );
         sssAmorRef.current.style.color = "blue";
         sssBalRef.current.style.color = "blue";
+      }
+    }
+    if (type === "PAGIBIG") {
+      if (
+        setPagibig.startDate != "" &&
+        setPagibig.endDate != "" &&
+        setPagibig.capital != ""
+      ) {
+        var months = monthDiff(setPagibig.startDate, setPagibig.endDate);
+        var cap = setPagibig.capital;
+        setPagibig.amortization = cap.replaceAll(",", "") / (months * 2);
+        setPagibig.balance = cap.replaceAll(",", "");
+        pagBalRef.current.value = numberFormat(cap.replaceAll(",", ""));
+        pagAmorRef.current.value = numberFormat(
+          cap.replaceAll(",", "") / (months * 2)
+        );
+        pagAmorRef.current.style.color = "blue";
+        pagBalRef.current.style.color = "blue";
       }
     }
   };
@@ -744,20 +729,220 @@ export const EmployeeLoans = () => {
     return row.lastName + row.firstName + row.employeeNo;
   }
 
+  const clearArr = () => {
+    setArray = {
+      id: "",
+      loanType: "",
+      employeeNo: "",
+      startDate: "",
+      endDate: "",
+      capital: "",
+      amortization: "",
+      balance: "",
+      transactNo: "",
+      origEndDate: "",
+    };
+  };
+
   const save = (type) => {
-    alert(type);
+    clearArr();
+    var saveArr = setArray;
+    var finalArr = setArray;
+    saveArr =
+      type === "SSS"
+        ? SSSA
+        : type === "PAGIBIG"
+        ? pagA
+        : type === "HOUSING"
+        ? houA
+        : type === "PROMISORY"
+        ? proA
+        : type === "EMERGENCY"
+        ? emeA
+        : type === "FAKE"
+        ? fakA
+        : type === "STORAGE"
+        ? stoA
+        : type === "CALMITY"
+        ? calA
+        : type === "COOP"
+        ? cooA
+        : type === "PERSONAL"
+        ? perA
+        : type === "OTHER"
+        ? othA
+        : type === "HRM"
+        ? hrmA
+        : type === "CASH"
+        ? casA
+        : saveArr;
+    if (saveArr) {
+      finalArr.id = saveArr.id;
+      finalArr.loanType = saveArr.loanType;
+      finalArr.employeeNo = saveArr.employeeNo;
+      finalArr.transactNo = saveArr.transactNo;
+      finalArr.origEndDate = saveArr.origEndDate;
+      // alert(setSSS.startDate === "");
+      finalArr.startDate =
+        finalArr.startDate === "" ? saveArr.startDate : finalArr.startDate;
+      finalArr.endDate =
+        finalArr.endDate === "" ? saveArr.endDate : finalArr.endDate;
+      finalArr.capital =
+        finalArr.capital === "" ? saveArr.capital : finalArr.capital;
+      setSSS.amortization =
+        finalArr.amortization === ""
+          ? saveArr.amortization
+          : finalArr.amortization;
+      finalArr.balance =
+        finalArr.balance === "" ? saveArr.balance : finalArr.balance;
+    }
+
     if (type === "SSS") {
       if (setSSS.id === "") {
         setSSS.origEndDate = setSSS.endDate;
         setSSS.loanType = type;
         setSSS.employeeNo = employeeNoRef.current.value;
-        setSSS.amortization = removePesoComma(sssAmorRef.current.value);
-        setSSS.balance = removePesoComma(sssBalRef.current.value);
         setSSS.transactNo = 0;
+        saveEmpLoan(setSSS);
+      } else {
+        saveEmpLoan(finalArr);
+        console.log(finalArr);
       }
-      saveEmpLoan(setSSS);
-      console.log(setSSS);
     }
+    if (type === "PAGIBIG") {
+      if (setPagibig.id === "") {
+        setPagibig.origEndDate = setPagibig.endDate;
+        setPagibig.loanType = type;
+        setPagibig.employeeNo = employeeNoRef.current.value;
+        setPagibig.transactNo = 0;
+        saveEmpLoan(setPagibig);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "HOUSING") {
+      if (setHousing.id === "") {
+        setHousing.origEndDate = setHousing.endDate;
+        setHousing.loanType = type;
+        setHousing.employeeNo = employeeNoRef.current.value;
+        setHousing.transactNo = 0;
+        saveEmpLoan(setHousing);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "PROMISORY") {
+      if (setPromisory.id === "") {
+        setPromisory.origEndDate = setPromisory.endDate;
+        setPromisory.loanType = type;
+        setPromisory.employeeNo = employeeNoRef.current.value;
+        setPromisory.transactNo = 0;
+        saveEmpLoan(setPromisory);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "EMERGENCY") {
+      if (setEmergency.id === "") {
+        setEmergency.origEndDate = setEmergency.endDate;
+        setEmergency.loanType = type;
+        setEmergency.employeeNo = employeeNoRef.current.value;
+        setEmergency.transactNo = 0;
+        saveEmpLoan(setEmergency);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "FAKE") {
+      if (setFake.id === "") {
+        setFake.origEndDate = setFake.endDate;
+        setFake.loanType = type;
+        setFake.employeeNo = employeeNoRef.current.value;
+        setFake.transactNo = 0;
+        saveEmpLoan(setFake);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "STORAGE") {
+      if (setStorage.id === "") {
+        setStorage.origEndDate = setStorage.endDate;
+        setStorage.loanType = type;
+        setStorage.employeeNo = employeeNoRef.current.value;
+        setStorage.transactNo = 0;
+        saveEmpLoan(setStorage);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "CALAMITY") {
+      if (setCalamity.id === "") {
+        setCalamity.origEndDate = setCalamity.endDate;
+        setCalamity.loanType = type;
+        setCalamity.employeeNo = employeeNoRef.current.value;
+        setCalamity.transactNo = 0;
+        saveEmpLoan(setCalamity);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "COOP") {
+      if (setCoop.id === "") {
+        setCoop.origEndDate = setCoop.endDate;
+        setCoop.loanType = type;
+        setCoop.employeeNo = employeeNoRef.current.value;
+        setCoop.transactNo = 0;
+        saveEmpLoan(setCoop);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "PERSONAL") {
+      if (setPersonal.id === "") {
+        setPersonal.origEndDate = setPersonal.endDate;
+        setPersonal.loanType = type;
+        setPersonal.employeeNo = employeeNoRef.current.value;
+        setPersonal.transactNo = 0;
+        saveEmpLoan(setPersonal);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "OTHER") {
+      if (setOther.id === "") {
+        setOther.origEndDate = setOther.endDate;
+        setOther.loanType = type;
+        setOther.employeeNo = employeeNoRef.current.value;
+        setOther.transactNo = 0;
+        saveEmpLoan(setOther);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "HRM") {
+      if (setHRM.id === "") {
+        setHRM.origEndDate = setHRM.endDate;
+        setHRM.loanType = type;
+        setHRM.employeeNo = employeeNoRef.current.value;
+        setHRM.transactNo = 0;
+        saveEmpLoan(setHRM);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    if (type === "CASH") {
+      if (setCash.id === "") {
+        setCash.origEndDate = setCash.endDate;
+        setCash.loanType = type;
+        setCash.employeeNo = employeeNoRef.current.value;
+        setCash.transactNo = 0;
+        saveEmpLoan(setCash);
+      } else {
+        saveEmpLoan(finalArr);
+      }
+    }
+    saveArr = [];
+    finalArr = [];
   };
 
   const rowEvents = {
@@ -1080,7 +1265,6 @@ export const EmployeeLoans = () => {
                       onChange={(event) => {
                         const { value } = event.target;
                         event.target.value = normalizeCurrency(value);
-
                         if (!isNaN(parseFloat(value))) {
                           setSSS.capital = value.replaceAll(",", "");
                           if (parseInt(value) > 0) {
@@ -1162,7 +1346,6 @@ export const EmployeeLoans = () => {
                           setSSS.balance = 0;
                           sssBalRef.current.style.color = "gray";
                         }
-                        reComputeLoan(value);
                       }}
                       onBlur={(event) => {
                         sssBalRef.current.value = checkChange(
@@ -1197,6 +1380,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setPagibig.startDate = value;
+                        pagSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1209,6 +1397,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setPagibig.endDate = value;
+                        pagEDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1219,6 +1412,29 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setPagibig.capital = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            pagCapRef.current.style.color = "blue";
+                          } else {
+                            pagCapRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setPagibig.capital = 0;
+                          pagCapRef.current.style.color = "gray";
+                        }
+                        reComputeLoan("PAGIBIG");
+                      }}
+                      onBlur={(event) => {
+                        pagCapRef.current.value = checkChange(
+                          pagCapRef.current.value,
+                          setPagibig.capital
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1231,6 +1447,30 @@ export const EmployeeLoans = () => {
                         textAlign: "right",
                         fontSize: "14px",
                       }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+
+                        if (!isNaN(parseFloat(value))) {
+                          setPagibig.amortization = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            pagAmorRef.current.style.color = "blue";
+                          } else {
+                            pagAmorRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setPagibig.amortization = 0;
+                          pagAmorRef.current.style.color = "gray";
+                        }
+                        //reComputeLoan(value);
+                      }}
+                      onBlur={(event) => {
+                        pagAmorRef.current.value = checkChange(
+                          pagAmorRef.current.value,
+                          setPagibig.amortization
+                        );
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1241,6 +1481,30 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+
+                        if (!isNaN(parseFloat(value))) {
+                          setPagibig.balance = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            pagBalRef.current.style.color = "blue";
+                          } else {
+                            pagBalRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setPagibig.balance = 0;
+                          pagBalRef.current.style.color = "gray";
+                        }
+                        //reComputeLoan(value);
+                      }}
+                      onBlur={(event) => {
+                        pagBalRef.current.value = checkChange(
+                          pagBalRef.current.value,
+                          setPagibig.balance
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1269,6 +1533,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setHousing.startDate = value;
+                        spSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1281,6 +1550,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setHousing.endDate = value;
+                        spEDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1291,6 +1565,29 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setHousing.capital = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            spCapRef.current.style.color = "blue";
+                          } else {
+                            spCapRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setHousing.capital = 0;
+                          spCapRef.current.style.color = "gray";
+                        }
+                        reComputeLoan("HOUSING");
+                      }}
+                      onBlur={(event) => {
+                        spCapRef.current.value = checkChange(
+                          spCapRef.current.value,
+                          setHousing.capital
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1303,6 +1600,29 @@ export const EmployeeLoans = () => {
                         textAlign: "right",
                         fontSize: "14px",
                       }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setHousing.amortization = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            spAmorRef.current.style.color = "blue";
+                          } else {
+                            spAmorRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setHousing.amortization = 0;
+                          spAmorRef.current.style.color = "gray";
+                        }
+                        // reComputeLoan("HOUSING");
+                      }}
+                      onBlur={(event) => {
+                        spAmorRef.current.value = checkChange(
+                          spAmorRef.current.value,
+                          setHousing.amortization
+                        );
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1313,6 +1633,29 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setHousing.balance = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            spBalRef.current.style.color = "blue";
+                          } else {
+                            spBalRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setHousing.balance = 0;
+                          spBalRef.current.style.color = "gray";
+                        }
+                        // reComputeLoan("HOUSING");
+                      }}
+                      onBlur={(event) => {
+                        spBalRef.current.value = checkChange(
+                          spBalRef.current.value,
+                          setHousing.balance
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1341,6 +1684,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setPromisory.startDate = value;
+                        plSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1353,6 +1701,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setPromisory.endDate = value;
+                        plEDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1363,6 +1716,29 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setPromisory.capital = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            plCapRef.current.style.color = "blue";
+                          } else {
+                            plCapRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setPromisory.capital = 0;
+                          plCapRef.current.style.color = "gray";
+                        }
+                        reComputeLoan("PROMISORY");
+                      }}
+                      onBlur={(event) => {
+                        plCapRef.current.value = checkChange(
+                          plCapRef.current.value,
+                          setPromisory.capital
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1375,6 +1751,29 @@ export const EmployeeLoans = () => {
                         textAlign: "right",
                         fontSize: "14px",
                       }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setPromisory.amortization = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            plAmorRef.current.style.color = "blue";
+                          } else {
+                            plAmorRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setPromisory.amortization = 0;
+                          plAmorRef.current.style.color = "gray";
+                        }
+                        // reComputeLoan("PROMISORY");
+                      }}
+                      onBlur={(event) => {
+                        plAmorRef.current.value = checkChange(
+                          plAmorRef.current.value,
+                          setPromisory.amortization
+                        );
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1385,6 +1784,29 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setPromisory.balance = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            plBalRef.current.style.color = "blue";
+                          } else {
+                            plBalRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setPromisory.balance = 0;
+                          plBalRef.current.style.color = "gray";
+                        }
+                        // reComputeLoan("PROMISORY");
+                      }}
+                      onBlur={(event) => {
+                        plBalRef.current.value = checkChange(
+                          plBalRef.current.value,
+                          setPromisory.balance
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1413,6 +1835,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setEmergency.startDate = value;
+                        emerSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1425,6 +1852,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setEmergency.endDate = value;
+                        emerEDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1435,6 +1867,29 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setEmergency.capital = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            emerCapRef.current.style.color = "blue";
+                          } else {
+                            emerCapRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setEmergency.capital = 0;
+                          emerCapRef.current.style.color = "gray";
+                        }
+                        reComputeLoan("EMERGENCY");
+                      }}
+                      onBlur={(event) => {
+                        emerCapRef.current.value = checkChange(
+                          emerCapRef.current.value,
+                          setEmergency.capital
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1447,6 +1902,29 @@ export const EmployeeLoans = () => {
                         textAlign: "right",
                         fontSize: "14px",
                       }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setEmergency.amortization = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            emerAmorRef.current.style.color = "blue";
+                          } else {
+                            emerAmorRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setEmergency.amortization = 0;
+                          emerAmorRef.current.style.color = "gray";
+                        }
+                        // reComputeLoan("EMERGENCY");
+                      }}
+                      onBlur={(event) => {
+                        emerAmorRef.current.value = checkChange(
+                          emerAmorRef.current.value,
+                          setEmergency.amortization
+                        );
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1457,6 +1935,29 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                        if (!isNaN(parseFloat(value))) {
+                          setEmergency.balance = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            emerBalRef.current.style.color = "blue";
+                          } else {
+                            emerBalRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setEmergency.balance = 0;
+                          emerBalRef.current.style.color = "gray";
+                        }
+                        // reComputeLoan("EMERGENCY");
+                      }}
+                      onBlur={(event) => {
+                        emerBalRef.current.value = checkChange(
+                          emerBalRef.current.value,
+                          setEmergency.balance
+                        );
                       }}
                     ></FormControl>
                   </Col>
@@ -1485,6 +1986,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setFake.startDate = value;
+                        foSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1496,6 +2002,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setFake.endDate = value;
+                        foEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1557,6 +2068,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setStorage.startDate = value;
+                        storSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1568,6 +2084,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setStorage.endDate = value;
+                        storEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1629,6 +2150,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setCalamity.startDate = value;
+                        pnSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1640,6 +2166,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setCalamity.endDate = value;
+                        pnEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1701,6 +2232,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setCoop.startDate = value;
+                        lapSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1712,6 +2248,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setCoop.endDate = value;
+                        lapEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1773,6 +2314,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setPersonal.startDate = value;
+                        perSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1784,6 +2330,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setPersonal.endDate = value;
+                        perEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1845,6 +2396,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setOther.startDate = value;
+                        liSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1856,6 +2412,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setOther.endDate = value;
+                        liEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1917,6 +2478,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setHRM.startDate = value;
+                        hmoSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1928,6 +2494,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setHRM.endDate = value;
+                        hmoEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1989,6 +2560,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setCash.startDate = value;
+                        cpmSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -2000,6 +2576,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setCash.endDate = value;
+                        cpmEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
