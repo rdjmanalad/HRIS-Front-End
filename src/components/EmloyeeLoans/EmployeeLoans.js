@@ -117,10 +117,12 @@ export const EmployeeLoans = () => {
   const cpmAmorRef = useRef();
   const cpmBalRef = useRef();
 
+  const [setSSS, setSetSSS] = useState("");
+
   var setArray = {
-    loanNO: "",
+    id: "",
     loanType: "",
-    EmployeeNo: "",
+    employeeNo: "",
     startDate: "",
     endDate: "",
     capital: "",
@@ -130,7 +132,7 @@ export const EmployeeLoans = () => {
     origEndDate: "",
   };
 
-  var setSSS = setArray;
+  //var setSSS = setArray;
   var setPagibig = setArray;
   var setHousing = setArray; //st peter
   var setPromisory = setArray; //promisory loan
@@ -160,7 +162,8 @@ export const EmployeeLoans = () => {
       for (var i = 0; i < len; i++) {
         if (employee.loan[i].loanType === "SSS") {
           sssb = true;
-          setSSS = employee.loan;
+          setSetSSS(employee.loan[i]);
+          console.log(setSSS);
           sssSDRef.current.value = loanArr[i].startDate;
           sssEDRef.current.value = loanArr[i].endDate;
           sssCapRef.current.value = numberFormat(loanArr[i].capital);
@@ -603,6 +606,28 @@ export const EmployeeLoans = () => {
       });
     }
   };
+
+  const saveEmpLoan = (setSave) => {
+    axios
+      .post("http://localhost:8080/api/loan/save", setSave, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Saved Successfully!");
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
   const handleClose = () => {
     setShow(false);
     showOnDetails();
@@ -659,9 +684,12 @@ export const EmployeeLoans = () => {
   };
 
   const checkChange = (val, val2) => {
+    // alert(val);
+    // alert(val2);
+    val = val.replaceAll(",", "").replaceAll("₱", "");
+    val2 = val.replaceAll(",", "").replaceAll("₱", "");
     var ret = 0;
-    ret =
-      val === numberFormat(val2) ? val : numberFormat(val.replaceAll(",", ""));
+    ret = val === numberFormat(val2) ? val : numberFormat(val);
     if (val === numberFormat(val2)) {
       ret = val;
     } else {
@@ -674,7 +702,33 @@ export const EmployeeLoans = () => {
     return val.substring(1).replaceAll(",", "");
   };
 
-  const reComputeLoan = (val) => {};
+  const reComputeLoan = (type) => {
+    if (type === "SSS") {
+      if (
+        setSSS.startDate != "" &&
+        setSSS.endDate != "" &&
+        setSSS.capital != ""
+      ) {
+        var months = monthDiff(setSSS.startDate, setSSS.endDate);
+        var cap = setSSS.capital;
+        // sssBalRef.current.value = setSSS.capital;
+        sssBalRef.current.value = numberFormat(cap.replaceAll(",", ""));
+        sssAmorRef.current.value = numberFormat(
+          cap.replaceAll(",", "") / (months * 2)
+        );
+        sssAmorRef.current.style.color = "blue";
+        sssBalRef.current.style.color = "blue";
+      }
+    }
+  };
+
+  const monthDiff = (d1, d2) => {
+    var months;
+    months = (d2.substring(0, 4) - d1.substring(0, 4)) * 12;
+    months -= parseInt(d1.substring(5, 7));
+    months += parseInt(d2.substring(5, 7));
+    return months <= 0 ? 0 : months;
+  };
 
   const nameFormatter = (data, row) => {
     return (
@@ -692,6 +746,18 @@ export const EmployeeLoans = () => {
 
   const save = (type) => {
     alert(type);
+    if (type === "SSS") {
+      if (setSSS.id === "") {
+        setSSS.origEndDate = setSSS.endDate;
+        setSSS.loanType = type;
+        setSSS.employeeNo = employeeNoRef.current.value;
+        setSSS.amortization = removePesoComma(sssAmorRef.current.value);
+        setSSS.balance = removePesoComma(sssBalRef.current.value);
+        setSSS.transactNo = 0;
+      }
+      saveEmpLoan(setSSS);
+      console.log(setSSS);
+    }
   };
 
   const rowEvents = {
@@ -977,6 +1043,11 @@ export const EmployeeLoans = () => {
                         textAlign: "center",
                         fontSize: "14px",
                       }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setSSS.startDate = value;
+                        sssSDRef.current.style.color = "blue";
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -988,6 +1059,11 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "center",
                         fontSize: "14px",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setSSS.endDate = value;
+                        sssEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1006,8 +1082,8 @@ export const EmployeeLoans = () => {
                         event.target.value = normalizeCurrency(value);
 
                         if (!isNaN(parseFloat(value))) {
-                          setSSS.capital = value;
-                          if (value > 0) {
+                          setSSS.capital = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
                             sssCapRef.current.style.color = "blue";
                           } else {
                             sssCapRef.current.style.color = "gray";
@@ -1016,7 +1092,7 @@ export const EmployeeLoans = () => {
                           setSSS.capital = 0;
                           sssCapRef.current.style.color = "gray";
                         }
-                        reComputeLoan(value);
+                        reComputeLoan("SSS");
                       }}
                       onBlur={(event) => {
                         sssCapRef.current.value = checkChange(
@@ -1035,6 +1111,30 @@ export const EmployeeLoans = () => {
                         textAlign: "right",
                         fontSize: "14px",
                       }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+
+                        if (!isNaN(parseFloat(value))) {
+                          setSSS.amortization = value.replaceAll(",", "");
+                          if (parseInt(value) > 0) {
+                            sssAmorRef.current.style.color = "blue";
+                          } else {
+                            sssAmorRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setSSS.amortization = 0;
+                          sssAmorRef.current.style.color = "gray";
+                        }
+                        reComputeLoan(value);
+                      }}
+                      onBlur={(event) => {
+                        sssAmorRef.current.value = checkChange(
+                          sssAmorRef.current.value,
+                          setSSS.amortization
+                        );
+                      }}
                     ></FormControl>
                   </Col>
                   <Col>
@@ -1045,6 +1145,30 @@ export const EmployeeLoans = () => {
                         fontWeight: "bolder",
                         textAlign: "right",
                         fontSize: "14px",
+                      }}
+                      onFocus={(event) => event.target.select()}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+
+                        if (!isNaN(parseFloat(value))) {
+                          setSSS.balance = value;
+                          if (value > 0) {
+                            sssBalRef.current.style.color = "blue";
+                          } else {
+                            sssBalRef.current.style.color = "gray";
+                          }
+                        } else {
+                          setSSS.balance = 0;
+                          sssBalRef.current.style.color = "gray";
+                        }
+                        reComputeLoan(value);
+                      }}
+                      onBlur={(event) => {
+                        sssBalRef.current.value = checkChange(
+                          sssBalRef.current.value,
+                          setSSS.balance
+                        );
                       }}
                     ></FormControl>
                   </Col>
