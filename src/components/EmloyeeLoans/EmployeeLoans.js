@@ -16,6 +16,7 @@ import {
   Col,
   Button,
   Modal,
+  Form,
 } from "react-bootstrap";
 
 export const EmployeeLoans = () => {
@@ -537,6 +538,8 @@ export const EmployeeLoans = () => {
     cpmBalRef.current.style.color = "grey";
   };
 
+  var yearsPay = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   useEffect(() => {
     showOnDetails();
   }, [employee]);
@@ -544,16 +547,6 @@ export const EmployeeLoans = () => {
   useEffect(() => {
     getData();
   }, []);
-
-  // const getData = () => {
-  //   axios.defaults.headers.common["Authorization"] =
-  //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-  //   axios.get("http://localhost:8080/api/vloan").then((response) => {
-  //     setLoans(response.data);
-  //     console.log(response.data);
-  //   });
-  // };
 
   const getData = () => {
     if (gcode) {
@@ -607,7 +600,28 @@ export const EmployeeLoans = () => {
       });
   };
 
-  const saveLkp = (setSave) => {
+  const saveLoanHistory = (setSave) => {
+    axios
+      .post("http://localhost:8080/api/loan/history/save", setSave, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Saved To Loan History");
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const saveLkp = (setSave, finalArr, ind) => {
     axios
       .post("http://localhost:8080/api/loan/lkp/save", setSave, {
         headers: {
@@ -620,9 +634,19 @@ export const EmployeeLoans = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          var rd = response.data;
-          setLkpId(rd);
-          alert(setLkpId);
+          //employee.loan[id].transactNo = response.data;
+          finalArr.transactNo = response.data;
+          alert(finalArr.transactNo);
+          var yest = new Date();
+          yest.setDate(yest.getDate() - 1);
+          finalArr.endDate = yest.toLocaleDateString("en-CA");
+          if (parseInt(finalArr.transactNo) > 0) {
+            saveLoanHistory(finalArr);
+            saveEmpLoan(finalArr);
+            console.log(employee.loan[ind]);
+            employee.loan.splice(ind);
+            console.log(employee.loan[ind]);
+          }
         }
       })
       .catch((message) => {
@@ -1052,10 +1076,10 @@ export const EmployeeLoans = () => {
       finalArr.balance =
         finalArr.balance === "" ? saveArr.balance : finalArr.balance;
     }
-
+    var bal = 0;
     if (type === "SSS") {
       if (finalArr.id) {
-        var bal = finalArr.balance;
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(sssCapRef.current.value);
         finalArr.amortization = removePesoComma(sssAmorRef.current.value);
         finalArr.balance = removePesoComma(sssBalRef.current.value);
@@ -1064,20 +1088,9 @@ export const EmployeeLoans = () => {
           lkpArr.loanNo = finalArr.id;
           lkpArr.payed = bal;
           lkpArr.transactDate = new Date();
-          saveLkp(lkpArr);
-          finalArr.transactNo = lkpId;
-          var yest = new Date();
-          yest.setDate(yest.getDate() - 1);
-          // alert(lkpId);
-
-          finalArr.endDate = yest.toLocaleDateString("en-CA");
-        }
-
-        saveEmpLoan(finalArr);
-        if (parseInt(finalArr.transactNo) > 0) {
-          console.log(employee.loan[sssI]);
-          employee.loan.splice(sssI);
-          console.log(employee.loan[sssI]);
+          saveLkp(lkpArr, finalArr, sssI);
+        } else {
+          saveEmpLoan(finalArr);
         }
       } else {
         setSSS.origEndDate = setSSS.endDate;
@@ -1089,12 +1102,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "PAGIBIG") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(pagCapRef.current.value);
         finalArr.amortization = removePesoComma(pagAmorRef.current.value);
         finalArr.balance = removePesoComma(pagBalRef.current.value);
         employee.loan[pagI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, pagI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setPagibig.origEndDate = setPagibig.endDate;
         setPagibig.loanType = type;
@@ -1105,12 +1125,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "HOUSING") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(spCapRef.current.value);
         finalArr.amortization = removePesoComma(spAmorRef.current.value);
         finalArr.balance = removePesoComma(spBalRef.current.value);
         employee.loan[houI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, houI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setHousing.origEndDate = setHousing.endDate;
         setHousing.loanType = type;
@@ -1121,12 +1148,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "PROMISORY") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(plCapRef.current.value);
         finalArr.amortization = removePesoComma(plAmorRef.current.value);
         finalArr.balance = removePesoComma(plBalRef.current.value);
         employee.loan[proI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, proI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setPromisory.origEndDate = setPromisory.endDate;
         setPromisory.loanType = type;
@@ -1137,12 +1171,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "EMERGENCY") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(emerCapRef.current.value);
         finalArr.amortization = removePesoComma(emerAmorRef.current.value);
         finalArr.balance = removePesoComma(emerBalRef.current.value);
         employee.loan[emeI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, emeI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setEmergency.origEndDate = setEmergency.endDate;
         setEmergency.loanType = type;
@@ -1153,12 +1194,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "FAKE") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(foCapRef.current.value);
         finalArr.amortization = removePesoComma(foAmorRef.current.value);
         finalArr.balance = removePesoComma(foBalRef.current.value);
         employee.loan[fakI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, fakI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setFake.origEndDate = setFake.endDate;
         setFake.loanType = type;
@@ -1169,12 +1217,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "STORAGE") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(storCapRef.current.value);
         finalArr.amortization = removePesoComma(storAmorRef.current.value);
         finalArr.balance = removePesoComma(storBalRef.current.value);
         employee.loan[stoI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, stoI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setStorage.origEndDate = setStorage.endDate;
         setStorage.loanType = type;
@@ -1185,12 +1240,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "CALAMITY") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(pnCapRef.current.value);
         finalArr.amortization = removePesoComma(pnAmorRef.current.value);
         finalArr.balance = removePesoComma(pnBalRef.current.value);
         employee.loan[calI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, calI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setCalamity.origEndDate = setCalamity.endDate;
         setCalamity.loanType = type;
@@ -1201,12 +1263,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "COOP") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(lapCapRef.current.value);
         finalArr.amortization = removePesoComma(lapAmorRef.current.value);
         finalArr.balance = removePesoComma(lapBalRef.current.value);
         employee.loan[cooI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, cooI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setCoop.origEndDate = setCoop.endDate;
         setCoop.loanType = type;
@@ -1217,12 +1286,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "PERSONAL") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(perCapRef.current.value);
         finalArr.amortization = removePesoComma(perAmorRef.current.value);
         finalArr.balance = removePesoComma(perBalRef.current.value);
         employee.loan[perI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, perI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setPersonal.origEndDate = setPersonal.endDate;
         setPersonal.loanType = type;
@@ -1233,12 +1309,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "OTHER") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(liCapRef.current.value);
         finalArr.amortization = removePesoComma(liAmorRef.current.value);
         finalArr.balance = removePesoComma(liBalRef.current.value);
         employee.loan[othI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, othI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setOther.origEndDate = setOther.endDate;
         setOther.loanType = type;
@@ -1249,12 +1332,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "HRM") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(hmoCapRef.current.value);
         finalArr.amortization = removePesoComma(hmoAmorRef.current.value);
         finalArr.balance = removePesoComma(hmoBalRef.current.value);
         employee.loan[hrmI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, hrmI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setHRM.origEndDate = setHRM.endDate;
         setHRM.loanType = type;
@@ -1265,12 +1355,19 @@ export const EmployeeLoans = () => {
     }
     if (type === "CASH") {
       if (finalArr.id) {
+        bal = finalArr.balance;
         finalArr.capital = removePesoComma(cpmCapRef.current.value);
         finalArr.amortization = removePesoComma(cpmAmorRef.current.value);
         finalArr.balance = removePesoComma(cpmBalRef.current.value);
         employee.loan[casI] = finalArr;
-        console.log(employee.loan);
-        saveEmpLoan(finalArr);
+        if (finalArr.balance === 0 || finalArr.balance === "0.00") {
+          lkpArr.loanNo = finalArr.id;
+          lkpArr.payed = bal;
+          lkpArr.transactDate = new Date();
+          saveLkp(lkpArr, finalArr, casI);
+        } else {
+          saveEmpLoan(finalArr);
+        }
       } else {
         setCash.origEndDate = setCash.endDate;
         setCash.loanType = type;
@@ -1281,6 +1378,12 @@ export const EmployeeLoans = () => {
     }
     saveArr = [];
     finalArr = [];
+  };
+
+  const addYears = (period, yrs) => {
+    var ret = 0;
+    ret = parseInt(period.substring(0, 4)) + parseInt(yrs);
+    return ret + period.substring(4);
   };
 
   const rowEvents = {
@@ -1421,7 +1524,7 @@ export const EmployeeLoans = () => {
       >
         <Card
           className={" border-dark bg-dark text-white floatTop"}
-          style={{ width: "80rem" }}
+          style={{ width: "84rem" }}
         >
           <Card.Header>
             <label
@@ -1524,14 +1627,27 @@ export const EmployeeLoans = () => {
               <FormGroup as={Row}>
                 <FormLabel
                   column
-                  sm="2"
+                  sm="1"
                   className="noWrapText"
                   style={{ paddingLeft: "15px" }}
                 >
                   LOANS
                 </FormLabel>
-                <FormLabel column sm="2" className="noWrapText textCenter">
+                <FormLabel
+                  column
+                  sm="2"
+                  className="noWrapText textCenter"
+                  style={{ marginRight: "0px" }}
+                >
                   START DATE
+                </FormLabel>
+                <FormLabel
+                  column
+                  sm="1"
+                  className="noWrapText"
+                  style={{ marginRight: "0px" }}
+                >
+                  YEARS TO PAY
                 </FormLabel>
                 <FormLabel column sm="2" className="noWrapText textCenter">
                   END DATE
@@ -1553,7 +1669,7 @@ export const EmployeeLoans = () => {
             <FormGroup as={Row} style={{ marginTop: "5px" }}>
               <FormGroup as={Col}>
                 <FormGroup as={Row} className={"loansRowColor"}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     SSS Loan
                   </FormLabel>
                   <Col sm="2">
@@ -1572,6 +1688,41 @@ export const EmployeeLoans = () => {
                         sssSDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    {/* <FormControl
+                      value="5"
+                      className="inpHeightXs"
+                    ></FormControl> */}
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        sssEDRef.current.value = addYears(
+                          sssSDRef.current.value,
+                          value
+                        );
+                        sssEDRef.current.style.color = "blue";
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+
+                      {/* <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option> */}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
