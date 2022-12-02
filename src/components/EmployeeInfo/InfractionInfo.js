@@ -32,9 +32,10 @@ function InfractionInfo({ empNo }) {
 
   const addNew = () => {};
 
-  const deleteInfra = () => {};
-
-  const saveInfra = () => {};
+  const saveInfra = (infrac) => {
+    console.log(infrac);
+    // editInfraction(infrac);
+  };
 
   const saveNew = () => {
     setArray.employeeNo = addZero(empNo);
@@ -84,7 +85,31 @@ function InfractionInfo({ empNo }) {
     return empString;
   };
 
+  const editInfraction = (data) => {
+    console.log(data);
+    axios
+      .post("http://localhost:8080/api/infraction/save", data, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Saved Successfully!");
+          getData();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
   const saveInfraction = () => {
+    console.log(setArray);
     axios
       .post("http://localhost:8080/api/infraction/save", setArray, {
         headers: {
@@ -100,6 +125,29 @@ function InfractionInfo({ empNo }) {
           alert("Saved Successfully!");
           getData();
           clearFields();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const deleteInfra = (delId) => {
+    axios
+      .delete("http://localhost:8080/api/infraction/delete/" + delId, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Delete Success!");
+          // clearFields();
+          getData();
         }
       })
       .catch((message) => {
@@ -240,29 +288,39 @@ function InfractionInfo({ empNo }) {
                         //   (infra.prepareDate = e.target.textContent)
                         // }
                         >
-                          {new Date(infra.transactDate).toLocaleDateString()}
+                          <FormControl
+                            className="inpHeightXs"
+                            type="date"
+                            ref={transDateRef}
+                            defaultValue={new Date(
+                              infra.transactDate
+                            ).toLocaleDateString("en-CA")}
+                            onChange={(event) =>
+                              (infra.transactDate = event.target.value)
+                            }
+                          ></FormControl>
+                          {/* {new Date(infra.transactDate).toLocaleDateString()} */}
                         </td>
                         <td
-                        // contentEditable="true"
-                        // onBlur={(e) => (infra.endYear = e.target.textContent)}
+                          contentEditable="true"
+                          // onChange={(e) => (infra.suspend = e.target.value)}
                         >
                           {infra.suspend}
                         </td>
                         <td
-                        // contentEditable="true"
-                        // onBlur={(e) => (infra.place = e.target.textContent)}
+                          contentEditable="true"
+                          onChange={(e) => (infra.infraction = e.target.value)}
                         >
                           {infra.infraction}
                         </td>
                         <td
-                        // contentEditable="true"
-                        // onBlur={(event) =>
-                        //   (infra.remarks = event.target.textContent)
-                        // }
+                          contentEditable="true"
+                          onChange={(e) => (infra.sanction = e.target.value)}
+                          onBlur={(e) => (infra.sanction = e.target.value)}
                         >
                           {infra.sanction}
                         </td>
-                        {/* <td>
+                        <td>
                           <div className="centerDiv">
                             <ButtonGroup>
                               <Button
@@ -282,7 +340,7 @@ function InfractionInfo({ empNo }) {
                               </Button>
                             </ButtonGroup>
                           </div>
-                        </td> */}
+                        </td>
                       </tr>
                     ))
                   )}

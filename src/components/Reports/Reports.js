@@ -4,6 +4,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import axios from "axios";
+import PdfReport from "./sample.pdf";
+// import { PDFView } from "react.pdf.stream";
 import {
   Card,
   FormControl,
@@ -21,6 +23,7 @@ export const Reports = () => {
   const [reports, setReports] = useState([]);
   const [report, setReport] = useState([]);
   const [data, setData] = useState("");
+  const [fileURL, setFileUrl] = useState("");
 
   useEffect(() => {
     getData();
@@ -40,29 +43,18 @@ export const Reports = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .post("http://localhost:8080/api/reports/sample", {
+      .get("http://localhost:8080/api/reports/sample", {
         headers: {
           contentType: "application/json",
           accept: "application/pdf",
         },
-        responseType: "arraybuffer",
+        responseType: "blob",
+        // responseType: "arraybuffer",
       })
       .then((response) => {
-        setData(response.data);
         const file = new Blob([response.data], { type: "application/pdf" });
-        const fileURL = URL.createObjectURL(file);
-        // var doc = new jsPDF();
-        // doc.output(response.data);
+        setFileUrl(window.URL.createObjectURL(file));
         window.open(fileURL);
-
-        // const arr = new Uint8Array(response.data);
-        // console.log(arr);
-        // const file = new Blob([arr], { type: "application/pdf" });
-        // console.log(file);
-        // const fileURL = URL.createObjectURL(file);
-        // window.open(fileURL);
-        // new File([response.data], fileName);
-        console.log(response.data);
       });
   };
 
@@ -193,7 +185,10 @@ export const Reports = () => {
             <Col sm="3"></Col>
           </FormGroup>
         </Card.Footer>
+        <a href={fileURL}>kkkkk</a>
       </Card>
+      {/* ReactDOM.render(
+      <PDFView filePath={fileURL} />, mountNode); */}
     </div>
   );
 };
