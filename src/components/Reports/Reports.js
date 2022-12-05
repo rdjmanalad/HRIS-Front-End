@@ -4,7 +4,6 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import axios from "axios";
-import PdfReport from "./sample.pdf";
 // import { PDFView } from "react.pdf.stream";
 import {
   Card,
@@ -16,6 +15,8 @@ import {
   Button,
   Form,
   Container,
+  Modal,
+  FormSelect,
 } from "react-bootstrap";
 // import { jsPDF } from "jspdf-react";
 
@@ -24,6 +25,19 @@ export const Reports = () => {
   const [report, setReport] = useState([]);
   const [data, setData] = useState("");
   const [fileURL, setFileUrl] = useState("");
+  const [show, setShow] = useState(false);
+  const [bcode, setBcode] = useState([]);
+  const [ccode, setCcode] = useState([]);
+  const [gcode, setGcode] = useState([]);
+  const [disCcode, setDisCcode] = useState(true);
+  const [disBcode, setDisBcode] = useState(true);
+  const [disGcode, setDisGcode] = useState(true);
+
+  const agcRef = useRef();
+  const accRef = useRef();
+  const abcRef = useRef();
+  const payPeriodFromRef = useRef();
+  const payPeriodToRef = useRef();
 
   useEffect(() => {
     getData();
@@ -56,6 +70,73 @@ export const Reports = () => {
         setFileUrl(window.URL.createObjectURL(file));
         window.open(fileURL);
       });
+  };
+
+  const getDropDown = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get("http://localhost:8080/api/branches/bcode")
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log(data);
+        setBcode(data);
+      })
+      .catch((message) => {
+        alert(message);
+      });
+
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get("http://localhost:8080/api/company/ccode")
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log(data);
+        setCcode(data);
+      })
+      .catch((message) => {
+        alert(message);
+      });
+
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get("http://localhost:8080/api/group1/gcode")
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log(data);
+        setGcode(data);
+      })
+      .catch((message) => {
+        alert(message);
+      });
+
+    // axios.defaults.headers.common["Authorization"] =
+    //   "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    // axios
+    //   .get("http://localhost:8080/api/nature/listAll")
+    //   .then((response) => response.data)
+    //   .then((data) => {
+    //     // console.log(data);
+    //     setNature(data);
+    //   })
+    //   .catch((message) => {
+    //     alert(message);
+    //   });
+  };
+
+  const computeDates = () => {};
+
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
+
+  const showFilter = () => {
+    setShow(true);
   };
 
   const nameFormatter = (data, row) => {
@@ -168,9 +249,9 @@ export const Reports = () => {
               <Button
                 className="setButtonMargin"
                 variant="primary"
-                onClick={() => printReport()}
+                onClick={() => showFilter()}
               >
-                Print
+                Continue
               </Button>
             </Col>
             {/* <Col sm="3">
@@ -185,10 +266,194 @@ export const Reports = () => {
             <Col sm="3"></Col>
           </FormGroup>
         </Card.Footer>
-        <a href={fileURL}>kkkkk</a>
       </Card>
-      {/* ReactDOM.render(
-      <PDFView filePath={fileURL} />, mountNode); */}
+      <Modal
+        show={show}
+        onHide={handleClose}
+        dialogClassName="my-modal"
+        backdrop="static"
+      >
+        <Modal.Header closeButton className="border-dark bg-dark text-white">
+          <Modal.Title>Print By</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="border-dark bg-dark text-white">
+          <Card
+            style={{
+              maxWidth: "25rem",
+              minWidth: "25rem",
+              height: "auto",
+            }}
+            className={" border-dark bg-dark text-white"}
+          >
+            <Container>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Group Code
+                </FormLabel>
+                <Col>
+                  <FormSelect
+                    className="dropDownList"
+                    style={{ padding: "0px 0px 0px 5px" }}
+                    ref={agcRef}
+                    disabled={disGcode}
+                    // onChange={(event) =>
+                    //   (empData.ogroupCode = event.target.value)
+                    // }
+                  >
+                    <option></option>
+                    {gcode.map((code) => (
+                      <option value={code.groupCode} key={code.groupCode}>
+                        {code.groupCode} - {code.groupName}
+                      </option>
+                    ))}
+                  </FormSelect>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Company Code
+                </FormLabel>
+                <Col>
+                  <FormSelect
+                    className="dropDownList"
+                    style={{ padding: "0px 0px 0px 5px" }}
+                    ref={accRef}
+                    disabled={disCcode}
+                  >
+                    <option></option>
+                    {ccode.map((o, i) => (
+                      <option
+                        value={ccode[i].substring(0, ccode[i].indexOf(","))}
+                        key={ccode[i].substring(0, ccode[i].indexOf(","))}
+                      >
+                        {ccode[i].substring(0, ccode[i].indexOf(",")) +
+                          " - " +
+                          ccode[i].substring(ccode[i].indexOf(",") + 1)}
+                      </option>
+                    ))}
+                  </FormSelect>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Branch Code
+                </FormLabel>
+                <Col>
+                  <FormSelect
+                    className="dropDownList"
+                    style={{ padding: "0px 0px 0px 5px" }}
+                    ref={abcRef}
+                    disabled={disBcode}
+                    // onChange={(event) =>
+                    //   (empData.obranchCode = event.target.value)
+                    // }
+                  >
+                    <option></option>
+                    {bcode.map((o, i) => (
+                      <option
+                        value={bcode[i].substring(0, bcode[i].indexOf(","))}
+                        key={bcode[i].substring(0, bcode[i].indexOf(","))}
+                      >
+                        {bcode[i].substring(0, bcode[i].indexOf(",")) +
+                          " - " +
+                          bcode[i].substring(bcode[i].indexOf(",") + 1)}
+                      </option>
+                    ))}
+                  </FormSelect>
+                </Col>
+              </FormGroup>
+              <label className="separator"></label>
+              <FormGroup as={Row}>
+                <FormLabel column sm="4" className="noWrapText">
+                  Payroll Period From
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={payPeriodFromRef}
+                    className="inpHeightXs"
+                    type="date"
+                    onChange={(e) => computeDates(e)}
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <FormLabel column className="noWrapText" sm="4">
+                  Payroll Period To
+                </FormLabel>
+                <Col>
+                  <FormControl
+                    ref={payPeriodToRef}
+                    className="inpHeightXs"
+                    type="Date"
+                    disabled
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+            </Container>
+            {/* <Container>
+              {loading ? (
+                <ColorRing
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="blocks-loading"
+                  // wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
+                  wrapperStyle={{ margin: "auto" }}
+                  wrapperClass="blocks-wrapper, centerLoading"
+                  colors={[
+                    "#e15b64",
+                    "#f47e60",
+                    "#f8b26a",
+                    "#abbd81",
+                    "#849b87",
+                  ]}
+                />
+              ) : (
+                <BootstrapTable
+                  id="bsTable"
+                  // keyField="userId"
+                  keyField="employeeNo"
+                  data={loans}
+                  columns={columns}
+                  striped
+                  hover
+                  condensed
+                  pagination={paginationFactory({
+                    paginationSize: 3,
+                    hideSizePerPage: true,
+                    withFirstAndLast: true,
+                    sizePerPageList: [
+                      {
+                        text: "12",
+                        value: 10,
+                      },
+                      {
+                        text: "15",
+                        value: 20,
+                      },
+                    ],
+                  })}
+                  filter={filterFactory()}
+                  rowStyle={{ padding: "1px" }}
+                  rowClasses="empTableRow"
+                  headerClasses="empTableHeader"
+                  selectRow={selectRowProp}
+                  rowEvents={rowEvents}
+                  // rowEvents={ rowEvents }
+                ></BootstrapTable>
+              )}
+            </Container> */}
+          </Card>
+        </Modal.Body>
+        <Modal.Footer className={" border-dark bg-dark text-white"}>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Print
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
