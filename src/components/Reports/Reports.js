@@ -32,6 +32,8 @@ export const Reports = () => {
   const [disCcode, setDisCcode] = useState(true);
   const [disBcode, setDisBcode] = useState(true);
   const [disGcode, setDisGcode] = useState(true);
+  const [disPayPeriod, setDisPayPeriod] = useState(true);
+  const [repName, setRepName] = useState("");
 
   const agcRef = useRef();
   const accRef = useRef();
@@ -41,6 +43,7 @@ export const Reports = () => {
 
   useEffect(() => {
     getData();
+    getDropDown();
   }, []);
 
   const getData = () => {
@@ -53,22 +56,62 @@ export const Reports = () => {
     });
   };
 
+  // const printReport = () => {
+  //   alert(agcRef.current.value);
+  //   axios.defaults.headers.common["Authorization"] =
+  //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+  //   axios
+  //     .get("http://localhost:8080/api/reports/sample", {
+  //       headers: {
+  //         contentType: "application/json",
+  //         accept: "application/pdf",
+  //       },
+  //       responseType: "blob",
+  //       // responseType: "arraybuffer",
+  //     })
+  //     .then((response) => {
+  //       const file = new Blob([response.data], { type: "application/pdf" });
+  //       setFileUrl(window.URL.createObjectURL(file));
+  //       window.open(fileURL);
+  //       setShow(false);
+  //     });
+  // };
+
   const printReport = () => {
+    var codeFilter =
+      agcRef.current.value +
+      "" +
+      accRef.current.value +
+      "" +
+      abcRef.current.value;
+    var reportName = report.jrxml;
+    var printBy = report.reportName;
+
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/reports/sample", {
-        headers: {
-          contentType: "application/json",
-          accept: "application/pdf",
-        },
-        responseType: "blob",
-        // responseType: "arraybuffer",
-      })
+      .get(
+        "http://localhost:8080/api/reports/print/" +
+          reportName +
+          "/" +
+          codeFilter +
+          "/" +
+          printBy,
+        {
+          headers: {
+            contentType: "application/json",
+            accept: "application/pdf",
+          },
+          responseType: "blob",
+          // responseType: "arraybuffer",
+        }
+      )
       .then((response) => {
         const file = new Blob([response.data], { type: "application/pdf" });
-        setFileUrl(window.URL.createObjectURL(file));
-        window.open(fileURL);
+        // setFileUrl(window.URL.createObjectURL(file));
+        window.open(window.URL.createObjectURL(file));
+        setShow(false);
+        disableFields();
       });
   };
 
@@ -126,6 +169,13 @@ export const Reports = () => {
     //   });
   };
 
+  const disableFields = () => {
+    setDisBcode(true);
+    setDisCcode(true);
+    setDisGcode(true);
+    setDisPayPeriod(true);
+  };
+
   const computeDates = () => {};
 
   const handleClose = () => {
@@ -136,6 +186,15 @@ export const Reports = () => {
   };
 
   const showFilter = () => {
+    if (report.reportName === "By Actual Group") {
+      setDisGcode(false);
+    }
+    if (report.reportName === "By Actual Company") {
+      setDisCcode(false);
+    }
+    if (report.reportName === "By Actual Branch") {
+      setDisBcode(false);
+    }
     setShow(true);
   };
 
@@ -155,6 +214,7 @@ export const Reports = () => {
     clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       setReport(row);
+      console.log(row);
       return true;
     },
   };
@@ -371,6 +431,7 @@ export const Reports = () => {
                   <FormControl
                     ref={payPeriodFromRef}
                     className="inpHeightXs"
+                    disabled={disPayPeriod}
                     type="date"
                     onChange={(e) => computeDates(e)}
                   ></FormControl>
@@ -449,7 +510,7 @@ export const Reports = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={printReport}>
             Print
           </Button>
         </Modal.Footer>

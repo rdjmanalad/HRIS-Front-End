@@ -257,3 +257,7 @@ input[type="checkbox"] {
 .paddedLeft {
   padding-left: 20px;
 }
+
+.modal-content-custom {
+  max-width: 100% !important;
+}

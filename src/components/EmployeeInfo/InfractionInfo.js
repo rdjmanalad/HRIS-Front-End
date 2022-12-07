@@ -34,7 +34,7 @@ function InfractionInfo({ empNo }) {
 
   const saveInfra = (infrac) => {
     console.log(infrac);
-    // editInfraction(infrac);
+    editInfraction(infrac);
   };
 
   const saveNew = () => {
@@ -281,7 +281,7 @@ function InfractionInfo({ empNo }) {
                     </tr>
                   ) : (
                     infractions.map((infra) => (
-                      <tr key={infra.id}>
+                      <tr key={infra.id} style={{ verticalAlign: "middle" }}>
                         <td
                         // contentEditable="true"
                         // onBlur={(e) =>
@@ -303,20 +303,25 @@ function InfractionInfo({ empNo }) {
                         </td>
                         <td
                           contentEditable="true"
-                          // onChange={(e) => (infra.suspend = e.target.value)}
+                          onBlur={(event) =>
+                            (infra.suspend = event.target.textContent)
+                          }
                         >
                           {infra.suspend}
                         </td>
                         <td
                           contentEditable="true"
-                          onChange={(e) => (infra.infraction = e.target.value)}
+                          onBlur={(event) =>
+                            (infra.infraction = event.target.textContent)
+                          }
                         >
                           {infra.infraction}
                         </td>
                         <td
                           contentEditable="true"
-                          onChange={(e) => (infra.sanction = e.target.value)}
-                          onBlur={(e) => (infra.sanction = e.target.value)}
+                          onBlur={(event) =>
+                            (infra.sanction = event.target.textContent)
+                          }
                         >
                           {infra.sanction}
                         </td>

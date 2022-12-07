@@ -109,7 +109,6 @@ function PayrollInfo({ empData }) {
 
   const obj = [];
   const rows = [];
-  const [success, setSuccess] = useState(false);
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN", {
@@ -183,7 +182,6 @@ function PayrollInfo({ empData }) {
 
   const saveChanges = () => {
     setCheckData();
-    console.log(payroll);
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
@@ -198,13 +196,15 @@ function PayrollInfo({ empData }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          setSuccess(true);
-          // alert("Data Saved!");
+          saveEmp();
         }
       })
       .catch((message) => {
         alert(message);
       });
+  };
+
+  const saveEmp = () => {
     axios
       .post("http://localhost:8080/api/masemployeeSave", empData, {
         headers: {
@@ -217,14 +217,13 @@ function PayrollInfo({ empData }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          setSuccess(true);
-          // alert("Data Saved!");
+          // success = true;
+          alert("Data Saved!");
         }
       })
       .catch((message) => {
         alert(message);
       });
-    success ? alert("Data Saved") : alert("Error on Saving Data");
   };
 
   const formatCurrency = (val) => {

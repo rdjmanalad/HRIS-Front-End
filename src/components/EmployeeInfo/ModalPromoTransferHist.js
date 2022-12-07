@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Modal, Button, Table, ButtonGroup } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Table,
+  ButtonGroup,
+  FormControl,
+} from "react-bootstrap";
 
 function ModalPromoTransferHist({ empNo }) {
   const [show, setShow] = useState(false);
@@ -35,6 +41,60 @@ function ModalPromoTransferHist({ empNo }) {
         alert(message);
       });
   };
+
+  const savePayroll = (payroll) => {
+    // setCheckData();
+    console.log(payroll);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .post("http://localhost:8080/api/payroll/save", payroll, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          // setSuccess(true);
+          alert("Data Saved!");
+          getPayroll();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const deletePayroll = (delId) => {
+    axios
+      .delete("http://localhost:8080/api/payroll/delete/" + delId, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Delete Success!");
+          getPayroll();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  // const savePayroll = () => {};
+  // const deletePayroll = (id) => {
+  //   alert(id);
+  // };
   return (
     <div style={{ marginTop: "10px" }}>
       {/* <Button
@@ -56,6 +116,8 @@ function ModalPromoTransferHist({ empNo }) {
         onHide={handleClose}
         className="modal-xl"
         variant="dark"
+        centered
+        fullscreen
       >
         <Modal.Header closeButton className="border-dark bg-dark text-white">
           <Modal.Title>Promotions and Transfer History</Modal.Title>
@@ -87,6 +149,7 @@ function ModalPromoTransferHist({ empNo }) {
                   <th>Rank</th>
                   <th>Position</th>
                   <th>Remarks</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,30 +159,183 @@ function ModalPromoTransferHist({ empNo }) {
                   </tr>
                 ) : (
                   payrolls.map((payroll) => (
-                    <tr key={payroll.id}>
-                      <td>
-                        {new Date(payroll.datePrepare).toLocaleDateString(
+                    <tr key={payroll.id} style={{ verticalAlign: "middle" }}>
+                      <td
+                        style={{
+                          width: "100px",
+                        }}
+                      >
+                        <FormControl
+                          className="inpHeightXs"
+                          type="date"
+                          style={{
+                            margin: "0px",
+                            width: "100px",
+                            padding: "0px",
+                          }}
+                          // ref={transDateRef}
+                          defaultValue={new Date(
+                            payroll.datePrepare
+                          ).toLocaleDateString("en-CA")}
+                          onChange={(event) =>
+                            (payroll.datePrepare = event.target.value)
+                          }
+                        ></FormControl>
+                        {/* {new Date(payroll.datePrepare).toLocaleDateString(
                           "en-CA"
-                        )}
+                        )} */}
+                      </td>
+                      <td
+                        style={{
+                          width: "100px",
+                        }}
+                      >
+                        <FormControl
+                          className="inpHeightXs"
+                          type="date"
+                          style={{
+                            margin: "0px",
+                            width: "100px",
+                            padding: "0px",
+                          }}
+                          // ref={transDateRef}
+                          defaultValue={new Date(
+                            payroll.dateEffect
+                          ).toLocaleDateString("en-CA")}
+                          onChange={(event) =>
+                            (payroll.dateEffect = event.target.value)
+                          }
+                        ></FormControl>
+                        {/* {new Date(payroll.dateEffect).toLocaleDateString(
+                          "en-CA"
+                        )} */}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.ocompanyCode = event.target.textContent)
+                        }
+                      >
+                        {payroll.ocompanyCode}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.obranchCode = event.target.textContent)
+                        }
+                      >
+                        {payroll.obranchCode}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.acompanyCode = event.target.textContent)
+                        }
+                      >
+                        {payroll.acompanyCode}
+                      </td>
+                      <td
+                        style={{ verticalAlign: "middle" }}
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.abranchCode = event.target.textContent)
+                        }
+                      >
+                        {payroll.abranchCode}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.basic = event.target.textContent)
+                        }
+                      >
+                        {payroll.basic}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.ecola = event.target.textContent)
+                        }
+                      >
+                        {payroll.ecola}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.allowance1 = event.target.textContent)
+                        }
+                      >
+                        {payroll.allowance1}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.allowance2 = event.target.textContent)
+                        }
+                      >
+                        {payroll.allowance2}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.others = event.target.textContent)
+                        }
+                      >
+                        {payroll.others}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.nature = event.target.textContent)
+                        }
+                      >
+                        {payroll.nature}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.rank = event.target.textContent)
+                        }
+                      >
+                        {payroll.rank}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.workPosition = event.target.textContent)
+                        }
+                      >
+                        {payroll.workPosition}
+                      </td>
+                      <td
+                        contentEditable="true"
+                        onBlur={(event) =>
+                          (payroll.remarks = event.target.textContent)
+                        }
+                      >
+                        {payroll.remarks}
                       </td>
                       <td>
-                        {new Date(payroll.dateEffect).toLocaleDateString(
-                          "en-CA"
-                        )}
+                        <div className="centerDiv">
+                          <ButtonGroup>
+                            <Button
+                              size="sm"
+                              variant="warning"
+                              onClick={() => savePayroll(payroll)}
+                            >
+                              Save
+                            </Button>
+                            {"  "}
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              onClick={() => deletePayroll(payroll.id)}
+                            >
+                              Delete
+                            </Button>
+                          </ButtonGroup>
+                        </div>
                       </td>
-                      <td>{payroll.ocompanyCode}</td>
-                      <td>{payroll.obranchCode}</td>
-                      <td>{payroll.acompanyCode}</td>
-                      <td>{payroll.abranchCode}</td>
-                      <td>{payroll.basic}</td>
-                      <td>{payroll.ecola}</td>
-                      <td>{payroll.allowance1}</td>
-                      <td>{payroll.allowance2}</td>
-                      <td>{payroll.others}</td>
-                      <td>{payroll.nature}</td>
-                      <td>{payroll.rank}</td>
-                      <td>{payroll.workPosition}</td>
-                      <td>{payroll.remarks}</td>
                     </tr>
                   ))
                 )}
