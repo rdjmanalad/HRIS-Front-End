@@ -3,6 +3,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
+import { ColorRing } from "react-loader-spinner";
 import axios from "axios";
 // import { PDFView } from "react.pdf.stream";
 import {
@@ -34,6 +35,10 @@ export const Reports = () => {
   const [disGcode, setDisGcode] = useState(true);
   const [disPayPeriod, setDisPayPeriod] = useState(true);
   const [repName, setRepName] = useState("");
+  const [loading, setL] = useState(true);
+  const [employee, setEmployee] = useState([]);
+  const [selectedId, setId] = useState("");
+  const [byEmp, setByEmp] = useState(false);
 
   const agcRef = useRef();
   const accRef = useRef();
@@ -56,34 +61,36 @@ export const Reports = () => {
     });
   };
 
-  const printReport = () => {
-    alert(agcRef.current.value);
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-    axios
-      .get("http://localhost:8080/api/reports/sample", {
-        headers: {
-          contentType: "application/json",
-          accept: "application/pdf",
-        },
-        responseType: "blob",
-        // responseType: "arraybuffer",
-      })
-      .then((response) => {
-        const file = new Blob([response.data], { type: "application/pdf" });
-        setFileUrl(window.URL.createObjectURL(file));
-        window.open(fileURL);
-        setShow(false);
-      });
-  };
+  // const printReport = () => {
+  //   alert(agcRef.current.value);
+  //   axios.defaults.headers.common["Authorization"] =
+  //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+  //   axios
+  //     .get("http://localhost:8080/api/reports/sample", {
+  //       headers: {
+  //         contentType: "application/json",
+  //         accept: "application/pdf",
+  //       },
+  //       responseType: "blob",
+  //       // responseType: "arraybuffer",
+  //     })
+  //     .then((response) => {
+  //       const file = new Blob([response.data], { type: "application/pdf" });
+  //       setFileUrl(window.URL.createObjectURL(file));
+  //       window.open(fileURL);
+  //       setShow(false);
+  //     });
+  // };
 
-  const printReport1 = () => {
+  const printReport = () => {
     var codeFilter =
       agcRef.current.value +
       "" +
       accRef.current.value +
       "" +
-      abcRef.current.value;
+      abcRef.current.value +
+      "" +
+      selectedId;
     var reportName = report.jrxml;
     var printBy = report.reportName;
 
@@ -154,19 +161,17 @@ export const Reports = () => {
       .catch((message) => {
         alert(message);
       });
+  };
 
-    // axios.defaults.headers.common["Authorization"] =
-    //   "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-    // axios
-    //   .get("http://localhost:8080/api/nature/listAll")
-    //   .then((response) => response.data)
-    //   .then((data) => {
-    //     // console.log(data);
-    //     setNature(data);
-    //   })
-    //   .catch((message) => {
-    //     alert(message);
-    //   });
+  const getEmp = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios.get("http://localhost:8080/api/masemployees").then((response) => {
+      setEmployee(response.data);
+      setL(false);
+      console.log(response.data);
+    });
   };
 
   const disableFields = () => {
@@ -179,6 +184,7 @@ export const Reports = () => {
   const computeDates = () => {};
 
   const handleClose = () => {
+    setByEmp(false);
     setShow(false);
   };
   const handleShow = () => {
@@ -195,7 +201,29 @@ export const Reports = () => {
     if (report.reportName === "By Actual Branch") {
       setDisBcode(false);
     }
+    if (report.reportName === "By Employee") {
+      setByEmp(true);
+      getEmp();
+    }
     setShow(true);
+  };
+
+  const addZero = (empNo) => {
+    var empString = String(empNo);
+    var length = empString.length;
+    for (let i = length; i < 4; i++) {
+      empString = "0" + empString;
+    }
+    return empString;
+  };
+
+  const nameFormatterEmp = (data, row) => {
+    return (
+      <span>
+        {row.lastName}, {row.firstName}{" "}
+        <a style={{ color: "blue" }}>{addZero(row.employeeNo)}</a>
+      </span>
+    );
   };
 
   const nameFormatter = (data, row) => {
@@ -209,6 +237,20 @@ export const Reports = () => {
     return row.reportGroupCode + row.reportGroupName;
   }
 
+  const selectRowPropEmp = {
+    mode: "radio",
+    clickToSelect: true,
+    onSelect: (row, isSelect, rowIndex, e) => {
+      // setRowEmp(row);
+      setId(row.employeeNo);
+      return true;
+    },
+  };
+
+  function nameFilterFormatterEMP(cell, row) {
+    return row.lastName + row.firstName + addZero(row.employeeNo);
+  }
+
   const selectRowProp = {
     mode: "radio",
     clickToSelect: true,
@@ -218,6 +260,32 @@ export const Reports = () => {
       return true;
     },
   };
+
+  const columnsEmp = [
+    {
+      // dataField: "username",
+      dataField: "lastName",
+      formatter: nameFormatterEmp,
+      text: "Filter",
+      sort: true,
+      filterValue: (cell, row) => nameFilterFormatterEMP(cell, row),
+      filter: textFilter({
+        style: { padding: "1px" },
+        placeholder: "Name...",
+      }),
+    },
+    {
+      // dataField: "currentGroup",
+      dataField: "ogroupCode",
+      text: "Filter",
+      sort: true,
+      filter: textFilter({
+        style: { padding: "1px" },
+        placeholder: "Group...",
+      }),
+      style: { width: "75px", textAlign: "center" },
+    },
+  ];
 
   const columns = [
     {
@@ -451,59 +519,63 @@ export const Reports = () => {
                 </Col>
               </FormGroup>
             </Container>
-            {/* <Container>
-              {loading ? (
-                <ColorRing
-                  visible={true}
-                  height="80"
-                  width="80"
-                  ariaLabel="blocks-loading"
-                  // wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
-                  wrapperStyle={{ margin: "auto" }}
-                  wrapperClass="blocks-wrapper, centerLoading"
-                  colors={[
-                    "#e15b64",
-                    "#f47e60",
-                    "#f8b26a",
-                    "#abbd81",
-                    "#849b87",
-                  ]}
-                />
-              ) : (
-                <BootstrapTable
-                  id="bsTable"
-                  // keyField="userId"
-                  keyField="employeeNo"
-                  data={loans}
-                  columns={columns}
-                  striped
-                  hover
-                  condensed
-                  pagination={paginationFactory({
-                    paginationSize: 3,
-                    hideSizePerPage: true,
-                    withFirstAndLast: true,
-                    sizePerPageList: [
-                      {
-                        text: "12",
-                        value: 10,
-                      },
-                      {
-                        text: "15",
-                        value: 20,
-                      },
-                    ],
-                  })}
-                  filter={filterFactory()}
-                  rowStyle={{ padding: "1px" }}
-                  rowClasses="empTableRow"
-                  headerClasses="empTableHeader"
-                  selectRow={selectRowProp}
-                  rowEvents={rowEvents}
-                  // rowEvents={ rowEvents }
-                ></BootstrapTable>
-              )}
-            </Container> */}
+            {byEmp ? (
+              <Container>
+                {loading ? (
+                  <ColorRing
+                    visible={true}
+                    height="80"
+                    width="80"
+                    ariaLabel="blocks-loading"
+                    // wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
+                    wrapperStyle={{ margin: "auto" }}
+                    wrapperClass="blocks-wrapper, centerLoading"
+                    colors={[
+                      "#e15b64",
+                      "#f47e60",
+                      "#f8b26a",
+                      "#abbd81",
+                      "#849b87",
+                    ]}
+                  />
+                ) : (
+                  <BootstrapTable
+                    id="bsTable"
+                    // keyField="userId"
+                    keyField="employeeNo"
+                    data={employee}
+                    columns={columnsEmp}
+                    striped
+                    hover
+                    condensed
+                    pagination={paginationFactory({
+                      paginationSize: 3,
+                      hideSizePerPage: true,
+                      withFirstAndLast: true,
+                      sizePerPageList: [
+                        {
+                          text: "12",
+                          value: 5,
+                        },
+                        {
+                          text: "15",
+                          value: 10,
+                        },
+                      ],
+                    })}
+                    filter={filterFactory()}
+                    rowStyle={{ padding: "1px" }}
+                    rowClasses="empTableRow"
+                    headerClasses="empTableHeader"
+                    selectRow={selectRowPropEmp}
+                    // rowEvents={rowEvents}
+                    // rowEvents={ rowEvents }
+                  ></BootstrapTable>
+                )}
+              </Container>
+            ) : (
+              <a></a>
+            )}
           </Card>
         </Modal.Body>
         <Modal.Footer className={" border-dark bg-dark text-white"}>

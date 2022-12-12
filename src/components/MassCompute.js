@@ -119,6 +119,35 @@ export const MassCompute = () => {
       });
   };
 
+  const call13thMonthCompute = async () => {
+    var today = new Date().toLocaleDateString("en-CA");
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .post(
+        "http://localhost:8080/api/set13thMonth/" +
+          localStorage.getItem("userId") +
+          "/" +
+          today +
+          "/" +
+          localStorage.getItem("FilterValue")
+      )
+      .then((response) => {
+        setShowLoading(false);
+        console.log(response.data);
+        if (response.status === 200) {
+          // alert("Save Success!");
+          setMessage("SUCCESS");
+          setShowMsg(true);
+        } else {
+          // alert("Error on Mass Compute");
+          setMessage("ERROR");
+          setShowMsg(true);
+        }
+      });
+  };
+
   function savePeriod() {
     axios
       .post("http://localhost:8080/api/period/save", setArray, {
@@ -160,7 +189,7 @@ export const MassCompute = () => {
   };
 
   var addPadZero = (m) => {
-    return m.length > 1 ? m : "0" + m;
+    return m > 9 ? m : "0" + m;
   };
 
   var computeStartCutPeriod = () => {
@@ -216,18 +245,21 @@ export const MassCompute = () => {
       cutPeriodToRef.current.value = computeEndCutPeriod();
       // actualNumDaysCodeRef.current.value = eDay - 15;
     } else {
-      alert("invalid period");
-      payPeriodFromRef.current.value = "";
-      payPeriodToRef.current.value = "";
-      cutPeriodFromRef.current.value = "";
-      cutPeriodToRef.current.value = "";
+      // alert("invalid period");
+      // payPeriodFromRef.current.value = "";
+      // payPeriodToRef.current.value = "";
+      // cutPeriodFromRef.current.value = "";
+      // cutPeriodToRef.current.value = "";
       // actualNumDaysCodeRef.current.value = "";
+      payPeriodFromRef.current.value = date;
+      payPeriodToRef.current.value = date;
+      cutPeriodFromRef.current.value = date;
+      cutPeriodToRef.current.value = date;
     }
     filterValueRef.current.value = "Z";
   };
 
   const computeDates2 = (date) => {
-    // alert(date);
     if (date) {
       sDay = date.substr(8);
       month = date.substring(5, 7);
@@ -248,11 +280,15 @@ export const MassCompute = () => {
         cutPeriodToRef.current.value = computeEndCutPeriod();
         // actualNumDaysCodeRef.current.value = eDay - 15;
       } else {
-        alert("invalid period!");
-        payPeriodFromRef.current.value = "";
-        payPeriodToRef.current.value = "";
-        cutPeriodFromRef.current.value = "";
-        cutPeriodToRef.current.value = "";
+        // alert("invalid period!");
+        // payPeriodFromRef.current.value = "";
+        // payPeriodToRef.current.value = "";
+        // cutPeriodFromRef.current.value = "";
+        // cutPeriodToRef.current.value = "";
+        payPeriodFromRef.current.value = date;
+        payPeriodToRef.current.value = date;
+        cutPeriodFromRef.current.value = date;
+        cutPeriodToRef.current.value = date;
       }
       filterValueRef.current.value = "Z";
       // setDate(new Date(date));
@@ -277,19 +313,32 @@ export const MassCompute = () => {
   };
 
   const checkToggle = (e) => {
+    var today = new Date().toLocaleDateString("en-CA");
+    payPeriodFromRef.current.value = today;
+    payPeriodToRef.current.value = today;
+    cutPeriodFromRef.current.value = today;
+    cutPeriodToRef.current.value = today;
     e.target.checked
       ? (setArray.bonus13thRef = 1)
       : (setArray.bonus13thRef = 0);
   };
 
   const confirmComp = () => {
-    setAction("MASS COMPUTATION");
+    if (bonus13thRef.current.checked) {
+      setAction("COMPUTE 13TH MONTH PAY");
+    } else {
+      setAction("MASS COMPUTATION");
+    }
     setShowMod(true);
   };
 
   const handleClose = (continueCompute) => {
     if (continueCompute) {
-      callMassCompute();
+      if (bonus13thRef.current.checked) {
+        call13thMonthCompute();
+      } else {
+        callMassCompute();
+      }
       setShowLoading(true);
       setShowMod(false);
     } else {
@@ -369,9 +418,6 @@ export const MassCompute = () => {
                     className="inpHeightXs"
                     type="Date"
                     disabled
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -383,9 +429,6 @@ export const MassCompute = () => {
                   <FormControl
                     ref={actualNumDaysCodeRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
                   ></FormControl>
                 </Col>
               </FormGroup>

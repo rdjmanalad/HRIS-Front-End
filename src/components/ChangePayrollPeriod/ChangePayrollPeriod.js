@@ -124,7 +124,7 @@ export const ChangePayrollPeriod = () => {
   };
 
   var addPadZero = (m) => {
-    return m.length > 1 ? m : "0" + m;
+    return m > 9 ? m : "0" + m;
   };
 
   var computeStartCutPeriod = () => {
@@ -180,12 +180,16 @@ export const ChangePayrollPeriod = () => {
       cutPeriodToRef.current.value = computeEndCutPeriod();
       // actualNumDaysCodeRef.current.value = eDay - 15;
     } else {
-      alert("invalid period");
-      payPeriodFromRef.current.value = "";
-      payPeriodToRef.current.value = "";
-      cutPeriodFromRef.current.value = "";
-      cutPeriodToRef.current.value = "";
+      // alert("invalid period");
+      // payPeriodFromRef.current.value = "";
+      // payPeriodToRef.current.value = "";
+      // cutPeriodFromRef.current.value = "";
+      // cutPeriodToRef.current.value = "";
       // actualNumDaysCodeRef.current.value = "";
+      payPeriodFromRef.current.value = date;
+      payPeriodToRef.current.value = date;
+      cutPeriodFromRef.current.value = date;
+      cutPeriodToRef.current.value = date;
     }
   };
 
@@ -211,11 +215,15 @@ export const ChangePayrollPeriod = () => {
         cutPeriodToRef.current.value = computeEndCutPeriod();
         // actualNumDaysCodeRef.current.value = eDay - 15;
       } else {
-        alert("invalid period!");
-        payPeriodFromRef.current.value = "";
-        payPeriodToRef.current.value = "";
-        cutPeriodFromRef.current.value = "";
-        cutPeriodToRef.current.value = "";
+        // alert("invalid period!");
+        // payPeriodFromRef.current.value = "";
+        // payPeriodToRef.current.value = "";
+        // cutPeriodFromRef.current.value = "";
+        // cutPeriodToRef.current.value = "";
+        payPeriodFromRef.current.value = date;
+        payPeriodToRef.current.value = date;
+        cutPeriodFromRef.current.value = date;
+        cutPeriodToRef.current.value = date;
       }
       // setDate(new Date(date));
     }
