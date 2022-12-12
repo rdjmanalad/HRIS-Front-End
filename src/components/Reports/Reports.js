@@ -56,28 +56,28 @@ export const Reports = () => {
     });
   };
 
-  // const printReport = () => {
-  //   alert(agcRef.current.value);
-  //   axios.defaults.headers.common["Authorization"] =
-  //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-  //   axios
-  //     .get("http://localhost:8080/api/reports/sample", {
-  //       headers: {
-  //         contentType: "application/json",
-  //         accept: "application/pdf",
-  //       },
-  //       responseType: "blob",
-  //       // responseType: "arraybuffer",
-  //     })
-  //     .then((response) => {
-  //       const file = new Blob([response.data], { type: "application/pdf" });
-  //       setFileUrl(window.URL.createObjectURL(file));
-  //       window.open(fileURL);
-  //       setShow(false);
-  //     });
-  // };
-
   const printReport = () => {
+    alert(agcRef.current.value);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get("http://localhost:8080/api/reports/sample", {
+        headers: {
+          contentType: "application/json",
+          accept: "application/pdf",
+        },
+        responseType: "blob",
+        // responseType: "arraybuffer",
+      })
+      .then((response) => {
+        const file = new Blob([response.data], { type: "application/pdf" });
+        setFileUrl(window.URL.createObjectURL(file));
+        window.open(fileURL);
+        setShow(false);
+      });
+  };
+
+  const printReport1 = () => {
     var codeFilter =
       agcRef.current.value +
       "" +
