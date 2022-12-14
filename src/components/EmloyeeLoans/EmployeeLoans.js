@@ -1686,6 +1686,12 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setSSS.startDate = value;
                         sssSDRef.current.style.color = "blue";
+                        sssEDRef.current.value = addYears(
+                          sssSDRef.current.value,
+                          5
+                        );
+                        setSSS.endDate = addYears(sssSDRef.current.value, 5);
+                        sssEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
                   </Col>
@@ -1709,7 +1715,17 @@ export const EmployeeLoans = () => {
                           sssSDRef.current.value,
                           value
                         );
+                        setSSS.endDate = addYears(
+                          sssSDRef.current.value,
+                          value
+                        );
                         sssEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(sssCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("SSS");
+                        }
                       }}
                     >
                       <option></option>

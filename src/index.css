@@ -261,3 +261,11 @@ input[type="checkbox"] {
 .modal-content-custom {
   max-width: 100% !important;
 }
+
+input[type="date"]:disabled {
+  background: #8f8f8f;
+}
+
+select:disabled {
+  background: gray !important;
+}

@@ -34,6 +34,7 @@ export const Reports = () => {
   const [disBcode, setDisBcode] = useState(true);
   const [disGcode, setDisGcode] = useState(true);
   const [disPayPeriod, setDisPayPeriod] = useState(true);
+  const [disPeriod2, setDisPeriod2] = useState(true);
   const [repName, setRepName] = useState("");
   const [loading, setL] = useState(true);
   const [employee, setEmployee] = useState([]);
@@ -91,8 +92,15 @@ export const Reports = () => {
       abcRef.current.value +
       "" +
       selectedId;
+    var per1 = payPeriodFromRef.current.value
+      ? payPeriodFromRef.current.value
+      : new Date().toLocaleDateString("en-CA");
+    var per2 = payPeriodToRef.current.value
+      ? payPeriodToRef.current.value
+      : new Date().toLocaleDateString("en-CA");
     var reportName = report.jrxml;
     var printBy = report.reportName;
+    codeFilter = codeFilter ? codeFilter : " ";
 
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
@@ -103,7 +111,11 @@ export const Reports = () => {
           "/" +
           codeFilter +
           "/" +
-          printBy,
+          printBy +
+          "/" +
+          per1 +
+          "/" +
+          per2,
         {
           headers: {
             contentType: "application/json",
@@ -179,6 +191,8 @@ export const Reports = () => {
     setDisCcode(true);
     setDisGcode(true);
     setDisPayPeriod(true);
+    setDisPeriod2(true);
+    setByEmp(false);
   };
 
   const computeDates = () => {};
@@ -186,13 +200,24 @@ export const Reports = () => {
   const handleClose = () => {
     setByEmp(false);
     setShow(false);
+    setDisPayPeriod(true);
+    setDisPeriod2(true);
+    setDisCcode(true);
+    setDisBcode(true);
+    setDisGcode(true);
   };
   const handleShow = () => {
     setShow(true);
   };
 
   const showFilter = () => {
-    if (report.reportName === "By Actual Group") {
+    if (
+      report.reportName === "By Actual Group" ||
+      report.reportName === "Birthday List" ||
+      report.reportName === "Active Employee List" ||
+      report.reportName === "Employees Masterlist" ||
+      report.reportName === "Maternity List"
+    ) {
       setDisGcode(false);
     }
     if (report.reportName === "By Actual Company") {
@@ -204,6 +229,13 @@ export const Reports = () => {
     if (report.reportName === "By Employee") {
       setByEmp(true);
       getEmp();
+    }
+    if (
+      report.reportName === "Hiring List" ||
+      report.reportName === "Probationary List"
+    ) {
+      setDisPayPeriod(false);
+      setDisPeriod2(false);
     }
     setShow(true);
   };
@@ -422,6 +454,7 @@ export const Reports = () => {
                   <FormSelect
                     className="dropDownList"
                     style={{ padding: "0px 0px 0px 5px" }}
+                    autoFocus
                     ref={agcRef}
                     disabled={disGcode}
                     // onChange={(event) =>
@@ -446,6 +479,7 @@ export const Reports = () => {
                     className="dropDownList"
                     style={{ padding: "0px 0px 0px 5px" }}
                     ref={accRef}
+                    autoFocus
                     disabled={disCcode}
                   >
                     <option></option>
@@ -472,6 +506,7 @@ export const Reports = () => {
                     style={{ padding: "0px 0px 0px 5px" }}
                     ref={abcRef}
                     disabled={disBcode}
+                    autoFocus
                     // onChange={(event) =>
                     //   (empData.obranchCode = event.target.value)
                     // }
@@ -501,6 +536,7 @@ export const Reports = () => {
                     className="inpHeightXs"
                     disabled={disPayPeriod}
                     type="date"
+                    autoFocus
                     onChange={(e) => computeDates(e)}
                   ></FormControl>
                 </Col>
@@ -514,7 +550,7 @@ export const Reports = () => {
                     ref={payPeriodToRef}
                     className="inpHeightXs"
                     type="Date"
-                    disabled
+                    disabled={disPeriod2}
                   ></FormControl>
                 </Col>
               </FormGroup>
