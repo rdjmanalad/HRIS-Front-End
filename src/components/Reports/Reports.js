@@ -232,7 +232,8 @@ export const Reports = () => {
     }
     if (
       report.reportName === "Hiring List" ||
-      report.reportName === "Probationary List"
+      report.reportName === "Probationary List" ||
+      report.reportName === "Terminated List"
     ) {
       setDisPayPeriod(false);
       setDisPeriod2(false);
