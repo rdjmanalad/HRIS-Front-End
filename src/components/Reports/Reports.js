@@ -205,18 +205,23 @@ export const Reports = () => {
     setDisCcode(true);
     setDisBcode(true);
     setDisGcode(true);
+    setId("");
   };
   const handleShow = () => {
     setShow(true);
   };
 
   const showFilter = () => {
+    setId("");
     if (
       report.reportName === "By Actual Group" ||
       report.reportName === "Birthday List" ||
       report.reportName === "Active Employee List" ||
       report.reportName === "Employees Masterlist" ||
-      report.reportName === "Maternity List"
+      report.reportName === "Maternity List" ||
+      report.reportName === "Employees Information" ||
+      report.reportName === "Company Master File" ||
+      report.reportName === "Branch Master File"
     ) {
       setDisGcode(false);
     }
