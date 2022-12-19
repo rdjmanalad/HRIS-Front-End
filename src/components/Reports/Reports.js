@@ -127,8 +127,10 @@ export const Reports = () => {
       )
       .then((response) => {
         const file = new Blob([response.data], { type: "application/pdf" });
+        file.setName = "dd";
         // setFileUrl(window.URL.createObjectURL(file));
-        window.open(window.URL.createObjectURL(file));
+        var w = window.open(window.URL.createObjectURL(file));
+        w.document.title = "sample";
         setShow(false);
         disableFields();
       });
