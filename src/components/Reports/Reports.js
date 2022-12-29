@@ -100,6 +100,21 @@ export const Reports = () => {
       : new Date().toLocaleDateString("en-CA");
     var reportName = report.jrxml;
     var printBy = report.reportName;
+    if (report.reportGroupName === "Payslips") {
+      printBy = report.reportGroupName + " " + printBy;
+    }
+    if (
+      report.reportGroupName === "Payroll Summary" ||
+      report.reportGroupName === "SSS Contributions" ||
+      report.reportGroupName === "Philhealth Contributions" ||
+      report.reportGroupName === "Pagibig Contributions" ||
+      report.reportGroupName === "Coop Contributions" ||
+      report.reportGroupName === "Income Tax Report" ||
+      report.reportGroupName === "Payroll Register"
+    ) {
+      printBy = report.reportGroupName + " " + printBy;
+    }
+
     codeFilter = codeFilter ? codeFilter : " ";
 
     axios.defaults.headers.common["Authorization"] =
@@ -223,24 +238,45 @@ export const Reports = () => {
       report.reportName === "Maternity List" ||
       report.reportName === "Employees Information" ||
       report.reportName === "Company Master File" ||
-      report.reportName === "Branch Master File"
+      report.reportName === "Branch Master File" ||
+      report.reportName === "Payroll Deductions" ||
+      report.reportName === "Other Deductions"
     ) {
       setDisGcode(false);
     }
-    if (report.reportName === "By Actual Company") {
+    if (
+      report.reportName === "By Actual Company" ||
+      report.reportName === "By Original Company"
+    ) {
       setDisCcode(false);
     }
     if (report.reportName === "By Actual Branch") {
       setDisBcode(false);
     }
-    if (report.reportName === "By Employee") {
+    if (
+      report.reportName === "By Employee" ||
+      report.reportName === "Infraction Monitoring" ||
+      report.reportName === "Employee Status" ||
+      report.reportName === "Payroll Deductions"
+    ) {
       setByEmp(true);
       getEmp();
     }
     if (
       report.reportName === "Hiring List" ||
       report.reportName === "Probationary List" ||
-      report.reportName === "Terminated List"
+      report.reportName === "Terminated List" ||
+      report.reportName === "Infraction Monitoring" ||
+      report.reportGroupName === "Payslips" ||
+      report.reportGroupName === "Payroll Summary" ||
+      report.reportName === "Payroll Deductions" ||
+      report.reportName === "Other Deductions" ||
+      report.reportGroupName === "SSS Contributions" ||
+      report.reportGroupName === "Philhealth Contributions" ||
+      report.reportGroupName === "Pagibig Contributions" ||
+      report.reportGroupName === "Coop Contributions" ||
+      report.reportGroupName === "Income Tax Report" ||
+      report.reportGroupName === "Payroll Register"
     ) {
       setDisPayPeriod(false);
       setDisPeriod2(false);

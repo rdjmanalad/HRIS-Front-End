@@ -124,7 +124,12 @@ export const ChangePayrollPeriod = () => {
   };
 
   var addPadZero = (m) => {
-    return m > 9 ? m : "0" + m;
+    if (m) {
+      if (parseInt(m) < 10) {
+        return "0" + parseInt(m);
+      }
+    }
+    return m;
   };
 
   var computeStartCutPeriod = () => {
