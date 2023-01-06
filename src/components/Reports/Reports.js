@@ -116,6 +116,12 @@ export const Reports = () => {
     }
 
     codeFilter = codeFilter ? codeFilter : " ";
+    if (printBy === "Fake/Over Appraised") {
+      printBy = "Fake Over Appraised";
+    }
+    if (printBy === "CS/PS/MCS") {
+      printBy = "CS PS MCS";
+    }
 
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
@@ -240,13 +246,31 @@ export const Reports = () => {
       report.reportName === "Company Master File" ||
       report.reportName === "Branch Master File" ||
       report.reportName === "Payroll Deductions" ||
-      report.reportName === "Other Deductions"
+      report.reportName === "Other Deductions" ||
+      report.reportName === "Group Totals" ||
+      report.reportName === "Paid Loans" ||
+      report.reportName === "Unpaid Loans" ||
+      report.reportName === "SSS Loan By Actual Group" ||
+      report.reportName === "Pagibig Loan by Actual Group" ||
+      report.reportName === "Emergency Loan" ||
+      report.reportName === "Promisory Loan" ||
+      report.reportName === "Fake/Over Appraised" ||
+      report.reportName === "Storage Loan" ||
+      report.reportName === "Promisory Note" ||
+      report.reportName === "Lay Away Plan" ||
+      report.reportName === "St Peter Payment" ||
+      report.reportName === "Personal Loan" ||
+      report.reportName === "Life Insurance" ||
+      report.reportName === "CS/PS/MCS" ||
+      report.reportName === "HMO"
     ) {
       setDisGcode(false);
     }
     if (
       report.reportName === "By Actual Company" ||
-      report.reportName === "By Original Company"
+      report.reportName === "By Original Company" ||
+      report.reportName === "SSS Loan by Original Company" ||
+      report.reportName === "Pagibig Loan by Original Company"
     ) {
       setDisCcode(false);
     }
@@ -276,7 +300,8 @@ export const Reports = () => {
       report.reportGroupName === "Pagibig Contributions" ||
       report.reportGroupName === "Coop Contributions" ||
       report.reportGroupName === "Income Tax Report" ||
-      report.reportGroupName === "Payroll Register"
+      report.reportGroupName === "Payroll Register" ||
+      report.reportGroupName === "Loan Payment Report"
     ) {
       setDisPayPeriod(false);
       setDisPeriod2(false);
