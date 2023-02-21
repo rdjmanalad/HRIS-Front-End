@@ -83,6 +83,28 @@ export const Reports = () => {
   //     });
   // };
 
+  const printReportCheck = () => {
+    var codeFilter =
+      agcRef.current.value +
+      "" +
+      accRef.current.value +
+      "" +
+      abcRef.current.value +
+      "" +
+      selectedId;
+    var per1 = payPeriodFromRef.current.value
+      ? payPeriodFromRef.current.value
+      : new Date().toLocaleDateString("en-CA");
+    var per2 = payPeriodToRef.current.value
+      ? payPeriodToRef.current.value
+      : new Date().toLocaleDateString("en-CA");
+    if (report.reportGroupName === "Alpha List Report") {
+      callAlphaList(codeFilter, per1, per2);
+    } else {
+      printReport();
+    }
+  };
+
   const printReport = () => {
     var codeFilter =
       agcRef.current.value +
@@ -110,7 +132,9 @@ export const Reports = () => {
       report.reportGroupName === "Pagibig Contributions" ||
       report.reportGroupName === "Coop Contributions" ||
       report.reportGroupName === "Income Tax Report" ||
-      report.reportGroupName === "Payroll Register"
+      report.reportGroupName === "Payroll Register" ||
+      report.reportGroupName === "Year to Date Gross Summary" ||
+      report.reportGroupName === "Personel Action Form"
     ) {
       printBy = report.reportGroupName + " " + printBy;
     }
@@ -154,6 +178,25 @@ export const Reports = () => {
         w.document.title = "sample";
         setShow(false);
         disableFields();
+      });
+  };
+
+  const callAlphaList = (ccode, per1, per2) => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .post(
+        "http://localhost:8080/api/alphaList/" + ccode + "/" + per1 + "/" + per2
+      )
+      .then((response) => {
+        // setShowLoading(false);
+        if (response.status === 200) {
+          console.log("alphaList success");
+          printReport();
+        } else {
+          alert("Error on Alphalist generation");
+        }
       });
   };
 
@@ -262,7 +305,8 @@ export const Reports = () => {
       report.reportName === "Personal Loan" ||
       report.reportName === "Life Insurance" ||
       report.reportName === "CS/PS/MCS" ||
-      report.reportName === "HMO"
+      report.reportName === "HMO" ||
+      report.reportName === "Monthly"
     ) {
       setDisGcode(false);
     }
@@ -270,18 +314,23 @@ export const Reports = () => {
       report.reportName === "By Actual Company" ||
       report.reportName === "By Original Company" ||
       report.reportName === "SSS Loan by Original Company" ||
-      report.reportName === "Pagibig Loan by Original Company"
+      report.reportName === "Pagibig Loan by Original Company" ||
+      report.reportGroupName === "Alpha List Report"
     ) {
       setDisCcode(false);
     }
-    if (report.reportName === "By Actual Branch") {
+    if (
+      report.reportName === "By Actual Branch" ||
+      report.reportName === "By Original Branch"
+    ) {
       setDisBcode(false);
     }
     if (
       report.reportName === "By Employee" ||
       report.reportName === "Infraction Monitoring" ||
       report.reportName === "Employee Status" ||
-      report.reportName === "Payroll Deductions"
+      report.reportName === "Payroll Deductions" ||
+      report.reportName === "Loan Payment History"
     ) {
       setByEmp(true);
       getEmp();
@@ -301,7 +350,11 @@ export const Reports = () => {
       report.reportGroupName === "Coop Contributions" ||
       report.reportGroupName === "Income Tax Report" ||
       report.reportGroupName === "Payroll Register" ||
-      report.reportGroupName === "Loan Payment Report"
+      report.reportGroupName === "Loan Payment Report" ||
+      report.reportName === "Loan Payment History" ||
+      report.reportGroupName === "13th Month Report" ||
+      report.reportGroupName === "Year to Date Gross Summary" ||
+      report.reportGroupName === "Alpha List Report"
     ) {
       setDisPayPeriod(false);
       setDisPeriod2(false);
@@ -687,7 +740,7 @@ export const Reports = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={printReport}>
+          <Button variant="primary" onClick={printReportCheck}>
             Print
           </Button>
         </Modal.Footer>
