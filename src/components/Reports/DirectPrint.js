@@ -19,20 +19,19 @@ import {
   Modal,
   FormSelect,
 } from "react-bootstrap";
-// import { jsPDF } from "jspdf-react";
 
-export const Reports = () => {
+export const DirectPrint = () => {
   const [reports, setReports] = useState([]);
   const [report, setReport] = useState([]);
-  const [data, setData] = useState("");
-  const [fileURL, setFileUrl] = useState("");
-  const [show, setShow] = useState(false);
+  //   const [data, setData] = useState("");
+  //   const [fileURL, setFileUrl] = useState("");
+  const [show, setShow] = useState(true);
   const [bcode, setBcode] = useState([]);
   const [ccode, setCcode] = useState([]);
   const [gcode, setGcode] = useState([]);
   const [disCcode, setDisCcode] = useState(true);
   const [disBcode, setDisBcode] = useState(true);
-  const [disGcode, setDisGcode] = useState(true);
+  const [disGcode, setDisGcode] = useState(false);
   const [disPayPeriod, setDisPayPeriod] = useState(true);
   const [disPeriod2, setDisPeriod2] = useState(true);
   const [repName, setRepName] = useState("");
@@ -48,40 +47,8 @@ export const Reports = () => {
   const payPeriodToRef = useRef();
 
   useEffect(() => {
-    getData();
     getDropDown();
   }, []);
-
-  const getData = () => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-    axios.get("http://localhost:8080/api/reports").then((response) => {
-      setReports(response.data);
-      console.log(response.data);
-    });
-  };
-
-  // const printReport = () => {
-  //   alert(agcRef.current.value);
-  //   axios.defaults.headers.common["Authorization"] =
-  //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-  //   axios
-  //     .get("http://localhost:8080/api/reports/sample", {
-  //       headers: {
-  //         contentType: "application/json",
-  //         accept: "application/pdf",
-  //       },
-  //       responseType: "blob",
-  //       // responseType: "arraybuffer",
-  //     })
-  //     .then((response) => {
-  //       const file = new Blob([response.data], { type: "application/pdf" });
-  //       setFileUrl(window.URL.createObjectURL(file));
-  //       window.open(fileURL);
-  //       setShow(false);
-  //     });
-  // };
 
   const printReportCheck = () => {
     var codeFilter =
@@ -98,11 +65,7 @@ export const Reports = () => {
     var per2 = payPeriodToRef.current.value
       ? payPeriodToRef.current.value
       : new Date().toLocaleDateString("en-CA");
-    if (report.reportGroupName === "Alpha List Report") {
-      callAlphaList(codeFilter, per1, per2);
-    } else {
-      printReport();
-    }
+    printReport();
   };
 
   const printReport = () => {
@@ -120,35 +83,8 @@ export const Reports = () => {
     var per2 = payPeriodToRef.current.value
       ? payPeriodToRef.current.value
       : new Date().toLocaleDateString("en-CA");
-    var reportName = report.jrxml;
-    var printBy = report.reportName;
-    if (report.reportGroupName === "Payslips") {
-      printBy = report.reportGroupName + " " + printBy;
-    }
-    if (
-      report.reportGroupName === "Payroll Summary" ||
-      report.reportGroupName === "SSS Contributions" ||
-      report.reportGroupName === "Philhealth Contributions" ||
-      report.reportGroupName === "Pagibig Contributions" ||
-      report.reportGroupName === "Coop Contributions" ||
-      report.reportGroupName === "Income Tax Report" ||
-      report.reportGroupName === "Payroll Register" ||
-      report.reportGroupName === "Year to Date Gross Summary" ||
-      report.reportGroupName === "Year to Date Tax Summary" ||
-      report.reportGroupName === "Leave Credits" ||
-      report.reportGroupName === "Personel Action Form"
-    ) {
-      printBy = report.reportGroupName + " " + printBy;
-    }
-
-    codeFilter = codeFilter ? codeFilter : " ";
-    if (printBy === "Fake/Over Appraised") {
-      printBy = "Fake Over Appraised";
-    }
-    if (printBy === "CS/PS/MCS") {
-      printBy = "CS PS MCS";
-    }
-
+    var reportName = "LeaveCredits.jrxml";
+    var printBy = "Leave Credits By Group";
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
@@ -175,32 +111,13 @@ export const Reports = () => {
       .then((response) => {
         const file = new Blob([response.data], { type: "application/pdf" });
         file.setName = "dd";
-        // setFileUrl(window.URL.createObjectURL(file));
         var w = window.open(window.URL.createObjectURL(file));
         w.document.title = "sample";
         setShow(false);
         disableFields();
       });
   };
-
-  const callAlphaList = (ccode, per1, per2) => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-    axios
-      .post(
-        "http://localhost:8080/api/alphaList/" + ccode + "/" + per1 + "/" + per2
-      )
-      .then((response) => {
-        // setShowLoading(false);
-        if (response.status === 200) {
-          console.log("alphaList success");
-          printReport();
-        } else {
-          alert("Error on Alphalist generation");
-        }
-      });
-  };
+  const computeDates = () => {};
 
   const getDropDown = () => {
     axios.defaults.headers.common["Authorization"] =
@@ -262,9 +179,6 @@ export const Reports = () => {
     setDisPeriod2(true);
     setByEmp(false);
   };
-
-  const computeDates = () => {};
-
   const handleClose = () => {
     setByEmp(false);
     setShow(false);
@@ -276,93 +190,6 @@ export const Reports = () => {
     setId("");
   };
   const handleShow = () => {
-    setShow(true);
-  };
-
-  const showFilter = () => {
-    setId("");
-    if (
-      report.reportName === "By Actual Group" ||
-      report.reportName === "By Group" ||
-      report.reportName === "Birthday List" ||
-      report.reportName === "Active Employee List" ||
-      report.reportName === "Employees Masterlist" ||
-      report.reportName === "Maternity List" ||
-      report.reportName === "Employees Information" ||
-      report.reportName === "Company Master File" ||
-      report.reportName === "Branch Master File" ||
-      report.reportName === "Payroll Deductions" ||
-      report.reportName === "Other Deductions" ||
-      report.reportName === "Group Totals" ||
-      report.reportName === "Paid Loans" ||
-      report.reportName === "Unpaid Loans" ||
-      report.reportName === "SSS Loan By Actual Group" ||
-      report.reportName === "Pagibig Loan by Actual Group" ||
-      report.reportName === "Emergency Loan" ||
-      report.reportName === "Promisory Loan" ||
-      report.reportName === "Fake/Over Appraised" ||
-      report.reportName === "Storage Loan" ||
-      report.reportName === "Promisory Note" ||
-      report.reportName === "Lay Away Plan" ||
-      report.reportName === "St Peter Payment" ||
-      report.reportName === "Personal Loan" ||
-      report.reportName === "Life Insurance" ||
-      report.reportName === "CS/PS/MCS" ||
-      report.reportName === "HMO" ||
-      report.reportName === "Monthly"
-    ) {
-      setDisGcode(false);
-    }
-    if (
-      report.reportName === "By Actual Company" ||
-      report.reportName === "By Original Company" ||
-      report.reportName === "SSS Loan by Original Company" ||
-      report.reportName === "Pagibig Loan by Original Company" ||
-      report.reportGroupName === "Alpha List Report"
-    ) {
-      setDisCcode(false);
-    }
-    if (
-      report.reportName === "By Actual Branch" ||
-      report.reportName === "By Original Branch"
-    ) {
-      setDisBcode(false);
-    }
-    if (
-      report.reportName === "By Employee" ||
-      report.reportName === "Infraction Monitoring" ||
-      report.reportName === "Employee Status" ||
-      report.reportName === "Payroll Deductions" ||
-      report.reportName === "Loan Payment History"
-    ) {
-      setByEmp(true);
-      getEmp();
-    }
-    if (
-      report.reportName === "Hiring List" ||
-      report.reportName === "Probationary List" ||
-      report.reportName === "Terminated List" ||
-      report.reportName === "Infraction Monitoring" ||
-      report.reportGroupName === "Payslips" ||
-      report.reportGroupName === "Payroll Summary" ||
-      report.reportName === "Payroll Deductions" ||
-      report.reportName === "Other Deductions" ||
-      report.reportGroupName === "SSS Contributions" ||
-      report.reportGroupName === "Philhealth Contributions" ||
-      report.reportGroupName === "Pagibig Contributions" ||
-      report.reportGroupName === "Coop Contributions" ||
-      report.reportGroupName === "Income Tax Report" ||
-      report.reportGroupName === "Payroll Register" ||
-      report.reportGroupName === "Loan Payment Report" ||
-      report.reportName === "Loan Payment History" ||
-      report.reportGroupName === "13th Month Report" ||
-      report.reportGroupName === "Year to Date Gross Summary" ||
-      report.reportGroupName === "Year to Date Tax Summary" ||
-      report.reportGroupName === "Alpha List Report"
-    ) {
-      setDisPayPeriod(false);
-      setDisPeriod2(false);
-    }
     setShow(true);
   };
 
@@ -473,86 +300,7 @@ export const Reports = () => {
   ];
 
   return (
-    <div
-      style={{
-        marginTop: "15px",
-        marginBottom: "10px",
-        paddingBottom: "40px",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      <Card
-        className={" border-dark bg-dark text-white floatTop"}
-        style={{ width: "40rem" }}
-      >
-        <Card.Body>
-          <label className="asHeader" style={{ paddingLeft: "5px" }}>
-            PRINT REPORTS
-          </label>
-
-          <label className="separator"> </label>
-          <Container>
-            <BootstrapTable
-              id="bsTable"
-              // keyField="userId"
-              keyField="reportID"
-              data={reports}
-              columns={columns}
-              striped
-              hover
-              condensed
-              pagination={paginationFactory({
-                paginationSize: 3,
-                hideSizePerPage: true,
-                withFirstAndLast: true,
-                sizePerPageList: [
-                  {
-                    text: "12",
-                    value: 12,
-                  },
-                  {
-                    text: "15",
-                    value: 20,
-                  },
-                ],
-              })}
-              filter={filterFactory()}
-              rowStyle={{ padding: "1px" }}
-              rowClasses="empTableRow"
-              headerClasses="empTableHeader"
-              selectRow={selectRowProp}
-              // rowEvents={ rowEvents }
-            ></BootstrapTable>
-          </Container>
-
-          {/* <label className="separator"> </label>   */}
-        </Card.Body>
-        <Card.Footer>
-          <FormGroup as={Row}>
-            <Col sm="9"></Col>
-            <Col sm="2">
-              <Button
-                className="setButtonMargin"
-                variant="primary"
-                onClick={() => showFilter()}
-              >
-                Continue
-              </Button>
-            </Col>
-            {/* <Col sm="3">
-              <Button
-                className="setButtonMargin"
-                variant="danger"
-                onClick={() => deleteUser()}
-              >
-                Remove
-              </Button>
-            </Col> */}
-            <Col sm="3"></Col>
-          </FormGroup>
-        </Card.Footer>
-      </Card>
+    <div>
       <Modal
         show={show}
         onHide={handleClose}

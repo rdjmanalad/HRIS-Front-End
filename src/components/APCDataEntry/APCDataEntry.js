@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import axios from "axios";
 import {
   Card,
   FormControl,
@@ -7,9 +8,12 @@ import {
   Row,
   Col,
   Button,
+  FormSelect,
 } from "react-bootstrap";
 
 export const APCDataEntry = () => {
+  const [gcode, setGcode] = useState([]);
+
   const actGroupCodeRef = useRef();
   const bpiBranchCodeRef = useRef();
   const tranDateRef = useRef();
@@ -17,9 +21,68 @@ export const APCDataEntry = () => {
   const compCodeRef = useRef();
   const batchNoRef = useRef();
 
-  function newUser() {}
+  var setAPC = {
+    aGroupCode: "",
+    bpiBCode: "",
+    transDate: "",
+    compAcctNo: "",
+    compCode: "",
+    batchNo: "",
+  };
 
-  function deleteUser() {}
+  useEffect(() => {
+    getDropDown();
+  }, []);
+
+  const proceed = () => {
+    alert(setAPC.transDate);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get(
+        "http://localhost:8080/api/reports/apc/" +
+          setAPC.aGroupCode +
+          "/" +
+          setAPC.bpiBCode +
+          "/" +
+          setAPC.transDate +
+          "/" +
+          setAPC.compAcctNo +
+          "/" +
+          setAPC.compCode +
+          "/" +
+          setAPC.batchNo,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+          },
+          responseType: "blob",
+        }
+      )
+      .then((response) => {
+        const file = new Blob([response.data], { type: "application/pdf" });
+        var w = window.open(window.URL.createObjectURL(file));
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const getDropDown = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get("http://localhost:8080/api/group1/gcode")
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log(data);
+        setGcode(data);
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
 
   return (
     <div
@@ -44,13 +107,20 @@ export const APCDataEntry = () => {
               Actual Group Code
             </FormLabel>
             <Col>
-              <FormControl
+              <FormSelect
+                className="dropDownList"
+                style={{ padding: "0px 0px 0px 5px" }}
+                autoFocus
                 ref={actGroupCodeRef}
-                className="inpHeightXs"
-                // onChange={(event) =>
-                //   (empData.paddress = event.target.value)
-                // }
-              ></FormControl>
+                onChange={(event) => (setAPC.aGroupCode = event.target.value)}
+              >
+                <option></option>
+                {gcode.map((code) => (
+                  <option value={code.groupCode} key={code.groupCode}>
+                    {code.groupCode} - {code.groupName}
+                  </option>
+                ))}
+              </FormSelect>
             </Col>
           </FormGroup>
           <FormGroup as={Row}>
@@ -61,9 +131,7 @@ export const APCDataEntry = () => {
               <FormControl
                 ref={bpiBranchCodeRef}
                 className="inpHeightXs"
-                // onChange={(event) =>
-                //   (empData.paddress = event.target.value)
-                // }
+                onChange={(event) => (setAPC.bpiBCode = event.target.value)}
               ></FormControl>
             </Col>
           </FormGroup>
@@ -75,9 +143,8 @@ export const APCDataEntry = () => {
               <FormControl
                 ref={tranDateRef}
                 className="inpHeightXs"
-                // onChange={(event) =>
-                //   (empData.paddress = event.target.value)
-                // }
+                type="Date"
+                onChange={(event) => (setAPC.transDate = event.target.value)}
               ></FormControl>
             </Col>
           </FormGroup>
@@ -89,9 +156,7 @@ export const APCDataEntry = () => {
               <FormControl
                 ref={compAcctNoRef}
                 className="inpHeightXs"
-                // onChange={(event) =>
-                //   (empData.paddress = event.target.value)
-                // }
+                onChange={(event) => (setAPC.compAcctNo = event.target.value)}
               ></FormControl>
             </Col>
           </FormGroup>
@@ -103,9 +168,7 @@ export const APCDataEntry = () => {
               <FormControl
                 ref={compCodeRef}
                 className="inpHeightXs"
-                // onChange={(event) =>
-                //   (empData.paddress = event.target.value)
-                // }
+                onChange={(event) => (setAPC.compCode = event.target.value)}
               ></FormControl>
             </Col>
           </FormGroup>
@@ -117,35 +180,23 @@ export const APCDataEntry = () => {
               <FormControl
                 ref={batchNoRef}
                 className="inpHeightXs"
-                // onChange={(event) =>
-                //   (empData.paddress = event.target.value)
-                // }
+                onChange={(event) => (setAPC.batchNo = event.target.value)}
               ></FormControl>
             </Col>
           </FormGroup>
         </Card.Body>
         <Card.Footer>
           <FormGroup as={Row}>
-            <Col sm="3"></Col>
-            <Col sm="3">
+            <Col sm="8"></Col>
+            <Col sm="4">
               <Button
                 className="setButtonMargin"
                 variant="success"
-                onClick={() => newUser()}
+                onClick={() => proceed()}
               >
-                New
+                Proceed
               </Button>
             </Col>
-            <Col sm="3">
-              <Button
-                className="setButtonMargin"
-                variant="danger"
-                onClick={() => deleteUser()}
-              >
-                Remove
-              </Button>
-            </Col>
-            <Col sm="3"></Col>
           </FormGroup>
         </Card.Footer>
       </Card>

@@ -64,7 +64,9 @@ function NavigationBar() {
               <NavDropdown.Item href="EmployeeLoans">
                 Employee Loans
               </NavDropdown.Item>
-              <NavDropdown.Item>Employee Leaves</NavDropdown.Item>
+              <NavDropdown.Item href="DirectPrint">
+                Employee Leaves
+              </NavDropdown.Item>
               <NavDropdown.Item href="EmployersDeduction">
                 Employers Deduction
               </NavDropdown.Item>

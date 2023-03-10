@@ -359,6 +359,8 @@ export const EmployeeLoans = () => {
         }
 
         if (employee.loan[i].loanType === "HRM") {
+          console.log("HRM HERE");
+          console.log(numberFormat(loanArr[i].capital));
           setHrmI(i);
           setHrmA(employee.loan[i]);
           hmoSDRef.current.value = loanArr[i].startDate;
@@ -1868,10 +1870,10 @@ export const EmployeeLoans = () => {
                 </FormGroup>
                 <label className="separator3"></label>
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Pagibig Loan
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={pagSDRef}
                       className="inpHeightXs"
@@ -1885,8 +1887,58 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setPagibig.startDate = value;
                         pagSDRef.current.style.color = "blue";
+                        pagEDRef.current.value = addYears(
+                          pagSDRef.current.value,
+                          5
+                        );
+                        setPagibig.endDate = addYears(
+                          pagSDRef.current.value,
+                          5
+                        );
+                        pagEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    {/* <FormControl
+                      value="5"
+                      className="inpHeightXs"
+                    ></FormControl> */}
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        pagEDRef.current.value = addYears(
+                          pagSDRef.current.value,
+                          value
+                        );
+                        setPagibig.endDate = addYears(
+                          pagSDRef.current.value,
+                          value
+                        );
+                        pagEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(pagCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("PAGIBIG");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -2020,11 +2072,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########### ST PETER LOAN *housing* ############# */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     St. Peter Loan
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={spSDRef}
                       className="inpHeightXs"
@@ -2038,8 +2093,51 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setHousing.startDate = value;
                         spSDRef.current.style.color = "blue";
+                        spEDRef.current.value = addYears(
+                          spSDRef.current.value,
+                          5
+                        );
+                        setHousing.endDate = addYears(spSDRef.current.value, 5);
+                        spEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        spEDRef.current.value = addYears(
+                          spSDRef.current.value,
+                          value
+                        );
+                        setHousing.endDate = addYears(
+                          spSDRef.current.value,
+                          value
+                        );
+                        spEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(spCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("HOUSING");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -2171,11 +2269,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########## PROMISORY LOAN ########## */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Promisory Loan
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={plSDRef}
                       className="inpHeightXs"
@@ -2189,8 +2290,54 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setPromisory.startDate = value;
                         plSDRef.current.style.color = "blue";
+                        plEDRef.current.value = addYears(
+                          plSDRef.current.value,
+                          5
+                        );
+                        setPromisory.endDate = addYears(
+                          plSDRef.current.value,
+                          5
+                        );
+                        plEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        plEDRef.current.value = addYears(
+                          plSDRef.current.value,
+                          value
+                        );
+                        setPromisory.endDate = addYears(
+                          plSDRef.current.value,
+                          value
+                        );
+                        plEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(plCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("PROMISORY");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -2322,11 +2469,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########## EMERGENCY ############# */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Emergency
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={emerSDRef}
                       className="inpHeightXs"
@@ -2340,8 +2490,55 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setEmergency.startDate = value;
                         emerSDRef.current.style.color = "blue";
+                        emerEDRef.current.value = addYears(
+                          emerSDRef.current.value,
+                          5
+                        );
+                        setEmergency.endDate = addYears(
+                          emerSDRef.current.value,
+                          5
+                        );
+                        emerEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        emerEDRef.current.value = addYears(
+                          emerSDRef.current.value,
+                          value
+                        );
+                        setEmergency.endDate = addYears(
+                          emerSDRef.current.value,
+                          value
+                        );
+                        emerEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(
+                            removePesoComma(emerCapRef.current.value)
+                          ) > 0
+                        ) {
+                          reComputeLoan("EMERGENCY");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -2356,6 +2553,15 @@ export const EmployeeLoans = () => {
                       onChange={(event) => {
                         const { value } = event.target;
                         setEmergency.endDate = value;
+                        emerEDRef.current.style.color = "blue";
+                        emerEDRef.current.value = addYears(
+                          emerSDRef.current.value,
+                          5
+                        );
+                        setEmergency.endDate = addYears(
+                          emerSDRef.current.value,
+                          5
+                        );
                         emerEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
@@ -2473,11 +2679,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########### FAKE OVER ############ */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Fake / Over
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={foSDRef}
                       className="inpHeightXs"
@@ -2491,8 +2700,51 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setFake.startDate = value;
                         foSDRef.current.style.color = "blue";
+                        foEDRef.current.value = addYears(
+                          foSDRef.current.value,
+                          5
+                        );
+                        setFake.endDate = addYears(foSDRef.current.value, 5);
+                        foEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        foEDRef.current.value = addYears(
+                          foSDRef.current.value,
+                          value
+                        );
+                        setFake.endDate = addYears(
+                          foSDRef.current.value,
+                          value
+                        );
+                        foEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(foCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("FAKE");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -2623,12 +2875,16 @@ export const EmployeeLoans = () => {
                     </Button>
                   </Col>
                 </FormGroup>
+
                 <label className="separator3"></label>
+
+                {/* ########## STORAGE ########## */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Storage
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={storSDRef}
                       className="inpHeightXs"
@@ -2642,8 +2898,55 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setStorage.startDate = value;
                         storSDRef.current.style.color = "blue";
+                        storEDRef.current.value = addYears(
+                          storSDRef.current.value,
+                          5
+                        );
+                        setStorage.endDate = addYears(
+                          storSDRef.current.value,
+                          5
+                        );
+                        storEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        storEDRef.current.value = addYears(
+                          storSDRef.current.value,
+                          value
+                        );
+                        setStorage.endDate = addYears(
+                          storSDRef.current.value,
+                          value
+                        );
+                        storEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(
+                            removePesoComma(storCapRef.current.value)
+                          ) > 0
+                        ) {
+                          reComputeLoan("STORAGE");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -2775,11 +3078,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########## PROMISORY NOTE *calamity* ############*/}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Promisory Note
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={pnSDRef}
                       className="inpHeightXs"
@@ -2793,8 +3099,54 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setCalamity.startDate = value;
                         pnSDRef.current.style.color = "blue";
+                        pnEDRef.current.value = addYears(
+                          pnSDRef.current.value,
+                          5
+                        );
+                        setCalamity.endDate = addYears(
+                          pnSDRef.current.value,
+                          5
+                        );
+                        pnEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        pnEDRef.current.value = addYears(
+                          pnSDRef.current.value,
+                          value
+                        );
+                        setCalamity.endDate = addYears(
+                          pnSDRef.current.value,
+                          value
+                        );
+                        pnEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(pnCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("CALAMITY");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -2926,11 +3278,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########## LAY AWAY PLAN *coop*########### */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Lay Away Plan
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={lapSDRef}
                       className="inpHeightXs"
@@ -2944,8 +3299,51 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setCoop.startDate = value;
                         lapSDRef.current.style.color = "blue";
+                        lapEDRef.current.value = addYears(
+                          lapSDRef.current.value,
+                          5
+                        );
+                        setCoop.endDate = addYears(lapSDRef.current.value, 5);
+                        lapEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        lapEDRef.current.value = addYears(
+                          lapSDRef.current.value,
+                          value
+                        );
+                        setCoop.endDate = addYears(
+                          lapSDRef.current.value,
+                          value
+                        );
+                        lapEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(lapCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("COOP");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -3077,11 +3475,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########### PERSONAL ############# */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Personal
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={perSDRef}
                       className="inpHeightXs"
@@ -3095,8 +3496,54 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setPersonal.startDate = value;
                         perSDRef.current.style.color = "blue";
+                        perEDRef.current.value = addYears(
+                          perSDRef.current.value,
+                          5
+                        );
+                        setPersonal.endDate = addYears(
+                          perSDRef.current.value,
+                          5
+                        );
+                        perEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        perEDRef.current.value = addYears(
+                          perSDRef.current.value,
+                          value
+                        );
+                        setPersonal.endDate = addYears(
+                          perSDRef.current.value,
+                          value
+                        );
+                        perEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(perCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("PERSONAL");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -3228,11 +3675,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########## LIFE INSURANCE *other* ############ */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     Life Insurance
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={liSDRef}
                       className="inpHeightXs"
@@ -3246,8 +3696,55 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setOther.startDate = value;
                         liSDRef.current.style.color = "blue";
+                        liEDRef.current.value = addYears(
+                          liSDRef.current.value,
+                          5
+                        );
+                        setOther.endDate = addYears(liSDRef.current.value, 5);
+                        liEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    {/* <FormControl
+                      value="5"
+                      className="inpHeightXs"
+                    ></FormControl> */}
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        liEDRef.current.value = addYears(
+                          liSDRef.current.value,
+                          value
+                        );
+                        setOther.endDate = addYears(
+                          liSDRef.current.value,
+                          value
+                        );
+                        liEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(liCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("OTHER");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -3379,11 +3876,14 @@ export const EmployeeLoans = () => {
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########### HMO *HRM* ########### */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     HMO
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={hmoSDRef}
                       className="inpHeightXs"
@@ -3397,8 +3897,51 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setHRM.startDate = value;
                         hmoSDRef.current.style.color = "blue";
+                        hmoEDRef.current.value = addYears(
+                          hmoSDRef.current.value,
+                          5
+                        );
+                        setHRM.endDate = addYears(hmoSDRef.current.value, 5);
+                        hmoEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        hmoEDRef.current.value = addYears(
+                          hmoSDRef.current.value,
+                          value
+                        );
+                        setHRM.endDate = addYears(
+                          hmoSDRef.current.value,
+                          value
+                        );
+                        hmoEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(hmoCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("HRM");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl
@@ -3523,18 +4066,21 @@ export const EmployeeLoans = () => {
                     <Button
                       className="buttonLoanSave"
                       variant="success"
-                      onClick={() => save("COOP")}
+                      onClick={() => save("HRM")}
                     >
                       Save
                     </Button>
                   </Col>
                 </FormGroup>
                 <label className="separator3"></label>
+
+                {/* ########### CS/PS/MS *cash* ########### */}
+
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
+                  <FormLabel column sm="1" className="noWrapText">
                     CS/PS/MS
                   </FormLabel>
-                  <Col>
+                  <Col sm="2">
                     <FormControl
                       ref={cpmSDRef}
                       className="inpHeightXs"
@@ -3548,8 +4094,55 @@ export const EmployeeLoans = () => {
                         const { value } = event.target;
                         setCash.startDate = value;
                         cpmSDRef.current.style.color = "blue";
+                        cpmEDRef.current.value = addYears(
+                          cpmSDRef.current.value,
+                          5
+                        );
+                        setCash.endDate = addYears(cpmSDRef.current.value, 5);
+                        cpmEDRef.current.style.color = "blue";
                       }}
                     ></FormControl>
+                  </Col>
+                  <Col sm="1">
+                    {/* <FormControl
+                      value="5"
+                      className="inpHeightXs"
+                    ></FormControl> */}
+                    <Form.Select
+                      className="inpHeightXs"
+                      defaultValue={"5"}
+                      style={{
+                        padding: "0px 0px 0px 15px",
+                        fontSize: "14px",
+                        fontWeight: "bolder",
+                      }}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.style.color = "blue";
+                        cpmEDRef.current.value = addYears(
+                          cpmSDRef.current.value,
+                          value
+                        );
+                        setCash.endDate = addYears(
+                          cpmSDRef.current.value,
+                          value
+                        );
+                        cpmEDRef.current.style.color = "blue";
+                        if (
+                          parseFloat(removePesoComma(cpmCapRef.current.value)) >
+                          0
+                        ) {
+                          reComputeLoan("CASH");
+                        }
+                      }}
+                    >
+                      <option></option>
+                      {yearsPay.map((yr) => (
+                        <option value={yr} key={yr}>
+                          {yr}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                   <Col>
                     <FormControl

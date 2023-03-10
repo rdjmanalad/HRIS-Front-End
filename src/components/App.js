@@ -24,6 +24,7 @@ import { APCDataEntry } from "./APCDataEntry/APCDataEntry";
 import { BankUploadReport } from "./BankUploadReport/BankUploadReport";
 import { Reports } from "./Reports/Reports";
 import { MassCompute } from "./MassCompute";
+import { DirectPrint } from "./Reports/DirectPrint";
 
 function App() {
   if (window.sessionStorage.getItem("jwt") == null) {
@@ -96,6 +97,7 @@ function App() {
                     <Route path="/ListUsers" element={<ListUsers />} />
                     <Route path="/EmployeeList" element={<EmployeeList />} />
                     <Route path="/MassCompute" element={<MassCompute />} />
+                    <Route path="/DirectPrint" element={<DirectPrint />} />
                   </Routes>
                 </Col>
               </Row>
