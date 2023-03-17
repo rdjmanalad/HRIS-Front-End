@@ -381,6 +381,11 @@ export const PaySlipDataEntry = () => {
     );
   };
 
+  const launchTimeRecords = () => {
+    alert("launch");
+    window.open("http://localhost:3000/Reports");
+  };
+
   const nameFormatter = (data, row) => {
     return (
       <span>
@@ -2097,7 +2102,7 @@ export const PaySlipDataEntry = () => {
                     className="setButtonMargin"
                     style={{ width: "150px" }}
                     variant="info"
-                    // onClick={() => deleteUser()}
+                    onClick={() => launchTimeRecords()}
                   >
                     Time Records
                   </Button>

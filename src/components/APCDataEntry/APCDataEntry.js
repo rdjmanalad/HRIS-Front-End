@@ -35,7 +35,6 @@ export const APCDataEntry = () => {
   }, []);
 
   const proceed = () => {
-    alert(setAPC.transDate);
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios

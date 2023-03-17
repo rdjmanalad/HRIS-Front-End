@@ -85,6 +85,7 @@ export const DirectPrint = () => {
       : new Date().toLocaleDateString("en-CA");
     var reportName = "LeaveCredits.jrxml";
     var printBy = "Leave Credits By Group";
+
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
@@ -117,6 +118,7 @@ export const DirectPrint = () => {
         disableFields();
       });
   };
+
   const computeDates = () => {};
 
   const getDropDown = () => {
