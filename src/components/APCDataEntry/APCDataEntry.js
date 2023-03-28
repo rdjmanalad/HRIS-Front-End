@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -20,8 +21,13 @@ export const APCDataEntry = () => {
   const compAcctNoRef = useRef();
   const compCodeRef = useRef();
   const batchNoRef = useRef();
+  var [showSPA, setShowSPA] = useState(false);
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+  var warn = new Map();
+  const [apc, setA] = useState({});
 
-  var setAPC = {
+  const setAPC = {
     aGroupCode: "",
     bpiBCode: "",
     transDate: "",
@@ -30,11 +36,71 @@ export const APCDataEntry = () => {
     batchNo: "",
   };
 
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
   useEffect(() => {
     getDropDown();
   }, []);
 
+  const validate = () => {
+    setAPC.aGroupCode = actGroupCodeRef.current.value;
+    setAPC.bpiBCode = bpiBranchCodeRef.current.value;
+    setAPC.transDate = tranDateRef.current.value;
+    setAPC.compAcctNo = compAcctNoRef.current.value;
+    setAPC.compCode = compCodeRef.current.value;
+    setAPC.batchNo = batchNoRef.current.value;
+    var isOk = true;
+    if (setAPC.aGroupCode === "") {
+      isOk = false;
+      warn.set(1, "Please Choose a Group Code");
+    }
+    if (setAPC.bpiBCode === "") {
+      isOk = false;
+      warn.set(2, "Please Fill BPI Branch Code");
+    }
+    if (setAPC.transDate === "") {
+      isOk = false;
+      warn.set(3, "Please Choose/Fill Transaction Date");
+    }
+    if (setAPC.compAcctNo === "") {
+      isOk = false;
+      warn.set(4, "Please Fill Company Account No.");
+    }
+    if (setAPC.compCode === "") {
+      isOk = false;
+      warn.set(5, "Please Fill Company Code");
+    }
+    if (setAPC.batchNo === "") {
+      isOk = false;
+      warn.set(6, "Please Fill Batch No.");
+    }
+    if (isOk) {
+      print();
+    } else {
+      setMessage(
+        warn.get(1)
+          ? warn.get(1)
+          : warn.get(2)
+          ? warn.get(2)
+          : warn.get(3)
+          ? warn.get(3)
+          : warn.get(4)
+          ? warn.get(4)
+          : warn.get(5)
+          ? warn.get(5)
+          : warn.get(6)
+      );
+      setShowMsg(true);
+    }
+  };
+
   const proceed = () => {
+    validate();
+  };
+
+  const print = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
@@ -199,6 +265,7 @@ export const APCDataEntry = () => {
           </FormGroup>
         </Card.Footer>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 };

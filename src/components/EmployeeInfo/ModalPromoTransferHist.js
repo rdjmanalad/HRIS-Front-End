@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
+import ModalConfirm from "../ModalAlerts/ModalConfirm";
 import {
   Modal,
   Button,
@@ -11,9 +13,20 @@ import {
 function ModalPromoTransferHist({ empNo }) {
   const [show, setShow] = useState(false);
   const [payrolls, setPayrolls] = useState([]);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
+  var [showMod, setShowMod] = useState(false);
+  var [action, setAction] = useState("");
   var stringEmpno = String(empNo);
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+  const [rowId, setRowId] = useState("");
+
+  const handleCloseM = () => setShow(false);
+  const handleShowM = () => setShow(true);
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
 
   useEffect(() => {
     getPayroll();
@@ -60,7 +73,9 @@ function ModalPromoTransferHist({ empNo }) {
       .then((response) => {
         if (response.status === 200) {
           // setSuccess(true);
-          alert("Data Saved!");
+          // alert("Data Saved!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           getPayroll();
         }
       })
@@ -82,13 +97,30 @@ function ModalPromoTransferHist({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Delete Success!");
+          // alert("Delete Success!");
+          setMessage("Deleted Successfully");
+          setShowMsg(true);
           getPayroll();
         }
       })
       .catch((message) => {
         alert(message);
       });
+  };
+
+  const confirmDelete = (delId) => {
+    setAction("DELETE");
+    setRowId(delId);
+    setShowMod(true);
+  };
+
+  const handleClose = (deleteAtt) => {
+    if (deleteAtt) {
+      deletePayroll(rowId);
+      setShowMod(false);
+    } else {
+      setShowMod(false);
+    }
   };
 
   // const savePayroll = () => {};
@@ -107,13 +139,13 @@ function ModalPromoTransferHist({ empNo }) {
       <label
         className="asHeaderClicable"
         style={{ paddingLeft: "5px" }}
-        onClick={handleShow}
+        onClick={handleShowM}
       >
         Click to Show Promotions and Transfer History ▲
       </label>
       <Modal
         show={show}
-        onHide={handleClose}
+        onHide={handleCloseM}
         className="modal-xl"
         variant="dark"
         centered
@@ -329,7 +361,7 @@ function ModalPromoTransferHist({ empNo }) {
                             <Button
                               size="sm"
                               variant="danger"
-                              onClick={() => deletePayroll(payroll.id)}
+                              onClick={() => confirmDelete(payroll.id)}
                             >
                               Delete
                             </Button>
@@ -344,11 +376,15 @@ function ModalPromoTransferHist({ empNo }) {
           </div>
         </Modal.Body>
         <Modal.Footer className="border-dark bg-dark text-white">
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleCloseM}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
+      {showMod && (
+        <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
+      )}
     </div>
   );
 }

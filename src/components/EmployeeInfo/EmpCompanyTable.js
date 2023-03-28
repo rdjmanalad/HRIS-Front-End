@@ -3,6 +3,7 @@ import { Table, Button, ButtonGroup } from "react-bootstrap";
 import axios from "axios";
 import { useRef } from "react";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 
 function EmpCompanyTable({ empNo }) {
   const [empList, setEmpList] = useState([]);
@@ -12,7 +13,8 @@ function EmpCompanyTable({ empNo }) {
   const placeRef = useRef();
   const remarksRef = useRef();
   const [rowId, setRowId] = useState("");
-  // var rowId = 0;
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
   var [rem, setRem] = useState("");
@@ -26,6 +28,10 @@ function EmpCompanyTable({ empNo }) {
     endYear: "",
     place: "",
     remarks: "",
+  };
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
   };
 
   const getData = () => {
@@ -62,7 +68,9 @@ function EmpCompanyTable({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Delete Success!");
+          // alert("Delete Success!");
+          setMessage("Data Deleted");
+          setShowMsg(true);
           getData();
         }
       })
@@ -84,7 +92,9 @@ function EmpCompanyTable({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved Successfully!");
+          // alert("Saved Successfully!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           getData();
         }
       })
@@ -106,7 +116,9 @@ function EmpCompanyTable({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Edit Saved!");
+          // alert("Edit Saved!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           getData();
         }
       })
@@ -257,6 +269,7 @@ function EmpCompanyTable({ empNo }) {
           )}
         </tbody>
       </Table>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
       {showMod ? (
         <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
       ) : (

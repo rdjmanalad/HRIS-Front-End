@@ -40,6 +40,7 @@ export const Reports = () => {
   const [employee, setEmployee] = useState([]);
   const [selectedId, setId] = useState("");
   const [byEmp, setByEmp] = useState(false);
+  const [showL, setShowL] = useState(false);
 
   const agcRef = useRef();
   const accRef = useRef();
@@ -84,6 +85,7 @@ export const Reports = () => {
   // };
 
   const printReportCheck = () => {
+    var validParam = true;
     var codeFilter =
       agcRef.current.value +
       "" +
@@ -101,11 +103,41 @@ export const Reports = () => {
     if (report.reportGroupName === "Alpha List Report") {
       callAlphaList(codeFilter, per1, per2);
     } else {
-      printReport();
+      if (!disGcode) {
+        if (agcRef.current.value === "") {
+          alert("Please Enter Group Code");
+          validParam = false;
+        }
+      }
+      if (!disCcode) {
+        if (accRef.current.value === "") {
+          alert("Please Enter Company Code");
+          validParam = false;
+        }
+      }
+      if (!disBcode) {
+        if (abcRef.current.value === "") {
+          alert("Please Enter Branch Code");
+          validParam = false;
+        }
+      }
+      if (!disPayPeriod || !disPeriod2) {
+        if (
+          payPeriodFromRef.current.value === "" ||
+          payPeriodToRef.current.value === ""
+        ) {
+          alert("Please Enter Payroll date/s");
+          validParam = false;
+        }
+      }
+      if (validParam) {
+        printReport();
+      }
     }
   };
 
   const printReport = () => {
+    setShowL(true);
     var codeFilter =
       agcRef.current.value +
       "" +
@@ -178,8 +210,8 @@ export const Reports = () => {
         // setFileUrl(window.URL.createObjectURL(file));
         var w = window.open(window.URL.createObjectURL(file));
         w.document.title = "sample";
-        setShow(false);
-        disableFields();
+        setShowL(false);
+        // disableFields();
       });
   };
 
@@ -266,6 +298,7 @@ export const Reports = () => {
   const computeDates = () => {};
 
   const handleClose = () => {
+    disableFields();
     setByEmp(false);
     setShow(false);
     setDisPayPeriod(true);
@@ -275,6 +308,11 @@ export const Reports = () => {
     setDisGcode(true);
     setId("");
   };
+
+  const handleCloseLoading = () => {
+    setShowL(false);
+  };
+
   const handleShow = () => {
     setShow(true);
   };
@@ -748,6 +786,28 @@ export const Reports = () => {
             Print
           </Button>
         </Modal.Footer>
+      </Modal>
+      <Modal
+        show={showL}
+        onHide={handleCloseLoading}
+        dialogClassName="my-modal"
+        backdrop="static"
+      >
+        <Modal.Header closeButton className="border-dark bg-dark text-white">
+          <Modal.Title>Generating Report Please Wait...</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="border-dark bg-dark text-white">
+          <ColorRing
+            visible={true}
+            height="50"
+            width="80"
+            ariaLabel="blocks-loading"
+            // wrapperStyle={{ marginTop: "180px", marginLeft: "120px" }}
+            wrapperStyle={{ margin: "auto" }}
+            wrapperClass="blocks-wrapper, centerLoading"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        </Modal.Body>
       </Modal>
     </div>
   );

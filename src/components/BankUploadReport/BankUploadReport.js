@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -24,37 +25,49 @@ export const BankUploadReport = () => {
   var rptName = "";
   var rptType = "";
   var [showSPA, setShowSPA] = useState(false);
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+  const warn = new Map();
 
   useEffect(() => {
     getDropDown();
   }, []);
 
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
   function validate() {
     var isOk = true;
-    if (
-      compCodeRef.current.value === null ||
-      compCodeRef.current.value === ""
-    ) {
-      alert("invalid company code");
+    var msg = "";
+    if (compCodeRef.current.value === "") {
+      // alert("invalid company code");
+      warn.set(1, "Invalid company code");
+      msg = msg + "Invalid company code \n";
       isOk = false;
     }
     if (
-      sssRef.current.checked ||
-      pagibigRef.current.checked ||
-      philhealthRef.current.checked
+      !(
+        sssRef.current.checked ||
+        pagibigRef.current.checked ||
+        philhealthRef.current.checked
+      )
     ) {
-      isOk = true;
-    } else {
       isOk = false;
-      alert("Please Choose/Check Option box");
+      // alert("Please Choose/Check Option box");
+      warn.set(2, "Please choose a report type");
+      msg = msg + "Please choose a report type";
     }
     if (sdRef.current.value === "") {
-      alert("Please choose a date");
+      // alert("Please choose a date");
+      warn.set(3, "Please choose a date");
+      msg = msg + "Please choose a date";
       isOk = false;
     }
     if (philhealthRef.current.checked) {
       if (spaRef.current.value.length < 15) {
-        alert("SPA No. is less than 15 Characters");
+        setMessage("SPA No. is less than 15 Characters");
+        setShowMsg(true);
         isOk = false;
       }
     }
@@ -74,6 +87,11 @@ export const BankUploadReport = () => {
         rptType = "PHILHEALTH";
         proceed();
       }
+    } else {
+      setMessage(
+        warn.get(1) ? warn.get(1) : warn.get(2) ? warn.get(2) : warn.get(3)
+      );
+      setShowMsg(true);
     }
   }
 
@@ -301,6 +319,7 @@ export const BankUploadReport = () => {
           </FormGroup>
         </Card.Footer>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 };

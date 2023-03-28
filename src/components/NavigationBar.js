@@ -8,16 +8,34 @@ import "../css/navi.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { BsBoxArrowRight } from "react-icons/bs";
+import { useRef, useEffect, useState } from "react";
+import AutoLogout from "./AutoLogout";
 
 function NavigationBar() {
   const navi = useNavigate();
   const user = localStorage.getItem("user");
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   function logout() {
     localStorage.setItem("jwt", "");
     navi("");
     window.location.reload();
   }
+
+  function onLogout() {
+    localStorage.setItem("jwt", "");
+    navi("");
+    window.location.reload();
+  }
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+  const handleLogout = () => {
+    onLogout();
+    setIsLoggedIn(false);
+  };
+
   return (
     <Navbar bg="dark" variant="dark" expand="md">
       {/* <Container id="navbarContainer"> */}
@@ -149,6 +167,7 @@ function NavigationBar() {
         </Navbar.Collapse>
         {/* </Container> */}
       </div>
+      <AutoLogout onLogout={handleLogout} timeoutInHours={10} />
     </Navbar>
   );
 }

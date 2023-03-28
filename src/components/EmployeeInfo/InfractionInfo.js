@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
+import ModalConfirm from "../ModalAlerts/ModalConfirm";
 import {
   Card,
   Form,
@@ -13,6 +15,7 @@ import {
   Table,
   FormSelect,
 } from "react-bootstrap";
+import { render } from "@testing-library/react";
 
 function InfractionInfo({ empNo }) {
   const [infractions, setInfractions] = useState([]);
@@ -21,6 +24,16 @@ function InfractionInfo({ empNo }) {
   const suspesionRef = useRef();
   const infractionRef = useRef();
   const sanctionRef = useRef();
+  var [showSPA, setShowSPA] = useState(false);
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+  var [showMod, setShowMod] = useState(false);
+  var [action, setAction] = useState("");
+  const [rowId, setRowId] = useState("");
+  const [rndr, setRndr] = useState(false);
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
   var setArray = {
     id: "",
     employeeNo: "",
@@ -28,6 +41,10 @@ function InfractionInfo({ empNo }) {
     suspend: "",
     infraction: "",
     sanction: "",
+  };
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
   };
 
   const addNew = () => {};
@@ -38,13 +55,31 @@ function InfractionInfo({ empNo }) {
   };
 
   const saveNew = () => {
+    var isOk = true;
     setArray.employeeNo = addZero(empNo);
     setArray.transactDate = transDateRef.current.value;
     setArray.suspend = suspesionRef.current.value;
     setArray.infraction = infractionRef.current.value;
     setArray.sanction = sanctionRef.current.value;
     console.log(setArray);
-    saveInfraction();
+    if (setArray.employeeNo === "") {
+      setMessage("Choose Employee First");
+      isOk = false;
+    }
+    if (
+      setArray.transactDate === "" ||
+      setArray.suspend === "" ||
+      setArray.infraction === "" ||
+      setArray.sanction === ""
+    ) {
+      setMessage("Please Fill All Infraction Information Fields");
+      isOk = false;
+    }
+    if (isOk) {
+      saveInfraction();
+    } else {
+      setShowMsg(true);
+    }
   };
 
   const clearFields = () => {
@@ -57,6 +92,10 @@ function InfractionInfo({ empNo }) {
   useEffect(() => {
     getData();
   }, [empNo]);
+
+  useEffect(() => {
+    getData();
+  }, [rndr]);
 
   const getData = () => {
     axios
@@ -122,7 +161,9 @@ function InfractionInfo({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved Successfully!");
+          // alert("Saved Successfully!");
+          setMessage("Saved Successfully");
+          setShowMsg(true);
           getData();
           clearFields();
         }
@@ -130,6 +171,12 @@ function InfractionInfo({ empNo }) {
       .catch((message) => {
         alert(message);
       });
+  };
+
+  const confirmDelete = (delId) => {
+    setAction("DELETE");
+    setRowId(delId);
+    setShowMod(true);
   };
 
   const deleteInfra = (delId) => {
@@ -145,14 +192,27 @@ function InfractionInfo({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Delete Success!");
-          // clearFields();
+          // alert("Delete Success!");
+          setMessage("Deleted Successfully");
+          setShowMsg(true);
           getData();
+          clearFields();
+          setRndr(true);
+          forceUpdate();
         }
       })
       .catch((message) => {
         alert(message);
       });
+  };
+
+  const handleClose = (deleteAtt) => {
+    if (deleteAtt) {
+      deleteInfra(rowId);
+      setShowMod(false);
+    } else {
+      setShowMod(false);
+    }
   };
 
   return (
@@ -339,7 +399,7 @@ function InfractionInfo({ empNo }) {
                               <Button
                                 size="sm"
                                 variant="danger"
-                                onClick={() => deleteInfra(infra.id)}
+                                onClick={() => confirmDelete(infra.id)}
                               >
                                 Delete
                               </Button>
@@ -368,6 +428,10 @@ function InfractionInfo({ empNo }) {
           </div>
         </Card.Footer>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
+      {showMod && (
+        <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
+      )}
     </div>
   );
 }

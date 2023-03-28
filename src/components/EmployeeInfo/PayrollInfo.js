@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   Form,
@@ -13,7 +14,6 @@ import {
 } from "react-bootstrap";
 import ModalPromoTransferHist from "./ModalPromoTransferHist";
 import { useRef } from "react";
-import { setDefaultLocale } from "react-datepicker";
 
 const normalizeCurrency = (value) => {
   return value
@@ -27,6 +27,9 @@ function PayrollInfo({ empData }) {
   const [ccode, setCcode] = useState([]);
   const [gcode, setGcode] = useState([]);
   const [nature, setNature] = useState([]);
+
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
 
   const payroll = {
     employeeNo: "",
@@ -71,9 +74,6 @@ function PayrollInfo({ empData }) {
 
   useEffect(() => {
     getDropDown();
-    // ogcRef.current.value = empData.ogroupCode;
-    // occRef.current.value = empData.ocompanyCode;
-    // obcRef.current.value = empData.obranchCode;
   }, []);
 
   useEffect(() => {
@@ -107,8 +107,11 @@ function PayrollInfo({ empData }) {
     remarksRef.current.value = empData.remarks;
   }, [empData]);
 
-  const obj = [];
   const rows = [];
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN", {
@@ -218,7 +221,9 @@ function PayrollInfo({ empData }) {
       .then((response) => {
         if (response.status === 200) {
           // success = true;
-          alert("Data Saved!");
+          // alert("Data Saved!");
+          setMessage("Data Saved");
+          setShowMsg(true);
         }
       })
       .catch((message) => {
@@ -274,427 +279,434 @@ function PayrollInfo({ empData }) {
   };
 
   return (
-    <Card className={" border-dark bg-dark text-white"}>
-      <Card.Body>
-        <Form as={Row}>
-          <FormGroup as={Row}>
-            <FormGroup as={Col}>
-              <label className="asHeader">Original Company</label>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Group Code
-                </FormLabel>
-                <Col>
-                  <FormSelect
-                    className="dropDownList"
-                    style={{ padding: "0px 0px 0px 5px" }}
-                    ref={ogcRef}
-                    onChange={(event) =>
-                      (empData.ogroupCode = event.target.value)
-                    }
-                  >
-                    <option></option>
-                    {gcode.map((code) => (
-                      <option value={code.groupCode} key={code.groupCode}>
-                        {code.groupCode} - {code.groupName}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </Col>
+    <div>
+      <Card className={" border-dark bg-dark text-white"}>
+        <Card.Body>
+          <Form as={Row}>
+            <FormGroup as={Row}>
+              <FormGroup as={Col}>
+                <label className="asHeader">Original Company</label>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Group Code
+                  </FormLabel>
+                  <Col>
+                    <FormSelect
+                      className="dropDownList"
+                      style={{ padding: "0px 0px 0px 5px" }}
+                      ref={ogcRef}
+                      onChange={(event) =>
+                        (empData.ogroupCode = event.target.value)
+                      }
+                    >
+                      <option></option>
+                      {gcode.map((code) => (
+                        <option value={code.groupCode} key={code.groupCode}>
+                          {code.groupCode} - {code.groupName}
+                        </option>
+                      ))}
+                    </FormSelect>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Company Code
+                  </FormLabel>
+                  <Col>
+                    <FormSelect
+                      className="dropDownList"
+                      style={{ padding: "0px 0px 0px 5px" }}
+                      ref={occRef}
+                      onChange={(event) =>
+                        (empData.ocompanyCode = event.target.value)
+                      }
+                    >
+                      <option></option>
+                      {ccode.map((o, i) => (
+                        <option
+                          value={ccode[i].substring(0, ccode[i].indexOf(","))}
+                          key={ccode[i].substring(0, ccode[i].indexOf(","))}
+                        >
+                          {ccode[i].substring(0, ccode[i].indexOf(",")) +
+                            " - " +
+                            ccode[i].substring(ccode[i].indexOf(",") + 1)}
+                        </option>
+                      ))}
+                    </FormSelect>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Branch Code
+                  </FormLabel>
+                  <Col>
+                    <FormSelect
+                      className="dropDownList"
+                      style={{ padding: "0px 0px 0px 5px" }}
+                      ref={obcRef}
+                      onChange={(event) =>
+                        (empData.obranchCode = event.target.value)
+                      }
+                    >
+                      <option></option>
+                      {bcode.map((o, i) => (
+                        <option
+                          value={bcode[i].substring(0, bcode[i].indexOf(","))}
+                          key={bcode[i].substring(0, bcode[i].indexOf(","))}
+                        >
+                          {bcode[i].substring(0, bcode[i].indexOf(",")) +
+                            " - " +
+                            bcode[i].substring(bcode[i].indexOf(",") + 1)}
+                        </option>
+                      ))}
+                    </FormSelect>
+                  </Col>
+                </FormGroup>
               </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Company Code
-                </FormLabel>
-                <Col>
-                  <FormSelect
-                    className="dropDownList"
-                    style={{ padding: "0px 0px 0px 5px" }}
-                    ref={occRef}
-                    onChange={(event) =>
-                      (empData.ocompanyCode = event.target.value)
-                    }
-                  >
-                    <option></option>
-                    {ccode.map((o, i) => (
-                      <option
-                        value={ccode[i].substring(0, ccode[i].indexOf(","))}
-                        key={ccode[i].substring(0, ccode[i].indexOf(","))}
-                      >
-                        {ccode[i].substring(0, ccode[i].indexOf(",")) +
-                          " - " +
-                          ccode[i].substring(ccode[i].indexOf(",") + 1)}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Branch Code
-                </FormLabel>
-                <Col>
-                  <FormSelect
-                    className="dropDownList"
-                    style={{ padding: "0px 0px 0px 5px" }}
-                    ref={obcRef}
-                    onChange={(event) =>
-                      (empData.obranchCode = event.target.value)
-                    }
-                  >
-                    <option></option>
-                    {bcode.map((o, i) => (
-                      <option
-                        value={bcode[i].substring(0, bcode[i].indexOf(","))}
-                        key={bcode[i].substring(0, bcode[i].indexOf(","))}
-                      >
-                        {bcode[i].substring(0, bcode[i].indexOf(",")) +
-                          " - " +
-                          bcode[i].substring(bcode[i].indexOf(",") + 1)}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </Col>
+              <FormGroup as={Col} style={{ paddingRight: "0px" }}>
+                <label className="asHeader">Actual Company</label>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Group Code
+                  </FormLabel>
+                  <Col>
+                    <FormSelect
+                      className="dropDownList"
+                      style={{ padding: "0px 0px 0px 5px" }}
+                      ref={agcRef}
+                    >
+                      <option></option>
+                      {gcode.map((code, i) => (
+                        <option value={code.groupCode} key={code.groupCode}>
+                          {code.groupCode} - {code.groupName}
+                        </option>
+                      ))}
+                    </FormSelect>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Company Code
+                  </FormLabel>
+                  <Col>
+                    <FormSelect
+                      className="dropDownList"
+                      style={{ padding: "0px 0px 0px 5px" }}
+                      ref={accRef}
+                    >
+                      <option></option>
+                      {ccode.map((o, i) => (
+                        <option
+                          value={ccode[i].substring(0, ccode[i].indexOf(","))}
+                          key={ccode[i].substring(0, ccode[i].indexOf(","))}
+                        >
+                          {ccode[i].substring(0, ccode[i].indexOf(",")) +
+                            " - " +
+                            ccode[i].substring(ccode[i].indexOf(",") + 1)}
+                        </option>
+                      ))}
+                    </FormSelect>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Branch Code
+                  </FormLabel>
+                  <Col>
+                    <FormSelect
+                      className="dropDownList"
+                      style={{ padding: "0px 0px 0px 5px" }}
+                      ref={abcRef}
+                    >
+                      <option></option>
+                      {bcode.map((o, i) => (
+                        <option
+                          value={bcode[i].substring(0, bcode[i].indexOf(","))}
+                          key={bcode[i].substring(0, bcode[i].indexOf(","))}
+                        >
+                          {bcode[i].substring(0, bcode[i].indexOf(",")) +
+                            " - " +
+                            bcode[i].substring(bcode[i].indexOf(",") + 1)}
+                        </option>
+                      ))}
+                    </FormSelect>
+                  </Col>
+                </FormGroup>
               </FormGroup>
             </FormGroup>
-            <FormGroup as={Col} style={{ paddingRight: "0px" }}>
-              <label className="asHeader">Actual Company</label>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Group Code
-                </FormLabel>
-                <Col>
-                  <FormSelect
-                    className="dropDownList"
-                    style={{ padding: "0px 0px 0px 5px" }}
-                    ref={agcRef}
-                  >
-                    <option></option>
-                    {gcode.map((code, i) => (
-                      <option value={code.groupCode} key={code.groupCode}>
-                        {code.groupCode} - {code.groupName}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </Col>
+            <FormGroup as={Row}>
+              <label
+                className="asHeader"
+                style={{
+                  marginTop: "5px",
+                  marginLeft: "6px",
+                  marginRight: "0px",
+                }}
+              >
+                Present Payroll Information
+              </label>
+              <FormGroup as={Col}>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Prepare Date
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      ref={datePrepareRef}
+                      className={"inpHeightXs"}
+                      type="date"
+                      onChange={(event) =>
+                        (payroll.datePrepare = event.target.value)
+                      }
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Date Effect
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      ref={dateEffectRef}
+                      className={"inpHeightXs"}
+                      type="date"
+                      onChange={(event) =>
+                        (payroll.dateEffect = new Date(
+                          event.target.value
+                        ).toLocaleDateString("en-CA"))
+                      }
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Rank/Level
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs"
+                      // value={empData.rank}
+                      ref={rankRef}
+                      onChange={(event) => (payroll.rank = event.target.value)}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Tax Code
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs"
+                      // value={empData.taxCode}
+                      ref={taxRef}
+                      onChange={(event) => (payroll.tax = event.target.value)}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Exemption
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs currency"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                      }}
+                      onBlur={(event) => {
+                        exemptionRef.current.value = checkChange(
+                          exemptionRef.current.value,
+                          empData.exemption
+                        );
+                      }}
+                      ref={exemptionRef}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
               </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Company Code
-                </FormLabel>
-                <Col>
-                  <FormSelect
-                    className="dropDownList"
-                    style={{ padding: "0px 0px 0px 5px" }}
-                    ref={accRef}
-                  >
-                    <option></option>
-                    {ccode.map((o, i) => (
-                      <option
-                        value={ccode[i].substring(0, ccode[i].indexOf(","))}
-                        key={ccode[i].substring(0, ccode[i].indexOf(","))}
-                      >
-                        {ccode[i].substring(0, ccode[i].indexOf(",")) +
-                          " - " +
-                          ccode[i].substring(ccode[i].indexOf(",") + 1)}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </Col>
+              {/* new column   ################################## */}
+              <FormGroup as={Col} style={{ paddingRight: "0px" }}>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Basic Pay
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs currency"
+                      ref={basicRef}
+                      // value={empData.basicPay}
+                      inputMode="numeric"
+                      autoComplete="cc-number"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                      }}
+                      onBlur={(event) => {
+                        basicRef.current.value = checkChange(
+                          basicRef.current.value,
+                          empData.basicPay
+                        );
+                      }}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText ">
+                    E-COLA
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs currency"
+                      inputMode="numeric"
+                      autoComplete="cc-number"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                      }}
+                      onBlur={(event) => {
+                        ecolaRef.current.value = checkChange(
+                          ecolaRef.current.value,
+                          empData.cola
+                        );
+                      }}
+                      ref={ecolaRef}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Allow1-Meal
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs currency"
+                      inputMode="numeric"
+                      autoComplete="cc-number"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                      }}
+                      onBlur={(event) => {
+                        allow1Ref.current.value = checkChange(
+                          allow1Ref.current.value,
+                          empData.allowance1
+                        );
+                      }}
+                      ref={allow1Ref}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Allow2-Night
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs currency"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCurrency(value);
+                      }}
+                      onBlur={(event) => {
+                        allow2Ref.current.value = checkChange(
+                          allow2Ref.current.value,
+                          empData.allowance2
+                        );
+                      }}
+                      ref={allow2Ref}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Coop Contr.
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs"
+                      ref={coopRef}
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
               </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Branch Code
-                </FormLabel>
-                <Col>
-                  <FormSelect
-                    className="dropDownList"
-                    style={{ padding: "0px 0px 0px 5px" }}
-                    ref={abcRef}
-                  >
-                    <option></option>
-                    {bcode.map((o, i) => (
-                      <option
-                        value={bcode[i].substring(0, bcode[i].indexOf(","))}
-                        key={bcode[i].substring(0, bcode[i].indexOf(","))}
-                      >
-                        {bcode[i].substring(0, bcode[i].indexOf(",")) +
-                          " - " +
-                          bcode[i].substring(bcode[i].indexOf(",") + 1)}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </Col>
+              {/* new column   ################################## */}
+              <FormGroup as={Col} style={{ paddingRight: "0px" }}>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Job Position
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      className="inpHeightXs"
+                      ref={jobRef}
+                      onChange={(event) =>
+                        (payroll.workPosition = event.target.value)
+                      }
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Act. Nature
+                  </FormLabel>
+                  <Col>
+                    <FormSelect
+                      className="dropDownList"
+                      style={{ padding: "0px 0px 0px 5px" }}
+                      ref={natureRef}
+                      onChange={(event) =>
+                        (empData.nature = event.target.value)
+                      }
+                    >
+                      <option></option>
+                      {nature.map((code) => (
+                        <option value={code.natureName} key={code.id}>
+                          {code.id} - {code.natureName}
+                        </option>
+                      ))}
+                    </FormSelect>
+                  </Col>
+                </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Remarks
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      as="textarea"
+                      rows={2}
+                      className="inpHeightXs"
+                      style={{ height: "60px" }}
+                      ref={remarksRef}
+                      onChange={(event) =>
+                        (payroll.remarks = event.target.value)
+                      }
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
               </FormGroup>
             </FormGroup>
-          </FormGroup>
-          <FormGroup as={Row}>
-            <label
-              className="asHeader"
-              style={{
-                marginTop: "5px",
-                marginLeft: "6px",
-                marginRight: "0px",
-              }}
+          </Form>
+          <ModalPromoTransferHist empNo={empData.employeeNo} />
+        </Card.Body>
+        <Card.Footer>
+          <div></div>
+          <div style={{ display: "grid" }}>
+            <button
+              type="submit"
+              className="btn btn-success btn-md buttonRight"
+              style={{ width: "80px", "margin-top": "5px" }}
+              onClick={() => saveChanges()}
             >
-              Present Payroll Information
-            </label>
-            <FormGroup as={Col}>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Prepare Date
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    ref={datePrepareRef}
-                    className={"inpHeightXs"}
-                    type="date"
-                    onChange={(event) =>
-                      (payroll.datePrepare = event.target.value)
-                    }
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Date Effect
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    ref={dateEffectRef}
-                    className={"inpHeightXs"}
-                    type="date"
-                    onChange={(event) =>
-                      (payroll.dateEffect = new Date(
-                        event.target.value
-                      ).toLocaleDateString("en-CA"))
-                    }
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Rank/Level
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs"
-                    // value={empData.rank}
-                    ref={rankRef}
-                    onChange={(event) => (payroll.rank = event.target.value)}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Tax Code
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs"
-                    // value={empData.taxCode}
-                    ref={taxRef}
-                    onChange={(event) => (payroll.tax = event.target.value)}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Exemption
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs currency"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      event.target.value = normalizeCurrency(value);
-                    }}
-                    onBlur={(event) => {
-                      exemptionRef.current.value = checkChange(
-                        exemptionRef.current.value,
-                        empData.exemption
-                      );
-                    }}
-                    ref={exemptionRef}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-            </FormGroup>
-            {/* new column   ################################## */}
-            <FormGroup as={Col} style={{ paddingRight: "0px" }}>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Basic Pay
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs currency"
-                    ref={basicRef}
-                    // value={empData.basicPay}
-                    inputMode="numeric"
-                    autoComplete="cc-number"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      event.target.value = normalizeCurrency(value);
-                    }}
-                    onBlur={(event) => {
-                      basicRef.current.value = checkChange(
-                        basicRef.current.value,
-                        empData.basicPay
-                      );
-                    }}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText ">
-                  E-COLA
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs currency"
-                    inputMode="numeric"
-                    autoComplete="cc-number"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      event.target.value = normalizeCurrency(value);
-                    }}
-                    onBlur={(event) => {
-                      ecolaRef.current.value = checkChange(
-                        ecolaRef.current.value,
-                        empData.cola
-                      );
-                    }}
-                    ref={ecolaRef}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Allow1-Meal
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs currency"
-                    inputMode="numeric"
-                    autoComplete="cc-number"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      event.target.value = normalizeCurrency(value);
-                    }}
-                    onBlur={(event) => {
-                      allow1Ref.current.value = checkChange(
-                        allow1Ref.current.value,
-                        empData.allowance1
-                      );
-                    }}
-                    ref={allow1Ref}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Allow2-Night
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs currency"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      event.target.value = normalizeCurrency(value);
-                    }}
-                    onBlur={(event) => {
-                      allow2Ref.current.value = checkChange(
-                        allow2Ref.current.value,
-                        empData.allowance2
-                      );
-                    }}
-                    ref={allow2Ref}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Coop Contr.
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs"
-                    ref={coopRef}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-            </FormGroup>
-            {/* new column   ################################## */}
-            <FormGroup as={Col} style={{ paddingRight: "0px" }}>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Job Position
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    className="inpHeightXs"
-                    ref={jobRef}
-                    onChange={(event) =>
-                      (payroll.workPosition = event.target.value)
-                    }
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Act. Nature
-                </FormLabel>
-                <Col>
-                  <FormSelect
-                    className="dropDownList"
-                    style={{ padding: "0px 0px 0px 5px" }}
-                    ref={natureRef}
-                    onChange={(event) => (empData.nature = event.target.value)}
-                  >
-                    <option></option>
-                    {nature.map((code) => (
-                      <option value={code.natureName} key={code.id}>
-                        {code.id} - {code.natureName}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="3" className="noWrapText">
-                  Remarks
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    as="textarea"
-                    rows={2}
-                    className="inpHeightXs"
-                    style={{ height: "60px" }}
-                    ref={remarksRef}
-                    onChange={(event) => (payroll.remarks = event.target.value)}
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-            </FormGroup>
-          </FormGroup>
-        </Form>
-        <ModalPromoTransferHist empNo={empData.employeeNo} />
-      </Card.Body>
-      <Card.Footer>
-        <div></div>
-        <div style={{ display: "grid" }}>
-          <button
-            type="submit"
-            className="btn btn-success btn-md buttonRight"
-            style={{ width: "80px", "margin-top": "5px" }}
-            onClick={() => saveChanges()}
-          >
-            Save
-          </button>
-        </div>
-      </Card.Footer>
-    </Card>
+              Save
+            </button>
+          </div>
+        </Card.Footer>
+      </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
+    </div>
   );
 }
 

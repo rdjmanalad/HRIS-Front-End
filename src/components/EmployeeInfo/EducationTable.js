@@ -3,6 +3,7 @@ import { Table, Button, ButtonGroup } from "react-bootstrap";
 import axios from "axios";
 import { useRef } from "react";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 
 function EducationTable({ empNo }) {
   const [eduList, setEduList] = useState([]);
@@ -12,10 +13,11 @@ function EducationTable({ empNo }) {
   const placeRef = useRef();
   const remarksRef = useRef();
   const [rowId, setRowId] = useState("");
-  // var rowId = 0;
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
   var [rem, setRem] = useState("");
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
   var setArray = {};
 
   setArray = {
@@ -26,6 +28,10 @@ function EducationTable({ empNo }) {
     endYear: "",
     place: "",
     remarks: "",
+  };
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
   };
 
   const getData = () => {
@@ -59,7 +65,9 @@ function EducationTable({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Delete Success!");
+          // alert("Delete Success!");
+          setMessage("Delete Success");
+          setShowMsg(true);
           getData();
         }
       })
@@ -81,7 +89,9 @@ function EducationTable({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved Successfully!");
+          // alert("Saved Successfully!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           getData();
         }
       })
@@ -103,7 +113,9 @@ function EducationTable({ empNo }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Edit Saved!");
+          // alert("Edit Saved!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           getData();
         }
       })
@@ -254,6 +266,7 @@ function EducationTable({ empNo }) {
           )}
         </tbody>
       </Table>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
       {showMod ? (
         <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
       ) : (

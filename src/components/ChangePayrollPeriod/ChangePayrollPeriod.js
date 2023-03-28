@@ -170,7 +170,6 @@ export const ChangePayrollPeriod = () => {
     month = date.substring(5, 7);
     year = date.substring(0, 4);
     actualNumDaysCodeRef.current.value = 13;
-    collectPeriodRef.current.value = "Y";
     eDay = String(computeEndDay(year, month)).substring(8, 10);
     if (sDay === "01") {
       periodTo = year + "-" + month + "-" + "15";
@@ -206,7 +205,6 @@ export const ChangePayrollPeriod = () => {
       year = date.substring(0, 4);
       eDay = String(computeEndDay(year, month)).substring(8, 10);
       actualNumDaysCodeRef.current.value = 13;
-      collectPeriodRef.current.value = "Y";
       if (sDay === "01") {
         periodTo = year + "-" + month + "-" + "15";
         payPeriodToRef.current.value = periodTo;
@@ -337,7 +335,7 @@ export const ChangePayrollPeriod = () => {
                   ></FormControl>
                 </Col>
               </FormGroup>
-              <FormGroup as={Row}>
+              {/* <FormGroup as={Row}>
                 <FormLabel column sm="4" className="noWrapText">
                   Transportation Rate
                 </FormLabel>
@@ -390,7 +388,7 @@ export const ChangePayrollPeriod = () => {
                     onChange={(event) => checkToggle(event)}
                   ></Form.Check>
                 </Col>
-              </FormGroup>
+              </FormGroup> */}
             </FormGroup>
             {/* <FormGroup as={Col} xs="1"></FormGroup> */}
             <FormGroup as={Col} sm="5">
@@ -429,7 +427,7 @@ export const ChangePayrollPeriod = () => {
               <FormGroup as={Row} style={{ height: "95px" }}>
                 <FormLabel sm="1"> </FormLabel>
               </FormGroup>
-              <FormGroup as={Row} style={{ height: "25px" }}>
+              {/* <FormGroup as={Row} style={{ height: "25px" }}>
                 <FormLabel column className="noWrapText" sm="5">
                   Collect this Period
                 </FormLabel>
@@ -443,7 +441,7 @@ export const ChangePayrollPeriod = () => {
                     // }
                   ></FormControl>
                 </Col>
-              </FormGroup>
+              </FormGroup> */}
               {/* <ReactDatePicker
                 selected={datep}
                 dateFormat="MM/dd/yyyy"
