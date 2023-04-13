@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useState } from "react";
 import axios from "axios";
-import ReactDatePicker from "react-datepicker";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -34,6 +34,9 @@ export const ChangePayrollPeriod = () => {
   const sample = useRef();
   const filterValueRef = useRef();
 
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+
   var setArray = {
     id: "",
     userID: "",
@@ -49,11 +52,17 @@ export const ChangePayrollPeriod = () => {
     bonus13: "",
   };
 
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
   const saveData = () => {
     setPayPeriodFrom(payPeriodFromRef.current.value);
     setFilterValue(filterValueRef.current.value);
     setPayPeriodTo(payPeriodToRef.current.value);
-    alert("SAVED");
+    // alert("SAVED");
+    setMessage("Saved");
+    setShowMsg(true);
     //putData();
     // console.log(setArray);
     //savePeriod();
@@ -427,28 +436,6 @@ export const ChangePayrollPeriod = () => {
               <FormGroup as={Row} style={{ height: "95px" }}>
                 <FormLabel sm="1"> </FormLabel>
               </FormGroup>
-              {/* <FormGroup as={Row} style={{ height: "25px" }}>
-                <FormLabel column className="noWrapText" sm="5">
-                  Collect this Period
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    ref={collectPeriodRef}
-                    className="inpHeightXs"
-                    style={{ textTransform: "uppercase" }}
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
-                  ></FormControl>
-                </Col>
-              </FormGroup> */}
-              {/* <ReactDatePicker
-                selected={datep}
-                dateFormat="MM/dd/yyyy"
-                ref={sample}
-                // placeholderText="mm/dd/yyyy"
-                onChange={(e) => setDate(e)}
-              ></ReactDatePicker> */}
             </FormGroup>
           </FormGroup>
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
@@ -485,6 +472,7 @@ export const ChangePayrollPeriod = () => {
           </div>
         </Card.Footer>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 };

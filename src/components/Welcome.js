@@ -9,7 +9,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
-
+import useLocalState from "./Hooks/useLocalState";
+import { useNavigate } from "react-router-dom";
 import {
   format,
   formatDistance,
@@ -23,11 +24,16 @@ function Welcome() {
   const user = localStorage.getItem("user");
   const locale = enCA;
   const [employees, setData] = useState([]);
+  const [userId, setUserId] = useLocalState("userId", "");
+  const [userRole, setUserRole] = useLocalState("userRole", "");
+  const [roleD, setRoleD] = useState("");
   var dayName = format(new Date(), "eeee");
   var date = format(new Date(), "MMMM dd, yyyy");
   var date2 = format(new Date(), "MMMM 'Birthday Celebrants");
   const [loading, setL] = useState(true);
   var bmonth = "03";
+  var limit = 0;
+  const navi = useNavigate();
 
   const [dt, setDt] = useState(new Date().toLocaleString());
 

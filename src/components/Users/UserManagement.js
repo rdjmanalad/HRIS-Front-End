@@ -23,6 +23,7 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import axios from "axios";
 import ReactTooltip from "react-tooltip";
 import { shouldForwardProp } from "@mui/styled-engine";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 
 export const UserManagement = () => {
   const usernameRef = useRef();
@@ -41,7 +42,6 @@ export const UserManagement = () => {
   const [nuser, setNuser] = useState([]);
   const [tooltip, showTooltip] = useState(true);
   const [roles, setRoles] = useState([]);
-  const [role, setRole] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
@@ -53,6 +53,11 @@ export const UserManagement = () => {
   const [rowInd, setRowInd] = useState(0);
   const [haveDel, setHaveDel] = useState(false);
 
+  const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
+  const [enable, setEnable] = useState(true);
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+
   useEffect(() => {
     getUsers();
     getRoles();
@@ -63,7 +68,15 @@ export const UserManagement = () => {
     getUsers();
   }, [haveDel]);
 
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
   const getUsers = () => {
+    if (userRole === "ROLE_USER") {
+      setEnable(false);
+    }
+    console.log(userRole);
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
@@ -85,7 +98,6 @@ export const UserManagement = () => {
       .get("http://localhost:8080/api/roles")
       .then((response) => response.data)
       .then((data) => {
-        console.log(data);
         setRoles(data);
       })
       .catch((message) => {
@@ -120,6 +132,14 @@ export const UserManagement = () => {
     deleteUser();
     setShowDel(false);
     handleShow();
+  };
+
+  const clearE = () => {
+    passwordRef.current.value = "";
+    usernameRef.current.value = "";
+    newPassRef.current.value = "";
+    confirmPassdRef.current.value = "";
+    userTypeRef.current.value = 0;
   };
 
   useEffect(() => {
@@ -161,10 +181,15 @@ export const UserManagement = () => {
     userTypeRef.current.value = user.roles[0].id;
   };
 
+  const handleReset = () => {
+    user.password = "1234";
+    validSaveEdit();
+  };
+
   function validSaveEdit() {
     // alert(userTypeRef.current.value);
-    user.username = usernameRef.current.value;
-    user.roles[0].id = user.role;
+    // user.username = usernameRef.current.value;
+    // user.roles[0].id = user.role;
     axios
       .post("http://localhost:8080/api/saveUsers", user, {
         headers: {
@@ -177,8 +202,11 @@ export const UserManagement = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Edit Success!");
-          handleShow();
+          // alert("Edit Success!");
+          setMessage("Edited Data Saved");
+          setShowMsg(true);
+          clearE();
+          // handleShow();
         }
       });
   }
@@ -197,7 +225,9 @@ export const UserManagement = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Save Success!");
+          // alert("Save Success!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           handleShow();
         }
       });
@@ -208,7 +238,9 @@ export const UserManagement = () => {
     if (info === "ok") {
       validSave();
     } else {
-      alert(info);
+      // alert(info);
+      setMessage(info);
+      setShowMsg(true);
     }
   }
 
@@ -219,7 +251,9 @@ export const UserManagement = () => {
     } else if (info === "oldPass") {
       saveEdit2();
     } else {
-      alert(info);
+      // alert(info);
+      setMessage(info);
+      setShowMsg(true);
     }
   }
 
@@ -233,7 +267,9 @@ export const UserManagement = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Delete Success!");
+          // alert("Delete Success!");
+          setMessage("Data Deleted");
+          setShowMsg(true);
           setHaveDel(true);
           setUsers(users.splice(rowInd, 1));
         }
@@ -259,9 +295,14 @@ export const UserManagement = () => {
       )
       .then((response) => {
         if (response.status === 200) {
+          user.username = usernameRef.current.value;
           validSaveEdit();
+          clearE();
+          // saveEdit2();
         } else {
-          alert("Wrong Password!");
+          // alert("Wrong Password!");
+          setMessage("Incorrect Password");
+          setShowMsg(true);
         }
       });
   }
@@ -269,11 +310,11 @@ export const UserManagement = () => {
   function saveEdit2() {
     user.username = usernameRef.current.value;
     user.roles[0].id = user.role;
+
     for (let i = 0; i < roles.length; i++) {
       // alert(roles[i].id);
       // alert(user.role);
       if (String(user.role) === String(roles[i].id)) {
-        alert("f");
         user.roles[0].name = roles[i].name;
       }
     }
@@ -289,8 +330,10 @@ export const UserManagement = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Edit Success!");
-          handleShow();
+          // alert("Edit Success!");
+          setMessage("Edited Data Saved");
+          setShowMsg(true);
+          // handleShow();
         }
       });
   }
@@ -336,6 +379,7 @@ export const UserManagement = () => {
         return "oldPass";
       }
     }
+    user.password = newPassRef.current.value;
     return "ok";
   }
 
@@ -426,6 +470,7 @@ export const UserManagement = () => {
                     type="password"
                     ref={passwordRef}
                     className="inpHeightXs"
+                    onFocus={(e) => e.target.select()}
                     // onChange={(event) => (user.password = event.target.value)}
                   ></FormControl>
                 </Col>
@@ -473,6 +518,7 @@ export const UserManagement = () => {
                     ref={userTypeRef}
                     className="dropDownList"
                     style={{ padding: "0px 0px 0px 5px" }}
+                    disabled={!enable}
                     onChange={(event) => (user.role = event.target.value)}
                   >
                     <option></option>
@@ -589,8 +635,8 @@ export const UserManagement = () => {
         <Modal.Body className="border-dark bg-dark text-white">
           <Card
             style={{
-              "max-width": "25rem",
-              "min-width": "25rem",
+              maxWidth: "25rem",
+              minWidth: "25rem",
               height: "auto",
             }}
             className={" border-dark bg-dark text-white"}
@@ -632,7 +678,8 @@ export const UserManagement = () => {
         <Modal.Footer className={" border-dark bg-dark text-white"}>
           <div className="centerDiv">
             {tooltip && <ReactTooltip effect="solid" />}
-            <BsFileEarmarkFontFill
+
+            {/* <BsFileEarmarkFontFill
               className="editIcon"
               data-tip="EDIT"
               data-type="info"
@@ -656,6 +703,7 @@ export const UserManagement = () => {
                 setTimeout(() => showTooltip(true), 5);
               }}
             />
+
             <BsFileEarmarkPlusFill
               className="addIcon"
               data-tip="NEW"
@@ -666,7 +714,45 @@ export const UserManagement = () => {
                 showTooltip(false);
                 setTimeout(() => showTooltip(true), 5);
               }}
-            />
+            /> */}
+            {enable && (
+              <button
+                type="submit"
+                className="btn btn-warning btn-md buttonRight"
+                style={{ width: "60px", marginTop: "0px", marginRight: "5px" }}
+                onClick={() => handleReset()}
+              >
+                Reset
+              </button>
+            )}
+            <button
+              type="submit"
+              className="btn btn-warning btn-md buttonRight"
+              style={{ width: "60px", marginTop: "0px", marginRight: "5px" }}
+              onClick={() => handleEdit()}
+            >
+              Edit
+            </button>
+            {enable && (
+              <button
+                type="submit"
+                className="btn btn-danger btn-md buttonRight"
+                style={{ width: "60px", marginTop: "0px", marginRight: "5px" }}
+                onClick={() => handleCloseDel()}
+              >
+                Delete
+              </button>
+            )}
+            {enable && (
+              <button
+                type="submit"
+                className="btn btn-success btn-md buttonRight"
+                style={{ width: "60px", marginTop: "0px" }}
+                onClick={() => handleAdd()}
+              >
+                New
+              </button>
+            )}
           </div>
         </Modal.Footer>
       </Modal>
@@ -683,8 +769,8 @@ export const UserManagement = () => {
         <Modal.Body className="border-dark bg-dark text-white">
           <Card
             style={{
-              "max-width": "25rem",
-              "min-width": "25rem",
+              maxWidth: "25rem",
+              minWidth: "25rem",
               height: "auto",
             }}
             className={" border-dark bg-dark text-white"}
@@ -698,6 +784,7 @@ export const UserManagement = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 };

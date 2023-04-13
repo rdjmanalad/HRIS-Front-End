@@ -7,6 +7,7 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import axios from "axios";
 import "../../css/paySlipDataEntry.css";
 import { ColorRing } from "react-loader-spinner";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -34,6 +35,8 @@ export const PaySlipDataEntry = () => {
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
 
   const periodRef = useRef();
   const employeeNoRef = useRef();
@@ -108,6 +111,10 @@ export const PaySlipDataEntry = () => {
     showOnDetails();
   }, [employee]);
 
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
   const getData = () => {
     // axios.defaults.headers.common["Authorization"] =
     //   "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
@@ -144,7 +151,9 @@ export const PaySlipDataEntry = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved Successfully!");
+          // alert("Saved Successfully!");
+          setMessage("Data Saved");
+          setShowMsg(true);
         }
       })
       .catch((message) => {
@@ -2158,6 +2167,7 @@ export const PaySlipDataEntry = () => {
           </FormGroup>
         </Card.Body>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 };

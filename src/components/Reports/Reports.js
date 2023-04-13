@@ -6,6 +6,7 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
 import axios from "axios";
 // import { PDFView } from "react.pdf.stream";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -42,16 +43,24 @@ export const Reports = () => {
   const [byEmp, setByEmp] = useState(false);
   const [showL, setShowL] = useState(false);
 
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+
   const agcRef = useRef();
   const accRef = useRef();
   const abcRef = useRef();
   const payPeriodFromRef = useRef();
   const payPeriodToRef = useRef();
 
+  const [brightness, setBrightness] = useState("brightness(1)");
+  // var brightness = "brightness(30%)";
+
   useEffect(() => {
     getData();
     getDropDown();
   }, []);
+
+  // useEffect(() => {}, [brightness]);
 
   const getData = () => {
     axios.defaults.headers.common["Authorization"] =
@@ -105,19 +114,28 @@ export const Reports = () => {
     } else {
       if (!disGcode) {
         if (agcRef.current.value === "") {
-          alert("Please Enter Group Code");
+          // alert("Please Enter Group Code");
+          setBrightness("brightness(0.5)");
+          setMessage("Please Enter Group Code");
+          setShowMsg(true);
           validParam = false;
         }
       }
       if (!disCcode) {
         if (accRef.current.value === "") {
-          alert("Please Enter Company Code");
+          // alert("Please Enter Company Code");
+          setBrightness("brightness(0.5)");
+          setMessage("Please Enter Company Code");
+          setShowMsg(true);
           validParam = false;
         }
       }
       if (!disBcode) {
         if (abcRef.current.value === "") {
-          alert("Please Enter Branch Code");
+          // alert("Please Enter Branch Code");
+          setBrightness("brightness(0.5)");
+          setMessage("Please Enter Branch Code");
+          setShowMsg(true);
           validParam = false;
         }
       }
@@ -126,7 +144,10 @@ export const Reports = () => {
           payPeriodFromRef.current.value === "" ||
           payPeriodToRef.current.value === ""
         ) {
-          alert("Please Enter Payroll date/s");
+          // alert("Please Enter Payroll date/s");
+          setBrightness("brightness(0.5)");
+          setMessage("Please Enter Payroll date/s");
+          setShowMsg(true);
           validParam = false;
         }
       }
@@ -134,6 +155,11 @@ export const Reports = () => {
         printReport();
       }
     }
+  };
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
+    setBrightness("brightness(1)");
   };
 
   const printReport = () => {
@@ -168,7 +194,7 @@ export const Reports = () => {
       report.reportGroupName === "Year to Date Gross Summary" ||
       report.reportGroupName === "Year to Date Tax Summary" ||
       report.reportGroupName === "Leave Credits" ||
-      report.reportGroupName === "Personel Action Form"
+      report.reportGroupName === "Personnel Action Form"
     ) {
       printBy = report.reportGroupName + " " + printBy;
     }
@@ -596,6 +622,7 @@ export const Reports = () => {
         onHide={handleClose}
         dialogClassName="my-modal"
         backdrop="static"
+        style={{ filter: brightness }}
       >
         <Modal.Header closeButton className="border-dark bg-dark text-white">
           <Modal.Title>Print By</Modal.Title>
@@ -809,6 +836,7 @@ export const Reports = () => {
           />
         </Modal.Body>
       </Modal>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 };

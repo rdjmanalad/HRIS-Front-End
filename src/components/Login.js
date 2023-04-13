@@ -4,6 +4,7 @@ import useLocalState from "./Hooks/useLocalState";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { waitFor, render } from "@testing-library/react";
 
 const LoginApp = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +13,7 @@ const LoginApp = () => {
   const [jwt, setJwt] = useLocalState("jwt", "jwt");
   const [user, setUser] = useLocalState("user", "");
   const [userId, setUserId] = useLocalState("userId", "");
+  const [userRole, setUserRole] = useLocalState("userRole", "");
 
   const navi = useNavigate();
 
@@ -41,6 +43,8 @@ const LoginApp = () => {
       username: username,
       password: password,
     };
+    var jw = "";
+    setUser(username);
 
     fetch("http://localhost:8080/api/login", {
       // fetch("api/login", {
@@ -51,25 +55,27 @@ const LoginApp = () => {
       body: JSON.stringify(reqBody),
     })
       .then((response) => {
-        if (response.status === 200)
+        if (response.status === 200) {
           return Promise.all([
             response.json(),
             //response.headers,
             response.data,
           ]);
-        else return Promise.reject("Invalid Login Credentials");
+
+          setUser(username);
+        } else {
+          return Promise.reject("Invalid Login Credentials");
+        }
       })
 
       .then(([data, headers, json]) => {
-        // console.log(data["accessToken"]);
+        // console.log(data);
         setJwt(data["accessToken"]);
         window.sessionStorage.setItem("jwt", data["accessToken"]);
-        // alert(localStorage.getItem("jwt"));
         setUser(username);
-
-        navi("");
+        jw = data["accessToken"].split(".")[1];
+        setUserRole(JSON.parse(window.atob(jw)).roles);
         window.location.reload();
-        getId();
       })
       .catch((message) => {
         alert(message);
@@ -84,9 +90,20 @@ const LoginApp = () => {
       .get("http://localhost:8080/api/getUserId/" + username)
       .then((response) => {
         setUserId(response.data);
-        alert(response.data);
       });
   };
+
+  const setRole = () => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .get("http://localhost:8080/api/getRole/" + userId)
+      .then((response) => {
+        setUserRole(response.data[0].name);
+      });
+  };
+
   return (
     <div className="div-form">
       <form className="loginForm">

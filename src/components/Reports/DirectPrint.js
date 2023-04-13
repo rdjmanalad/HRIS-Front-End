@@ -5,7 +5,7 @@ import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
 import axios from "axios";
-// import { PDFView } from "react.pdf.stream";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -40,6 +40,9 @@ export const DirectPrint = () => {
   const [selectedId, setId] = useState("");
   const [byEmp, setByEmp] = useState(false);
 
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+
   const agcRef = useRef();
   const accRef = useRef();
   const abcRef = useRef();
@@ -49,6 +52,10 @@ export const DirectPrint = () => {
   useEffect(() => {
     getDropDown();
   }, []);
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
 
   const printReportCheck = () => {
     var codeFilter =
@@ -65,6 +72,10 @@ export const DirectPrint = () => {
     var per2 = payPeriodToRef.current.value
       ? payPeriodToRef.current.value
       : new Date().toLocaleDateString("en-CA");
+    if (codeFilter === "") {
+      setMessage("Please Choose a Code");
+      setShowMsg(true);
+    }
     printReport();
   };
 
@@ -114,8 +125,8 @@ export const DirectPrint = () => {
         file.setName = "dd";
         var w = window.open(window.URL.createObjectURL(file));
         w.document.title = "sample";
-        setShow(false);
-        disableFields();
+        // setShow(false);
+        // disableFields();
       });
   };
 
@@ -499,6 +510,7 @@ export const DirectPrint = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 };

@@ -43,6 +43,13 @@ code {
 .no-margin {
   margin: 0;
   display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.no-margin-l {
+  margin: 0;
+  display: flex;
   justify-content: left;
   align-items: center;
 }

@@ -49,7 +49,11 @@ function ShowMsg({ closeMsg, message }) {
             }}
             className={" border-dark bg-dark text-white"}
           >
-            <h3 style={{ textAlign: "center" }}>SAVING {message} !</h3>
+            {message === "Data Saved" ? (
+              <h3 style={{ textAlign: "center" }}>{message} !</h3>
+            ) : (
+              <h3 style={{ textAlign: "center" }}>SAVING {message} !</h3>
+            )}
           </Card>
         </Modal.Body>
         <Modal.Footer className={" border-dark bg-dark text-white"}>

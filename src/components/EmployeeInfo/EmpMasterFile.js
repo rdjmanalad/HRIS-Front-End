@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -61,6 +62,9 @@ function EmpMasterFile({ empData, refreshPage }) {
   const [vbarangay, setVbarangay] = useState("");
   const [tag, setTag] = useState("H");
 
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+
   useEffect(() => {
     // setAddress(empData.address);
     setEmp(empData);
@@ -76,6 +80,10 @@ function EmpMasterFile({ empData, refreshPage }) {
     setVcity("");
     setVbarangay("");
     setShow(true);
+  };
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
   };
 
   const setProv = (e) => {
@@ -127,8 +135,27 @@ function EmpMasterFile({ empData, refreshPage }) {
   //   return result.region_id === region;
   // });
 
+  const checkFirst = () => {
+    var isOk = true;
+    if (
+      masEmployee.lastName === "" ||
+      masEmployee.firstName === "" ||
+      masEmployee.middleName === ""
+    ) {
+      setMessage("Full Name Required");
+      setShowMsg(true);
+      isOk = false;
+    }
+    if (masEmployee.birthday === "") {
+      masEmployee.birthday = new Date().toLocaleDateString("en-CA");
+    }
+    if (isOk) {
+      saveDetails();
+    }
+  };
+
   function saveDetails() {
-    console.log(masEmployee);
+    // console.log(masEmployee);
     masEmployee.address = addressRef.current.value;
     masEmployee.paddress = paddressRef.current.value;
     masEmployee.caddress = caddressRef.current.value;
@@ -146,7 +173,9 @@ function EmpMasterFile({ empData, refreshPage }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Successfully Saved!");
+          // alert("Successfully Saved!");
+          setMessage("Data Saved");
+          setShowMsg(true);
         }
       })
       .catch((message) => {
@@ -698,20 +727,20 @@ function EmpMasterFile({ empData, refreshPage }) {
             <Button
               className="btn btn-primary btn-md buttonRight"
               style={{
-                width: "80px",
+                width: "100px",
                 marginTop: "0px",
                 marginRight: "5px",
               }}
               onClick={() => newDetails()}
             >
-              New
+              New/Refresh
             </Button>
 
             <Button
               // className="setButtonMargin2"
               className="btn btn-success btn-md "
               style={{ width: "80px", marginTop: "0px" }}
-              onClick={() => saveDetails()}
+              onClick={() => checkFirst()}
             >
               Save
             </Button>
@@ -876,6 +905,7 @@ function EmpMasterFile({ empData, refreshPage }) {
           </div>
         </ModalFooter>
       </Modal>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );
 }

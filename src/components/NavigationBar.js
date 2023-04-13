@@ -10,11 +10,61 @@ import { useNavigate } from "react-router-dom";
 import { BsBoxArrowRight } from "react-icons/bs";
 import { useRef, useEffect, useState } from "react";
 import AutoLogout from "./AutoLogout";
+import axios from "axios";
+import useLocalState from "./Hooks/useLocalState";
+import { useReducer } from "react";
 
 function NavigationBar() {
   const navi = useNavigate();
   const user = localStorage.getItem("user");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  // var userRoleDis = localStorage.getItem("userRole").substring(5);
+  var [userRoleDis, setURD] = useState(
+    localStorage.getItem("userRole").substring(5)
+  );
+  const [userId, setUserId] = useLocalState("userId", "");
+  const [userRole, setUserRole] = useLocalState("userRole", "");
+  const userRef = useRef();
+
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  // getId();
+  useEffect(() => {
+    getId();
+  }, []);
+
+  // useEffect(() => {
+  //   getId();
+  //   userRoleDis = userRole.substring(5);
+  //   alert(userRoleDis);
+  //   alert(userRole);
+  //   // userRef.current.value = userRoleDis;
+  // }, [userRoleDis]);
+
+  const getId = () => {
+    // alert(user);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .get("http://localhost:8080/api/getUserId/" + user)
+      .then((response) => {
+        setUserId(response.data);
+        setRole(response.data);
+      });
+  };
+
+  const setRole = (uId) => {
+    // alert(userId);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios.get("http://localhost:8080/api/getRole/" + uId).then((response) => {
+      setUserRole(response.data[0].name);
+      userRoleDis = userRole.substring(5);
+      forceUpdate();
+    });
+  };
 
   function logout() {
     localStorage.setItem("jwt", "");
@@ -130,16 +180,17 @@ function NavigationBar() {
             <label
               className={"text-gray no-margin fs-med"}
               style={{
-                width: "4rem",
+                width: "10rem",
                 fontWeight: "bold",
-                marginRight: "10px",
+                marginRight: "15px",
               }}
+              ref={userRef}
             >
-              User :
+              {userRoleDis}
             </label>
             <label
-              className="text-red no-margin fs-med"
-              style={{ fontWeight: "bold" }}
+              className="text-red no-margin-l fs-med"
+              style={{ fontWeight: "bold", width: "10rem" }}
             >
               {user}
             </label>
@@ -163,6 +214,13 @@ function NavigationBar() {
               }}
               onClick={() => logout()}
             />
+            <label
+              // className="text-red no-margin-l fs-med"
+              className="text-gray no-margin-l"
+              style={{ width: "5rem" }}
+            >
+              Ver 0.0
+            </label>
           </Nav>
         </Navbar.Collapse>
         {/* </Container> */}

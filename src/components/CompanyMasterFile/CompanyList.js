@@ -5,6 +5,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -22,6 +23,8 @@ export const CompanyList = () => {
 
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
 
   var [delId, setDelId] = useState("");
 
@@ -56,6 +59,10 @@ export const CompanyList = () => {
     philSignatory: "",
     pagibigBranch: "",
     locID: "",
+  };
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
   };
 
   useEffect(() => {
@@ -122,7 +129,10 @@ export const CompanyList = () => {
           alert(message);
         });
     }
-    success && alert("Saved SuccessFully!");
+    if (success) {
+      setMessage("Data Saved");
+      setShowMsg(true);
+    }
   };
 
   const deleteCompany = () => {
@@ -170,7 +180,11 @@ export const CompanyList = () => {
           alert(message);
         });
     }
-    success && alert("Deleted SuccessFully!");
+    // success && alert("Deleted SuccessFully!");
+    if (success) {
+      setMessage("Data Deleted");
+      setShowMsg(true);
+    }
   };
 
   const saveData = () => {
@@ -188,9 +202,17 @@ export const CompanyList = () => {
     setArrLoc.philSignatory = philSignatoryRef.current.value;
     setArrLoc.pagibigBranch = pagibigBranchRef.current.value;
     setArrLoc.locID = locIDRef.current.value;
-    console.log(setArrCom);
-    console.log(setArrLoc);
-    saveCompany();
+    if (
+      companyCodeRef.current.value === "" ||
+      groupCodeRef.current.value === "" ||
+      companyNameRef.current.value === "" ||
+      companyAddressRef.current.value == ""
+    ) {
+      setMessage("Please Fill Company Code, Name, Address and Group Code");
+      setShowMsg(true);
+    } else {
+      saveCompany();
+    }
   };
 
   const clearFields = () => {
@@ -596,6 +618,8 @@ export const CompanyList = () => {
           </div>
         </Card.Footer>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
+
       {showMod ? (
         <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
       ) : (

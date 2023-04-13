@@ -5,6 +5,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -26,6 +27,13 @@ export const GroupList = () => {
   var [action, setAction] = useState("");
   var [delId, setDelId] = useState("");
 
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -38,6 +46,18 @@ export const GroupList = () => {
       setGroups(response.data);
       console.log(response.data);
     });
+  };
+
+  const validateFirst = () => {
+    if (
+      groupCodeRef.current.value === "" ||
+      groupNameRef.current.value === ""
+    ) {
+      setMessage("Fill All Details");
+      setShowMsg(true);
+    } else {
+      saveNew();
+    }
   };
 
   const saveGroup = () => {
@@ -53,7 +73,9 @@ export const GroupList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved Successfully!");
+          // alert("Saved Successfully!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           getData();
           clearFields();
         }
@@ -76,7 +98,9 @@ export const GroupList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Delete Success!");
+          // alert("Delete Success!");
+          setMessage("Data Deleted");
+          setShowMsg(true);
           clearFields();
           getData();
         }
@@ -246,13 +270,14 @@ export const GroupList = () => {
               type="submit"
               className="btn btn-success btn-md "
               style={{ width: "80px", marginTop: "0px" }}
-              onClick={() => saveNew()}
+              onClick={() => validateFirst()}
             >
               Save
             </button>
           </div>
         </Card.Footer>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
       {showMod ? (
         <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
       ) : (

@@ -6,6 +6,7 @@ import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
 import axios from "axios";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Container,
   Card,
@@ -34,6 +35,8 @@ export const EmployeeLoans = () => {
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
 
   const periodRef = useRef();
   const employeeNoRef = useRef();
@@ -542,6 +545,10 @@ export const EmployeeLoans = () => {
 
   var yearsPay = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
   useEffect(() => {
     showOnDetails();
   }, [employee]);
@@ -587,8 +594,38 @@ export const EmployeeLoans = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved Successfully!");
-          // alert(response.data);
+          // alert("Saved Successfully!");
+          setMessage("Loan Saved");
+          setShowMsg(true);
+          if (setSave.id === "") {
+            setSave.id = response.data;
+            employee.loan.push(setSave);
+            console.log(employee.loan);
+            showOnDetails();
+          }
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const saveEmpLoanPaid = (setSave) => {
+    axios
+      .post("http://localhost:8080/api/loan/save", setSave, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          // alert("Saved Successfully!");
+          setMessage("Loan Paid " + message);
+          setShowMsg(true);
           if (setSave.id === "") {
             setSave.id = response.data;
             employee.loan.push(setSave);
@@ -615,7 +652,9 @@ export const EmployeeLoans = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved To Loan History");
+          // alert("Saved To Loan History");
+          // setMessage("Loan Paid ");
+          // setShowMsg(true);
         }
       })
       .catch((message) => {
@@ -638,13 +677,15 @@ export const EmployeeLoans = () => {
         if (response.status === 200) {
           //employee.loan[id].transactNo = response.data;
           finalArr.transactNo = response.data;
-          alert(finalArr.transactNo);
+          // alert(finalArr.transactNo);
+          setMessage("Transaction No: " + finalArr.transactNo);
           var yest = new Date();
           yest.setDate(yest.getDate() - 1);
           finalArr.endDate = yest.toLocaleDateString("en-CA");
           if (parseInt(finalArr.transactNo) > 0) {
             saveLoanHistory(finalArr);
-            saveEmpLoan(finalArr);
+            // saveEmpLoan(finalArr);
+            saveEmpLoanPaid(finalArr);
             console.log(employee.loan[ind]);
             employee.loan.splice(ind);
             console.log(employee.loan[ind]);
@@ -4319,6 +4360,7 @@ export const EmployeeLoans = () => {
             </FormGroup>
           </Card.Body>
         </Card>
+        {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
       </div>
     </div>
   );

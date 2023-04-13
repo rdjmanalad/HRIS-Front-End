@@ -11,10 +11,10 @@ function PopUpMsg({ closeMsg, message }) {
     <div>
       <Modal
         // show={showModals.showModals}  {() => handleClose(false)}
-        size="md"
+        // size="sm"
         show={true}
         onHide={() => closeMsg(false)}
-        // dialogClassName="my-modal"
+        dialogClassName="my-modal"
         backdrop="static"
       >
         <Modal.Header closeButton className="border-dark bg-dark text-white">
@@ -34,8 +34,8 @@ function PopUpMsg({ closeMsg, message }) {
         <Modal.Body className="border-dark bg-dark text-white">
           <Card
             style={{
-              //   "max-width": "25rem",
-              //   "min-width": "25rem",
+              "max-width": "25rem",
+              "min-width": "25rem",
               height: "auto",
             }}
             className={" border-dark bg-dark text-white"}

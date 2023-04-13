@@ -161,7 +161,9 @@ export const MassCompute = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Save Success!");
+          setMessage("Data Saved");
+          setShowMsg(true);
+          // alert("Save Success!");
         }
       });
   }
@@ -360,6 +362,10 @@ export const MassCompute = () => {
   };
 
   const closeMsg = (close) => {
+    setShowMsg(false);
+  };
+
+  const closeMsgs = (close) => {
     setShowMsg(false);
   };
 

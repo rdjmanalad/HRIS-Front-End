@@ -5,6 +5,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
+import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
   FormControl,
@@ -28,6 +29,8 @@ export const BranchList = () => {
 
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
+  var [showMsg, setShowMsg] = useState(false);
+  var [message, setMessage] = useState("");
 
   var setArray = {
     branchCode: "",
@@ -45,6 +48,10 @@ export const BranchList = () => {
     addressRef.current.value = row.branchAddress;
     branchNameRef.current.value = row.branchName;
   }
+
+  const closeMsg = (close) => {
+    setShowMsg(false);
+  };
 
   useEffect(() => {
     getData();
@@ -73,7 +80,9 @@ export const BranchList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Saved Successfully!");
+          // alert("Saved Successfully!");
+          setMessage("Data Saved");
+          setShowMsg(true);
           getData();
           clearFields();
         }
@@ -96,7 +105,9 @@ export const BranchList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          alert("Delete Success!");
+          // alert("Delete Success!");
+          setMessage("Data Deleted");
+          setShowMsg(true);
           clearFields();
           getData();
         }
@@ -112,7 +123,18 @@ export const BranchList = () => {
     setArray.companyCode = companyCodeRef.current.value;
     setArray.branchName = branchNameRef.current.value;
     setArray.branchAddress = addressRef.current.value;
-    saveBranch();
+    if (
+      branchCodeRef.current.value === "" ||
+      groupCodeRef.current.value === "" ||
+      companyCodeRef.current.value === "" ||
+      branchNameRef.current.value === "" ||
+      addressRef.current.value === ""
+    ) {
+      setMessage("Please Fill All Fields");
+      setShowMsg(true);
+    } else {
+      saveBranch();
+    }
   };
 
   const clearFields = () => {
@@ -344,6 +366,7 @@ export const BranchList = () => {
           </div>
         </Card.Footer>
       </Card>
+      {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
       {showMod ? (
         <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
       ) : (
