@@ -33,6 +33,7 @@ export const ChangePayrollPeriod = () => {
   const bonus13thRef = useRef();
   const sample = useRef();
   const filterValueRef = useRef();
+  const baseURL = localStorage.getItem("baseURL");
 
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
@@ -60,7 +61,6 @@ export const ChangePayrollPeriod = () => {
     setPayPeriodFrom(payPeriodFromRef.current.value);
     setFilterValue(filterValueRef.current.value);
     setPayPeriodTo(payPeriodToRef.current.value);
-    // alert("SAVED");
     setMessage("Saved");
     setShowMsg(true);
     //putData();
@@ -94,7 +94,7 @@ export const ChangePayrollPeriod = () => {
 
   function savePeriod() {
     axios
-      .post("http://localhost:8080/api/period/save", setArray, {
+      .post(baseURL + "/api/period/save", setArray, {
         headers: {
           // Accept: "application/json",
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export const ChangePayrollPeriod = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/period/latest")
+      .get(baseURL + "/api/period/latest")
       .then((response) => response.data)
       .then((data) => {
         console.log(data);

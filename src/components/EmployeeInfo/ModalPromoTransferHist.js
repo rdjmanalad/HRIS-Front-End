@@ -23,6 +23,7 @@ function ModalPromoTransferHist({ empNo }) {
 
   const handleCloseM = () => setShow(false);
   const handleShowM = () => setShow(true);
+  const baseURL = localStorage.getItem("baseURL");
 
   const closeMsg = (close) => {
     setShowMsg(false);
@@ -44,7 +45,7 @@ function ModalPromoTransferHist({ empNo }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/payroll/listbyempno/" + stringEmpno)
+      .get(baseURL + "/api/payroll/listbyempno/" + stringEmpno)
       .then((response) => response.data)
       .then((data) => {
         console.log(data);
@@ -61,7 +62,7 @@ function ModalPromoTransferHist({ empNo }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .post("http://localhost:8080/api/payroll/save", payroll, {
+      .post(baseURL + "/api/payroll/save", payroll, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -86,7 +87,7 @@ function ModalPromoTransferHist({ empNo }) {
 
   const deletePayroll = (delId) => {
     axios
-      .delete("http://localhost:8080/api/payroll/delete/" + delId, {
+      .delete(baseURL + "/api/payroll/delete/" + delId, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

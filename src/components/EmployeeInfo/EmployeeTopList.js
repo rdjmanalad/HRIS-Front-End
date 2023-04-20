@@ -8,6 +8,7 @@ import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 
 function EmployeeTopList() {
+  const baseURL = localStorage.getItem("baseURL");
   const [employees, setData] = useState([]);
   useEffect(() => {
     getData();
@@ -16,7 +17,7 @@ function EmployeeTopList() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/employees").then((response) => {
+    axios.get(baseURL + "/api/employees").then((response) => {
       setData(response.data);
     });
   };

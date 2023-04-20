@@ -14,6 +14,7 @@ const LoginApp = () => {
   const [user, setUser] = useLocalState("user", "");
   const [userId, setUserId] = useLocalState("userId", "");
   const [userRole, setUserRole] = useLocalState("userRole", "");
+  const baseURL = localStorage.getItem("baseURL");
 
   const navi = useNavigate();
 
@@ -46,7 +47,7 @@ const LoginApp = () => {
     var jw = "";
     setUser(username);
 
-    fetch("http://localhost:8080/api/login", {
+    fetch(baseURL + "/api/login", {
       // fetch("api/login", {
       headers: {
         "Content-Type": "application-json",
@@ -81,28 +82,6 @@ const LoginApp = () => {
         alert(message);
       });
   }
-
-  const getId = () => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-    axios
-      .get("http://localhost:8080/api/getUserId/" + username)
-      .then((response) => {
-        setUserId(response.data);
-      });
-  };
-
-  const setRole = () => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-    axios
-      .get("http://localhost:8080/api/getRole/" + userId)
-      .then((response) => {
-        setUserRole(response.data[0].name);
-      });
-  };
 
   return (
     <div className="div-form">

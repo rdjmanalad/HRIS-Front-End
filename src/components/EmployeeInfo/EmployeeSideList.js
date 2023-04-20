@@ -16,6 +16,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
   const [selectedId, setId] = useState("");
   const [employee, setRowEmp] = useState([]);
   const [emptyEmp, setEmptyEmp] = useState([]);
+  const baseURL = localStorage.getItem("baseURL");
 
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
@@ -84,7 +85,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
     axios
-      .delete("http://localhost:8080/api/masemployeeDel/" + selectedId, {
+      .delete(baseURL + "/api/masemployeeDel/" + selectedId, {
         header: { employeeNo: selectedId },
       })
       .then((response) => {
@@ -102,7 +103,7 @@ function EmployeeTopList({ childToParent, refreshPage, childToParent2 }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/masemployees").then((response) => {
+    axios.get(baseURL + "/api/masemployees").then((response) => {
       setL(false);
       setData(response.data);
       console.log(response.data);

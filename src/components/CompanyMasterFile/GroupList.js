@@ -29,6 +29,7 @@ export const GroupList = () => {
 
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
 
   const closeMsg = (close) => {
     setShowMsg(false);
@@ -42,7 +43,7 @@ export const GroupList = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/group1/gcode").then((response) => {
+    axios.get(baseURL + "/api/group1/gcode").then((response) => {
       setGroups(response.data);
       console.log(response.data);
     });
@@ -62,7 +63,7 @@ export const GroupList = () => {
 
   const saveGroup = () => {
     axios
-      .post("http://localhost:8080/api/group1/save", setArray, {
+      .post(baseURL + "/api/group1/save", setArray, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -73,7 +74,6 @@ export const GroupList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          // alert("Saved Successfully!");
           setMessage("Data Saved");
           setShowMsg(true);
           getData();
@@ -87,7 +87,7 @@ export const GroupList = () => {
 
   const delData = () => {
     axios
-      .delete("http://localhost:8080/api/group1/delete/" + delId, {
+      .delete(baseURL + "/api/group1/delete/" + delId, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

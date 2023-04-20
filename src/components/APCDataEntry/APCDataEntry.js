@@ -26,6 +26,7 @@ export const APCDataEntry = () => {
   var [message, setMessage] = useState("");
   var warn = new Map();
   const [apc, setA] = useState({});
+  const baseURL = localStorage.getItem("baseURL");
 
   const setAPC = {
     aGroupCode: "",
@@ -105,7 +106,8 @@ export const APCDataEntry = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
       .get(
-        "http://localhost:8080/api/reports/apc/" +
+        baseURL +
+          "/api/reports/apc/" +
           setAPC.aGroupCode +
           "/" +
           setAPC.bpiBCode +
@@ -138,7 +140,7 @@ export const APCDataEntry = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/group1/gcode")
+      .get(baseURL + "/api/group1/gcode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);

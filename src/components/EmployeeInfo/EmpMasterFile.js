@@ -29,6 +29,7 @@ function EmpMasterFile({ empData, refreshPage }) {
   const [region, setRegion] = useState("");
   const [province, setProvince] = useState("");
   const [city, setCity] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
 
   const addressRef = useRef();
   const paddressRef = useRef();
@@ -162,7 +163,7 @@ function EmpMasterFile({ empData, refreshPage }) {
     setEmpNo(empData.employeeNo);
     // if (empNo.length > 0) {
     axios
-      .post("http://localhost:8080/api/masemployeeSave", masEmployee, {
+      .post(baseURL + "/api/masemployeeSave", masEmployee, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -209,7 +210,7 @@ function EmpMasterFile({ empData, refreshPage }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/address/regions").then((response) => {
+    axios.get(baseURL + "/api/address/regions").then((response) => {
       setRegions(response.data);
       console.log(response.data);
     });
@@ -217,34 +218,28 @@ function EmpMasterFile({ empData, refreshPage }) {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
   };
   const getProvinces = () => {
-    axios
-      .get("http://localhost:8080/api/address/provinces/" + region)
-      .then((response) => {
-        setProvinces(response.data);
-        console.log(response.data);
-      });
+    axios.get(baseURL + "/api/address/provinces/" + region).then((response) => {
+      setProvinces(response.data);
+      console.log(response.data);
+    });
   };
   const getCities = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios
-      .get("http://localhost:8080/api/address/cities/" + province)
-      .then((response) => {
-        setCities(response.data);
-        console.log(response.data);
-      });
+    axios.get(baseURL + "/api/address/cities/" + province).then((response) => {
+      setCities(response.data);
+      console.log(response.data);
+    });
   };
   const getBarangays = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios
-      .get("http://localhost:8080/api/address/barangays/" + city)
-      .then((response) => {
-        setBarangays(response.data);
-        console.log(response.data);
-      });
+    axios.get(baseURL + "/api/address/barangays/" + city).then((response) => {
+      setBarangays(response.data);
+      console.log(response.data);
+    });
   };
 
   function newDetails() {

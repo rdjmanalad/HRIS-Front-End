@@ -46,6 +46,7 @@ export const UserManagement = () => {
   const [editMode, setEditMode] = useState(false);
 
   var [displayAdd, setDisplayAdd] = useState(false);
+  const baseURL = localStorage.getItem("baseURL");
 
   const [show, setShow] = useState(false);
   const [showDel, setShowDel] = useState(false);
@@ -80,7 +81,7 @@ export const UserManagement = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/users")
+      .get(baseURL + "/api/users")
       .then((response) => response.data)
       .then((data) => {
         console.log(data);
@@ -95,7 +96,7 @@ export const UserManagement = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/roles")
+      .get(baseURL + "/api/roles")
       .then((response) => response.data)
       .then((data) => {
         setRoles(data);
@@ -191,7 +192,7 @@ export const UserManagement = () => {
     // user.username = usernameRef.current.value;
     // user.roles[0].id = user.role;
     axios
-      .post("http://localhost:8080/api/saveUsers", user, {
+      .post(baseURL + "/api/saveUsers", user, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -214,7 +215,7 @@ export const UserManagement = () => {
   function validSave() {
     user.roles[0].id = user.role;
     axios
-      .post("http://localhost:8080/api/saveUsers", user, {
+      .post(baseURL + "/api/saveUsers", user, {
         headers: {
           // Accept: "application/json",
           "Content-Type": "application/json",
@@ -262,7 +263,7 @@ export const UserManagement = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
     axios
-      .delete("http://localhost:8080/api/userDelete/" + user.id, {
+      .delete(baseURL + "/api/userDelete/" + user.id, {
         // header: { employeeNo: selectedId },
       })
       .then((response) => {
@@ -279,10 +280,7 @@ export const UserManagement = () => {
   function saveEdit() {
     axios
       .get(
-        "http://localhost:8080/api/checkPass/" +
-          user.id +
-          "/" +
-          passwordRef.current.value,
+        baseURL + "/api/checkPass/" + user.id + "/" + passwordRef.current.value,
         {
           headers: {
             Accept: "application/json",
@@ -319,7 +317,7 @@ export const UserManagement = () => {
       }
     }
     axios
-      .put("http://localhost:8080/api/updateUser", user, {
+      .put(baseURL + "/api/updateUser", user, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

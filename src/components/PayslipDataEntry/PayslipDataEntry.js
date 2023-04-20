@@ -32,6 +32,7 @@ export const PaySlipDataEntry = () => {
   const [len, setLen] = useState(0);
   const [loading, setL] = useState(true);
   const [gross, setGross] = useState(0);
+  const baseURL = localStorage.getItem("baseURL");
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
@@ -128,9 +129,7 @@ export const PaySlipDataEntry = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
     axios
-      .get(
-        "http://localhost:8080/api/vpayslip/" + per1 + "/" + per2 + "/" + gcode
-      )
+      .get(baseURL + "/api/vpayslip/" + per1 + "/" + per2 + "/" + gcode)
       .then((response) => {
         setL(false);
         setPayslips(response.data);
@@ -140,7 +139,7 @@ export const PaySlipDataEntry = () => {
 
   const saveEmpPayslip = () => {
     axios
-      .post("http://localhost:8080/api/payslip/save", employee, {
+      .post(baseURL + "/api/payslip/save", employee, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

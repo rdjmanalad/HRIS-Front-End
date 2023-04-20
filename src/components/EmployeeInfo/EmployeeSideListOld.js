@@ -11,11 +11,12 @@ class EmployeeSideList extends React.Component {
   }
 
   componentDidMount() {
+    const baseURL = localStorage.getItem("baseURL");
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
     axios
-      .get("http://localhost:8080/api/employees")
+      .get(baseURL + "/api/employees")
       .then((response) => response.data)
       .then((data) => {
         this.setState({ employees: data });

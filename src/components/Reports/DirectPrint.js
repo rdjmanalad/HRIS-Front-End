@@ -39,6 +39,7 @@ export const DirectPrint = () => {
   const [employee, setEmployee] = useState([]);
   const [selectedId, setId] = useState("");
   const [byEmp, setByEmp] = useState(false);
+  const baseURL = localStorage.getItem("baseURL");
 
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
@@ -101,7 +102,8 @@ export const DirectPrint = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
       .get(
-        "http://localhost:8080/api/reports/print/" +
+        baseURL +
+          "/api/reports/print/" +
           reportName +
           "/" +
           codeFilter +
@@ -136,7 +138,7 @@ export const DirectPrint = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/branches/bcode")
+      .get(baseURL + "/api/branches/bcode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -149,7 +151,7 @@ export const DirectPrint = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/company/ccode")
+      .get(baseURL + "/api/company/ccode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -162,7 +164,7 @@ export const DirectPrint = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/group1/gcode")
+      .get(baseURL + "/api/group1/gcode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -177,7 +179,7 @@ export const DirectPrint = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/masemployees").then((response) => {
+    axios.get(baseURL + "/api/masemployees").then((response) => {
       setEmployee(response.data);
       setL(false);
       console.log(response.data);

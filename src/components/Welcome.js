@@ -27,6 +27,7 @@ function Welcome() {
   const [userId, setUserId] = useLocalState("userId", "");
   const [userRole, setUserRole] = useLocalState("userRole", "");
   const [roleD, setRoleD] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
   var dayName = format(new Date(), "eeee");
   var date = format(new Date(), "MMMM dd, yyyy");
   var date2 = format(new Date(), "MMMM 'Birthday Celebrants");
@@ -56,7 +57,7 @@ function Welcome() {
 
     axios
       // .get("http://localhost:8080/api/masemployeesBday/" + today)
-      .get("http://localhost:8080/api/masemployeesBday")
+      .get(baseURL + "/api/masemployeesBday")
       .then((response) => {
         setL(false);
         setData(response.data);
@@ -68,13 +69,11 @@ function Welcome() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios
-      .get("http://localhost:8080/api/masemployees/" + bmonth)
-      .then((response) => {
-        setL(false);
-        setData(response.data);
-        console.log(response.data);
-      });
+    axios.get(baseURL + "/api/masemployees/" + bmonth).then((response) => {
+      setL(false);
+      setData(response.data);
+      console.log(response.data);
+    });
   };
 
   const getFormat = (d) => {

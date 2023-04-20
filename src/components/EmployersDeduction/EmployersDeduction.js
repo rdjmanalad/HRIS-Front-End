@@ -28,6 +28,7 @@ export const EmployersDeduction = () => {
   var per2 = localStorage.getItem("PPTo");
   var gcode = localStorage.getItem("FilterValue");
   const [index, setIndex] = useState(0);
+  const baseURL = localStorage.getItem("baseURL");
 
   var setArray = {
     employeeNo: "",
@@ -53,14 +54,7 @@ export const EmployersDeduction = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
     axios
-      .get(
-        "http://localhost:8080/api/employersDeduc/" +
-          gcode +
-          "/" +
-          per1 +
-          "/" +
-          per2
-      )
+      .get(baseURL + "/api/employersDeduc/" + gcode + "/" + per1 + "/" + per2)
       .then((response) => {
         setL(false);
         setDeduc(response.data);
@@ -70,7 +64,7 @@ export const EmployersDeduction = () => {
 
   const saveData = (data) => {
     axios
-      .post("http://localhost:8080/api/employersDeduc/save", data, {
+      .post(baseURL + "/api/employersDeduc/save", data, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

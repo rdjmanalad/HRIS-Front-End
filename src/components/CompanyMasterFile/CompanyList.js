@@ -27,6 +27,7 @@ export const CompanyList = () => {
   var [message, setMessage] = useState("");
 
   var [delId, setDelId] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
 
   const companyCodeRef = useRef();
   const groupCodeRef = useRef();
@@ -73,17 +74,15 @@ export const CompanyList = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios
-      .get("http://localhost:8080/api/company/withLocator")
-      .then((response) => {
-        setCompanies(response.data);
-        console.log(response.data);
-      });
+    axios.get(baseURL + "/api/company/withLocator").then((response) => {
+      setCompanies(response.data);
+      console.log(response.data);
+    });
   };
 
   const saveCompany = () => {
     axios
-      .post("http://localhost:8080/api/company/save", setArrCom, {
+      .post(baseURL + "/api/company/save", setArrCom, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -107,7 +106,7 @@ export const CompanyList = () => {
 
     if (success) {
       axios
-        .post("http://localhost:8080/api/sssLocator/save", setArrLoc, {
+        .post(baseURL + "/api/sssLocator/save", setArrLoc, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -137,7 +136,7 @@ export const CompanyList = () => {
 
   const deleteCompany = () => {
     axios
-      .delete("http://localhost:8080/api/company/delete/" + delId, {
+      .delete(baseURL + "/api/company/delete/" + delId, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -159,7 +158,7 @@ export const CompanyList = () => {
       });
     if (success) {
       axios
-        .delete("http://localhost:8080/api/sssLocator/delete/" + delId, {
+        .delete(baseURL + "/api/sssLocator/delete/" + delId, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

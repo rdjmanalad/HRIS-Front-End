@@ -33,6 +33,7 @@ function InfractionInfo({ empNo }) {
   const [rndr, setRndr] = useState(false);
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
+  const baseURL = localStorage.getItem("baseURL");
 
   var setArray = {
     id: "",
@@ -99,7 +100,7 @@ function InfractionInfo({ empNo }) {
 
   const getData = () => {
     axios
-      .get("http://localhost:8080/api/infraction/getby/" + addZero(empNo), {
+      .get(baseURL + "/api/infraction/getby/" + addZero(empNo), {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -127,7 +128,7 @@ function InfractionInfo({ empNo }) {
   const editInfraction = (data) => {
     console.log(data);
     axios
-      .post("http://localhost:8080/api/infraction/save", data, {
+      .post(baseURL + "/api/infraction/save", data, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -150,7 +151,7 @@ function InfractionInfo({ empNo }) {
   const saveInfraction = () => {
     console.log(setArray);
     axios
-      .post("http://localhost:8080/api/infraction/save", setArray, {
+      .post(baseURL + "/api/infraction/save", setArray, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -181,7 +182,7 @@ function InfractionInfo({ empNo }) {
 
   const deleteInfra = (delId) => {
     axios
-      .delete("http://localhost:8080/api/infraction/delete/" + delId, {
+      .delete(baseURL + "/api/infraction/delete/" + delId, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

@@ -27,6 +27,7 @@ function PayrollInfo({ empData }) {
   const [ccode, setCcode] = useState([]);
   const [gcode, setGcode] = useState([]);
   const [nature, setNature] = useState([]);
+  const baseURL = localStorage.getItem("baseURL");
 
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
@@ -127,7 +128,7 @@ function PayrollInfo({ empData }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/branches/bcode")
+      .get(baseURL + "/api/branches/bcode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -140,7 +141,7 @@ function PayrollInfo({ empData }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/company/ccode")
+      .get(baseURL + "/api/company/ccode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -153,7 +154,7 @@ function PayrollInfo({ empData }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/group1/gcode")
+      .get(baseURL + "/api/group1/gcode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -166,7 +167,7 @@ function PayrollInfo({ empData }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/nature/listAll")
+      .get(baseURL + "/api/nature/listAll")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -188,7 +189,7 @@ function PayrollInfo({ empData }) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .post("http://localhost:8080/api/payroll/save", payroll, {
+      .post(baseURL + "/api/payroll/save", payroll, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -209,7 +210,7 @@ function PayrollInfo({ empData }) {
 
   const saveEmp = () => {
     axios
-      .post("http://localhost:8080/api/masemployeeSave", empData, {
+      .post(baseURL + "/api/masemployeeSave", empData, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

@@ -27,8 +27,8 @@ function NavigationBar() {
   const userRef = useRef();
 
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const baseURL = localStorage.getItem("baseURL");
 
-  // getId();
   useEffect(() => {
     getId();
   }, []);
@@ -46,12 +46,10 @@ function NavigationBar() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios
-      .get("http://localhost:8080/api/getUserId/" + user)
-      .then((response) => {
-        setUserId(response.data);
-        setRole(response.data);
-      });
+    axios.get(baseURL + "/api/getUserId/" + user).then((response) => {
+      setUserId(response.data);
+      setRole(response.data);
+    });
   };
 
   const setRole = (uId) => {
@@ -59,7 +57,7 @@ function NavigationBar() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/getRole/" + uId).then((response) => {
+    axios.get(baseURL + "/api/getRole/" + uId).then((response) => {
       setUserRole(response.data[0].name);
       userRoleDis = userRole.substring(5);
       forceUpdate();

@@ -13,6 +13,7 @@ function EducationTable({ empNo }) {
   const placeRef = useRef();
   const remarksRef = useRef();
   const [rowId, setRowId] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
   var [rem, setRem] = useState("");
@@ -36,7 +37,7 @@ function EducationTable({ empNo }) {
 
   const getData = () => {
     axios
-      .get("http://localhost:8080/api/att/attainmentEDU/" + empNo, {
+      .get(baseURL + "/api/att/attainmentEDU/" + empNo, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -54,7 +55,7 @@ function EducationTable({ empNo }) {
 
   const delAttainment = (id) => {
     axios
-      .delete("http://localhost:8080/api/att/deleteAttainment/" + id, {
+      .delete(baseURL + "/api/att/deleteAttainment/" + id, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -78,7 +79,7 @@ function EducationTable({ empNo }) {
 
   const saveAttainment = () => {
     axios
-      .post("http://localhost:8080/api/att/saveAttainment", setArray, {
+      .post(baseURL + "/api/att/saveAttainment", setArray, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -102,7 +103,7 @@ function EducationTable({ empNo }) {
 
   const saveEditAttainment = (edited) => {
     axios
-      .post("http://localhost:8080/api/att/saveAttainment", edited, {
+      .post(baseURL + "/api/att/saveAttainment", edited, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

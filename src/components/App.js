@@ -1,5 +1,6 @@
 import React from "react";
-
+import useLocalState from "./Hooks/useLocalState";
+import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
@@ -30,6 +31,12 @@ function App() {
   if (window.sessionStorage.getItem("jwt") == null) {
     localStorage.setItem("jwt", "");
   }
+
+  const [baseURL, setBaseURL] = useLocalState("baseURL", "");
+  // setBaseURL("http://localhost:8080");
+  useEffect(() => {
+    setBaseURL("http://localhost:8080");
+  }, []);
 
   let logged = false;
   if (localStorage.getItem("jwt") != null) {

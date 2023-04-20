@@ -28,6 +28,7 @@ export const BankUploadReport = () => {
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
   const warn = new Map();
+  const baseURL = localStorage.getItem("baseURL");
 
   useEffect(() => {
     getDropDown();
@@ -41,7 +42,6 @@ export const BankUploadReport = () => {
     var isOk = true;
     var msg = "";
     if (compCodeRef.current.value === "") {
-      // alert("invalid company code");
       warn.set(1, "Invalid company code");
       msg = msg + "Invalid company code \n";
       isOk = false;
@@ -54,12 +54,10 @@ export const BankUploadReport = () => {
       )
     ) {
       isOk = false;
-      // alert("Please Choose/Check Option box");
       warn.set(2, "Please choose a report type");
       msg = msg + "Please choose a report type";
     }
     if (sdRef.current.value === "") {
-      // alert("Please choose a date");
       warn.set(3, "Please choose a date");
       msg = msg + "Please choose a date";
       isOk = false;
@@ -121,7 +119,8 @@ export const BankUploadReport = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
       .get(
-        "http://localhost:8080/api/reports/bankUpload/" +
+        baseURL +
+          "/api/reports/bankUpload/" +
           ccode +
           "/" +
           sDate +
@@ -154,7 +153,7 @@ export const BankUploadReport = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/company/ccode")
+      .get(baseURL + "/api/company/ccode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);

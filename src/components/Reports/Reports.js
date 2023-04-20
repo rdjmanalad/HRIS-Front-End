@@ -42,6 +42,7 @@ export const Reports = () => {
   const [selectedId, setId] = useState("");
   const [byEmp, setByEmp] = useState(false);
   const [showL, setShowL] = useState(false);
+  const baseURL = localStorage.getItem("baseURL");
 
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
@@ -66,7 +67,7 @@ export const Reports = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/reports").then((response) => {
+    axios.get(baseURL + "/api/reports").then((response) => {
       setReports(response.data);
       console.log(response.data);
     });
@@ -211,7 +212,8 @@ export const Reports = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
       .get(
-        "http://localhost:8080/api/reports/print/" +
+        baseURL +
+          "/api/reports/print/" +
           reportName +
           "/" +
           codeFilter +
@@ -246,9 +248,7 @@ export const Reports = () => {
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
     axios
-      .post(
-        "http://localhost:8080/api/alphaList/" + ccode + "/" + per1 + "/" + per2
-      )
+      .post(baseURL + "/api/alphaList/" + ccode + "/" + per1 + "/" + per2)
       .then((response) => {
         // setShowLoading(false);
         if (response.status === 200) {
@@ -264,7 +264,7 @@ export const Reports = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/branches/bcode")
+      .get(baseURL + "/api/branches/bcode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -277,7 +277,7 @@ export const Reports = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/company/ccode")
+      .get(baseURL + "/api/company/ccode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -290,7 +290,7 @@ export const Reports = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/group1/gcode")
+      .get(baseURL + "/api/group1/gcode")
       .then((response) => response.data)
       .then((data) => {
         // console.log(data);
@@ -305,7 +305,7 @@ export const Reports = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/masemployees").then((response) => {
+    axios.get(baseURL + "/api/masemployees").then((response) => {
       setEmployee(response.data);
       setL(false);
       console.log(response.data);

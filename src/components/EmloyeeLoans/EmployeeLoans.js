@@ -31,6 +31,7 @@ export const EmployeeLoans = () => {
   const [len, setLen] = useState(0);
   const [loading, setL] = useState(true);
   const [lkpId, setLkpId] = useState(0);
+  const baseURL = localStorage.getItem("baseURL");
   var lkpLoanId = 0;
   var per1 = localStorage.getItem("PPFrom");
   var per2 = localStorage.getItem("PPTo");
@@ -562,18 +563,16 @@ export const EmployeeLoans = () => {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-      axios
-        .get("http://localhost:8080/api/loan/emploan/" + gcode)
-        .then((response) => {
-          setL(false);
-          setLoans(response.data);
-          console.log(response.data);
-        });
+      axios.get(baseURL + "/api/loan/emploan/" + gcode).then((response) => {
+        setL(false);
+        setLoans(response.data);
+        console.log(response.data);
+      });
     } else {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-      axios.get("http://localhost:8080/api/loan/emploan").then((response) => {
+      axios.get(baseURL + "/api/loan/emploan").then((response) => {
         setL(false);
         setLoans(response.data);
         console.log(response.data);
@@ -583,7 +582,7 @@ export const EmployeeLoans = () => {
 
   const saveEmpLoan = (setSave) => {
     axios
-      .post("http://localhost:8080/api/loan/save", setSave, {
+      .post(baseURL + "/api/loan/save", setSave, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -612,7 +611,7 @@ export const EmployeeLoans = () => {
 
   const saveEmpLoanPaid = (setSave) => {
     axios
-      .post("http://localhost:8080/api/loan/save", setSave, {
+      .post(baseURL + "/api/loan/save", setSave, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -641,7 +640,7 @@ export const EmployeeLoans = () => {
 
   const saveLoanHistory = (setSave) => {
     axios
-      .post("http://localhost:8080/api/loan/history/save", setSave, {
+      .post(baseURL + "/api/loan/history/save", setSave, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -664,7 +663,7 @@ export const EmployeeLoans = () => {
 
   const saveLkp = (setSave, finalArr, ind) => {
     axios
-      .post("http://localhost:8080/api/loan/lkp/save", setSave, {
+      .post(baseURL + "/api/loan/lkp/save", setSave, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

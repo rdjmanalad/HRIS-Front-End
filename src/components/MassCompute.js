@@ -27,6 +27,7 @@ export const MassCompute = () => {
   var [showLoading, setShowLoading] = useState(false);
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
 
   const payPeriodFromRef = useRef();
   const payPeriodToRef = useRef();
@@ -97,7 +98,8 @@ export const MassCompute = () => {
 
     axios
       .post(
-        "http://localhost:8080/api/massCompute/" +
+        baseURL +
+          "/api/massCompute/" +
           localStorage.getItem("userId") +
           "/" +
           localStorage.getItem("PPFrom") +
@@ -126,7 +128,8 @@ export const MassCompute = () => {
 
     axios
       .post(
-        "http://localhost:8080/api/set13thMonth/" +
+        baseURL +
+          "/api/set13thMonth/" +
           localStorage.getItem("userId") +
           "/" +
           localStorage.getItem("PPFrom") +
@@ -150,7 +153,7 @@ export const MassCompute = () => {
 
   function savePeriod() {
     axios
-      .post("http://localhost:8080/api/period/save", setArray, {
+      .post(baseURL + "/api/period/save", setArray, {
         headers: {
           // Accept: "application/json",
           "Content-Type": "application/json",
@@ -172,7 +175,7 @@ export const MassCompute = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/period/latest")
+      .get(baseURL + "/api/period/latest")
       .then((response) => response.data)
       .then((data) => {
         console.log(data);

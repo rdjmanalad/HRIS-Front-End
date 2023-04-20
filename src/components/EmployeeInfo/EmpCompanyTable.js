@@ -13,6 +13,7 @@ function EmpCompanyTable({ empNo }) {
   const placeRef = useRef();
   const remarksRef = useRef();
   const [rowId, setRowId] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
   var [showMod, setShowMod] = useState(false);
@@ -36,7 +37,7 @@ function EmpCompanyTable({ empNo }) {
 
   const getData = () => {
     axios
-      .get("http://localhost:8080/api/att/attainmentEMP/" + empNo, {
+      .get(baseURL + "/api/att/attainmentEMP/" + empNo, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -57,7 +58,7 @@ function EmpCompanyTable({ empNo }) {
 
   const delAttainment = (id) => {
     axios
-      .delete("http://localhost:8080/api/att/deleteAttainment/" + id, {
+      .delete(baseURL + "/api/att/deleteAttainment/" + id, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -81,7 +82,7 @@ function EmpCompanyTable({ empNo }) {
 
   const saveAttainment = () => {
     axios
-      .post("http://localhost:8080/api/att/saveAttainment", setArray, {
+      .post(baseURL + "/api/att/saveAttainment", setArray, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -105,7 +106,7 @@ function EmpCompanyTable({ empNo }) {
 
   const saveEditAttainment = (edited) => {
     axios
-      .post("http://localhost:8080/api/att/saveAttainment", edited, {
+      .post(baseURL + "/api/att/saveAttainment", edited, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

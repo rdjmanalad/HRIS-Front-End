@@ -15,6 +15,7 @@ function ListUsers() {
   const [users, setUsers] = useState([]);
   const [tooltip, showTooltip] = useState(true);
   const [roles, setRoles] = useState([]);
+  const baseURL = localStorage.getItem("baseURL");
 
   const [show, setShow] = useState(false);
 
@@ -27,7 +28,7 @@ function ListUsers() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/users")
+      .get(baseURL + "/api/users")
       .then((response) => response.data)
       .then((data) => {
         setUsers(data);
@@ -41,7 +42,7 @@ function ListUsers() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
     axios
-      .get("http://localhost:8080/api/roles")
+      .get(baseURL + "/api/roles")
       .then((response) => response.data)
       .then((data) => {
         console.log(data);

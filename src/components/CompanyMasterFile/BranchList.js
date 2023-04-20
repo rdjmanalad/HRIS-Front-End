@@ -26,6 +26,7 @@ export const BranchList = () => {
   const addressRef = useRef();
   const branchNameRef = useRef();
   const [delId, setDelId] = useState("");
+  const baseURL = localStorage.getItem("baseURL");
 
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
@@ -61,7 +62,7 @@ export const BranchList = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get("http://localhost:8080/api/branches").then((response) => {
+    axios.get(baseURL + "/api/branches").then((response) => {
       setBranches(response.data);
       console.log(response.data);
     });
@@ -69,7 +70,7 @@ export const BranchList = () => {
 
   const saveBranch = () => {
     axios
-      .post("http://localhost:8080/api/branches/save", setArray, {
+      .post(baseURL + "/api/branches/save", setArray, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -80,7 +81,6 @@ export const BranchList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          // alert("Saved Successfully!");
           setMessage("Data Saved");
           setShowMsg(true);
           getData();
@@ -94,7 +94,7 @@ export const BranchList = () => {
 
   const deleteBranch = () => {
     axios
-      .delete("http://localhost:8080/api/branches/delete/" + delId, {
+      .delete(baseURL + "/api/branches/delete/" + delId, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
