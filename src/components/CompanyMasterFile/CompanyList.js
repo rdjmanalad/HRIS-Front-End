@@ -19,7 +19,7 @@ import {
 export const CompanyList = () => {
   const [companies, setCompanies] = useState([]);
   const [company, setCompany] = useState([]);
-  const [success, setSuccess] = useState(false);
+  var [success, setSuccess] = useState(false);
 
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
@@ -81,6 +81,7 @@ export const CompanyList = () => {
   };
 
   const saveCompany = () => {
+    var ok = false;
     axios
       .post(baseURL + "/api/company/save", setArrCom, {
         headers: {
@@ -93,45 +94,36 @@ export const CompanyList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          // alert("Saved Successfully!");
-          setSuccess(true);
-          // getData();
-          // clearFields();
+          saveLocator();
         }
       })
       .catch((message) => {
-        setSuccess(false);
         alert(message);
       });
+  };
 
-    if (success) {
-      axios
-        .post(baseURL + "/api/sssLocator/save", setArrLoc, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer " +
-              localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            // alert("Saved Successfully!");
-            setSuccess(true);
-            getData();
-            clearFields();
-          }
-        })
-        .catch((message) => {
-          setSuccess(false);
-          alert(message);
-        });
-    }
-    if (success) {
-      setMessage("Data Saved");
-      setShowMsg(true);
-    }
+  const saveLocator = () => {
+    axios
+      .post(baseURL + "/api/sssLocator/save", setArrLoc, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setMessage("Data Saved");
+          setShowMsg(true);
+          getData();
+          clearFields();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
   };
 
   const deleteCompany = () => {
@@ -148,6 +140,7 @@ export const CompanyList = () => {
       .then((response) => {
         if (response.status === 200) {
           setSuccess(true);
+          deleteLocator();
           // clearFields();
           // getData();
         }
@@ -156,34 +149,31 @@ export const CompanyList = () => {
         setSuccess(false);
         alert(message);
       });
-    if (success) {
-      axios
-        .delete(baseURL + "/api/sssLocator/delete/" + delId, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer " +
-              localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setSuccess(true);
-            clearFields();
-            getData();
-          }
-        })
-        .catch((message) => {
-          setSuccess(false);
-          alert(message);
-        });
-    }
-    // success && alert("Deleted SuccessFully!");
-    if (success) {
-      setMessage("Data Deleted");
-      setShowMsg(true);
-    }
+  };
+  const deleteLocator = () => {
+    axios
+      .delete(baseURL + "/api/sssLocator/delete/" + delId, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1"),
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setSuccess(true);
+          setMessage("Data Deleted");
+          setShowMsg(true);
+          clearFields();
+          getData();
+        }
+      })
+      .catch((message) => {
+        setSuccess(false);
+        alert(message);
+      });
   };
 
   const saveData = () => {

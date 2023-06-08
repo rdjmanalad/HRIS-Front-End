@@ -33,7 +33,7 @@ function App() {
   }
 
   const [baseURL, setBaseURL] = useLocalState("baseURL", "");
-  // setBaseURL("http://localhost:8080");
+  
   useEffect(() => {
     setBaseURL("http://localhost:8080");
   }, []);

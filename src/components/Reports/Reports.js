@@ -5,7 +5,6 @@ import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
 import axios from "axios";
-// import { PDFView } from "react.pdf.stream";
 import PopUpMsg from "../ModalAlerts/PopUpMsg";
 import {
   Card,
@@ -20,7 +19,6 @@ import {
   Modal,
   FormSelect,
 } from "react-bootstrap";
-// import { jsPDF } from "jspdf-react";
 
 export const Reports = () => {
   const [reports, setReports] = useState([]);
@@ -355,7 +353,7 @@ export const Reports = () => {
       report.reportName === "Employees Information" ||
       report.reportName === "Company Master File" ||
       report.reportName === "Branch Master File" ||
-      report.reportName === "Payroll Deductions" ||
+      // report.reportName === "Payroll Deductions" ||
       report.reportName === "Other Deductions" ||
       report.reportName === "Group Totals" ||
       report.reportName === "Paid Loans" ||

@@ -46,10 +46,19 @@ function NavigationBar() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get(baseURL + "/api/getUserId/" + user).then((response) => {
-      setUserId(response.data);
-      setRole(response.data);
-    });
+    axios
+      .get(baseURL + "/api/getUserId/" + user)
+      .then((response) => {
+        setUserId(response.data);
+        setRole(response.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          navi("");
+          localStorage.setItem("jwt", "");
+          window.history.go("");
+        }
+      });
   };
 
   const setRole = (uId) => {

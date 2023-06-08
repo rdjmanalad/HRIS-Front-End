@@ -275,7 +275,7 @@ function EmpMasterFile({ empData, refreshPage }) {
       dateRegularRef.current.value = new Date(
         masEmployee.dateRegular
       ).toLocaleDateString("en-CA");
-      leaveRef.current.checked = masEmployee.leave === "1" ? true : false;
+      leaveRef.current.checked = masEmployee.onLeave === 1 ? true : false;
       atmnoRef.current.value = masEmployee.atmno;
       sssnoRef.current.value = masEmployee.sssno;
       tinnoRef.current.value = masEmployee.tinno;
@@ -314,7 +314,7 @@ function EmpMasterFile({ empData, refreshPage }) {
     empData.firstName = "";
     empData.gender = "";
     empData.lastName = "";
-    empData.leave = "";
+    empData.onLeave = "";
     empData.middleName = "";
     empData.obranchCode = "";
     empData.ocompanyCode = "";
@@ -342,7 +342,7 @@ function EmpMasterFile({ empData, refreshPage }) {
   }
 
   const checkToggle = (e) => {
-    e.target.checked ? (empData.leave = 1) : (empData.leave = 0);
+    e.target.checked ? (empData.onLeave = 1) : (empData.onLeave = 0);
   };
 
   const setHomeAdd = () => {

@@ -100,14 +100,34 @@ function Welcome() {
   const nameFormatter = (data, row) => {
     return (
       <span>
-        {row.lastName}, {row.firstName}{" "}
+        {format(new Date(row.birthday), "dd") === format(new Date(), "dd") ? (
+          <a style={{ color: "green" }}>
+            {row.lastName}, {row.firstName}{" "}
+          </a>
+        ) : (
+          <a>
+            {row.lastName}, {row.firstName}{" "}
+          </a>
+        )}
+        {/* {row.lastName}, {row.firstName}{" "} */}
         <a style={{ color: "blue" }}>{addZero(row.employeeNo)}</a>
       </span>
     );
   };
 
   const bdayFormatter = (data, row) => {
-    return format(new Date(row.birthday), "dd");
+    // return format(new Date(row.birthday), "dd");
+    return (
+      <span>
+        {format(new Date(row.birthday), "dd") === format(new Date(), "dd") ? (
+          <a style={{ color: "green" }}>
+            {format(new Date(row.birthday), "dd")}
+          </a>
+        ) : (
+          <a>{format(new Date(row.birthday), "dd")}</a>
+        )}
+      </span>
+    );
   };
 
   function nameFilterFormatter(cell, row) {
@@ -175,7 +195,15 @@ function Welcome() {
               <FormGroup as={Col}>
                 <h1>{dayName}</h1>
                 <h1>{date}</h1>
-                <label style={{ fontSize: "88px", width: "100%" }}>{dt}</label>
+                <label
+                  style={{
+                    fontSize: "75px",
+                    width: "100%",
+                    fontFamily: "monaco",
+                  }}
+                >
+                  {dt}
+                </label>
               </FormGroup>
               <FormGroup as={Col}>
                 <label
