@@ -26,6 +26,7 @@ import { BankUploadReport } from "./BankUploadReport/BankUploadReport";
 import { Reports } from "./Reports/Reports";
 import { MassCompute } from "./MassCompute";
 import { DirectPrint } from "./Reports/DirectPrint";
+import { TimeKeeping } from "./TimeKeeping/TimeKeeping";
 
 function App() {
   if (window.sessionStorage.getItem("jwt") == null) {
@@ -33,7 +34,7 @@ function App() {
   }
 
   const [baseURL, setBaseURL] = useLocalState("baseURL", "");
-  
+
   useEffect(() => {
     setBaseURL("http://localhost:8080");
   }, []);
@@ -105,6 +106,7 @@ function App() {
                     <Route path="/EmployeeList" element={<EmployeeList />} />
                     <Route path="/MassCompute" element={<MassCompute />} />
                     <Route path="/DirectPrint" element={<DirectPrint />} />
+                    <Route path="/TimeKeeping" element={<TimeKeeping />} />
                   </Routes>
                 </Col>
               </Row>

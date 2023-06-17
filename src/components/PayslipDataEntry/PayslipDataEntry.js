@@ -390,8 +390,12 @@ export const PaySlipDataEntry = () => {
   };
 
   const launchTimeRecords = () => {
-    alert("launch");
-    window.open("http://localhost:3000/Reports");
+    // window.open(
+    //   "http://localhost:3000/TimeKeeping",
+    //   "_blank",
+    //   "toolbar=0,location=0,menubar=0,directories=0,titlebar=0"
+    // );
+    window.open("http://localhost:3000/TimeKeeping");
   };
 
   const nameFormatter = (data, row) => {
