@@ -7,16 +7,20 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import { ColorRing } from "react-loader-spinner";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
 import { Card, Container, Button } from "react-bootstrap";
+import cellEditFactory from "react-bootstrap-table2-editor";
+import { Type } from "react-bootstrap-table2-editor";
 
 export const Attendance = () => {
   var [showMod, setShowMod] = useState(false);
   var [action, setAction] = useState("");
   const dateInref = useRef();
+  const gcodeRef = useRef();
   const [selectedId, setId] = useState("");
   const [employee, setRowEmp] = useState([]);
   const [attendance, setData] = useState([]);
   const baseURL = localStorage.getItem("baseURL");
   const [loading, setL] = useState(true);
+  var gcode = "";
   var [dateIn, setDateIn] = useState(
     // new Date("2019-12-28").toLocaleDateString("en-CA")
     new Date().toLocaleDateString("en-CA")
@@ -43,6 +47,27 @@ export const Attendance = () => {
       setData(response.data);
       console.log(response.data);
     });
+  };
+
+  const getData2 = () => {
+    gcode = gcodeRef.current.value.toUpperCase();
+
+    if (dateInref.current.value === "") {
+      dateInref.current.value = dateIn;
+    } else {
+      setDateIn(dateInref.current.value);
+    }
+    // alert(dateIn);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .get(baseURL + "/api/timeRecord/" + dateIn + "/" + gcode)
+      .then((response) => {
+        setL(false);
+        setData(response.data);
+        console.log(response.data);
+      });
   };
 
   const reload = () => {
@@ -110,7 +135,7 @@ export const Attendance = () => {
         style: { padding: "1px" },
         placeholder: "EmpNo",
       }),
-      style: { width: "70px", textAlign: "center", color: "blue" },
+      style: { width: "70px", textAlign: "center", color: "red" },
     },
     {
       dataField: "employeeName",
@@ -120,7 +145,8 @@ export const Attendance = () => {
         style: { padding: "1px" },
         placeholder: "Name...",
       }),
-      style: { width: "275px", color: "purple", paddingLeft: "5px" },
+      style: { width: "275px", paddingLeft: "5px" },
+      editable: false,
     },
     {
       dataField: "schedIn",
@@ -129,6 +155,8 @@ export const Attendance = () => {
       style: { width: "100px", textAlign: "center" },
       formatter: dateSchedIn,
       headerAlign: "center",
+      editor: { type: Type.DATE },
+      // editable: false,
     },
     {
       dataField: "schedOut",
@@ -137,6 +165,7 @@ export const Attendance = () => {
       style: { width: "100px", textAlign: "center" },
       formatter: dateSchedOut,
       headerAlign: "center",
+      editable: false,
     },
     {
       dataField: "transactDate",
@@ -145,6 +174,7 @@ export const Attendance = () => {
       formatter: transactDate,
       style: { width: "100px", textAlign: "center" },
       headerAlign: "center",
+      editable: false,
     },
     {
       dataField: "timeIn",
@@ -219,11 +249,14 @@ export const Attendance = () => {
   const selectRowProp = {
     mode: "radio",
     clickToSelect: true,
+    clickToEdit: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       setRowEmp(row);
       setId(row.employeeNo);
       return true;
     },
+    bgColor: "#d1d1d1",
+    style: { filter: "invert(100%)" },
   };
 
   return (
@@ -233,12 +266,19 @@ export const Attendance = () => {
         className={" border-dark bg-dark text-white"}
       >
         <div>
-          <span style={{ marginLeft: "10px", marginRight: "10px" }}>DATE</span>
+          <span style={{ marginLeft: "10px", marginRight: "10px" }}>Group</span>
+          <input
+            type={"textbox"}
+            // type={"time"}
+            style={{ width: "70px", textTransform: "uppercase" }}
+            ref={gcodeRef}
+          ></input>
+          <span style={{ marginLeft: "10px", marginRight: "10px" }}>Date</span>
           <input type={"date"} ref={dateInref}></input>
           <Button
             variant="success"
             size="sm"
-            onClick={() => getData()}
+            onClick={() => getData2()}
             style={{ marginLeft: "10px" }}
           >
             Submit/Reload
@@ -263,6 +303,7 @@ export const Attendance = () => {
               keyField="employeeNo"
               data={attendance}
               columns={columns}
+              cellEdit={cellEditFactory({ mode: "click" })}
               striped
               hover
               condensed
