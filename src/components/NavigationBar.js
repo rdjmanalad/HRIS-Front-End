@@ -105,23 +105,19 @@ function NavigationBar() {
           <Nav className={"me-auto"}>
             <NavDropdown
               className="fs-med"
-              title="Link"
+              title="Maintenance"
               id="basic-nav-dropdown"
               style={{ fontWeight: "bold" }}
             >
               <NavDropdown.Item href="EmployeeList">
                 Emloyee List
               </NavDropdown.Item>
-              <NavDropdown.Divider />
+              <NavDropdown.Divider style={{ borderColor: "gray" }} />
               <NavDropdown.Item href="CompanyMasterFile">
                 Company Master File
               </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="ChangePayrollPeriod">
-                Change Payroll Period
-              </NavDropdown.Item>
-              {/* <NavDropdown.Item>Filter Actual Group</NavDropdown.Item> */}
-              <NavDropdown.Divider />
+              <NavDropdown.Divider style={{ borderColor: "gray" }} />
+
               <NavDropdown.Item href="UserManagement">
                 User Accounts
               </NavDropdown.Item>
@@ -132,10 +128,14 @@ function NavigationBar() {
               id="basic-nav-dropdown"
               style={{ fontWeight: "bold" }}
             >
+              <NavDropdown.Item href="ChangePayrollPeriod">
+                Change Payroll Period
+              </NavDropdown.Item>
+              <NavDropdown.Divider style={{ borderColor: "gray" }} />
               <NavDropdown.Item href="PaySlipDataEntry">
                 Payroll Register
               </NavDropdown.Item>
-              <NavDropdown.Divider />
+              <NavDropdown.Divider style={{ borderColor: "gray" }} />
               <NavDropdown.Item href="EmployeeLoans">
                 Employee Loans
               </NavDropdown.Item>
@@ -145,15 +145,15 @@ function NavigationBar() {
               <NavDropdown.Item href="EmployersDeduction">
                 Employers Deduction
               </NavDropdown.Item>
-              <NavDropdown.Divider />
+              <NavDropdown.Divider style={{ borderColor: "gray" }} />
               <NavDropdown.Item href="APCDataEntry">
                 APC Data Entry
               </NavDropdown.Item>
-              <NavDropdown.Divider />
+              <NavDropdown.Divider style={{ borderColor: "gray" }} />
               <NavDropdown.Item href="BankUploadReport">
                 Bank Upload Report
               </NavDropdown.Item>
-              <NavDropdown.Divider />
+              <NavDropdown.Divider style={{ borderColor: "gray" }} />
               <NavDropdown.Item href="MassCompute">
                 Mass Computation
               </NavDropdown.Item>
@@ -165,23 +165,13 @@ function NavigationBar() {
             >
               Reports
             </Nav.Link>
-            {/* <NavDropdown
-              className="fs-med"
-              title="Test"
-              id="basic-nav-dropdown"
-              style={{ fontWeight: "bold" }}
-            >
-              <NavDropdown.Item href="AddUser">Add User</NavDropdown.Item>
-              <NavDropdown.Item href="ListUsers">List Users</NavDropdown.Item>
-              <NavDropdown.Item href="UserMaintenance">
-                User Maintenance
-              </NavDropdown.Item>
 
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="EmployeeTopList">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown> */}
+            <Nav.Link
+              href={"TimeKeeping"}
+              style={{ fontWeight: "bold", fontSize: "medium" }}
+            >
+              Time Keeping
+            </Nav.Link>
           </Nav>
           <Nav>
             <label

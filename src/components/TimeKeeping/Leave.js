@@ -24,6 +24,8 @@ export const Leave = () => {
   const leaveRef = useRef();
   const nameRef = useRef();
   const empNoRef = useRef();
+  const dateInref = useRef();
+  const bcodeRef = useRef();
   const [employees, setEmployees] = useState([]);
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
@@ -49,6 +51,58 @@ export const Leave = () => {
       setData(response.data);
       console.log(response.data);
     });
+  };
+
+  const getLeavesBF = (bcode, fdate) => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios
+      .get(baseURL + "/api/leave/" + bcode + "/" + fdate)
+      .then((response) => {
+        setL(false);
+        setData(response.data);
+        console.log(response.data);
+      });
+  };
+
+  const getLeavesB = (bcode) => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios.get(baseURL + "/api/leave/bcode/" + bcode).then((response) => {
+      setL(false);
+      setData(response.data);
+      console.log(response.data);
+    });
+  };
+
+  const getLeavesF = (fdate) => {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+
+    axios.get(baseURL + "/api/leave/date/" + fdate).then((response) => {
+      setL(false);
+      setData(response.data);
+      console.log(response.data);
+    });
+  };
+
+  const getData2 = () => {
+    var bcode = bcodeRef.current.value.toUpperCase();
+    var fdate = dateInref.current.value;
+
+    if (bcode != "" && fdate != "") {
+      getLeavesBF(bcode, fdate);
+    } else if (bcode != "" && fdate === "") {
+      getLeavesB(bcode);
+    } else if (bcode === "" && fdate != "") {
+      getLeavesF(fdate);
+    } else {
+      getData();
+    }
+
+    // alert("dt:" + fdate + " br:" + bcode);
   };
 
   const getEmp = () => {
@@ -267,6 +321,38 @@ export const Leave = () => {
         style={{ height: "auto", width: "600px" }}
         className={" border-dark bg-dark text-white"}
       >
+        <div
+          style={{
+            height: "26px",
+            marginTop: "10px",
+            display: "flex",
+            marginBottom: "10px",
+          }}
+        >
+          <span style={{ marginLeft: "10px", marginRight: "10px" }}>
+            Branch
+          </span>
+          <input
+            type={"textbox"}
+            // type={"time"}
+            style={{ width: "70px", textTransform: "uppercase" }}
+            ref={bcodeRef}
+          ></input>
+          <span style={{ marginLeft: "10px", marginRight: "10px" }}>Date</span>
+          <input
+            type={"date"}
+            ref={dateInref}
+            style={{ height: "26px" }}
+          ></input>
+          <Button
+            variant="success"
+            size="sm"
+            onClick={() => getData2()}
+            style={{ marginLeft: "10px" }}
+          >
+            Submit/Reload
+          </Button>
+        </div>
         <Container>
           {loading ? (
             <ColorRing
@@ -296,7 +382,7 @@ export const Leave = () => {
                 sizePerPageList: [
                   {
                     text: "12",
-                    value: 20,
+                    value: 17,
                   },
                   {
                     text: "15",
@@ -461,11 +547,11 @@ export const Leave = () => {
                     sizePerPageList: [
                       {
                         text: "12",
-                        value: 10,
+                        value: 14,
                       },
                       {
                         text: "15",
-                        value: 20,
+                        value: 10,
                       },
                     ],
                   })}

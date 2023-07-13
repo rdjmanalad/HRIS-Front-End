@@ -6,6 +6,9 @@
 .dropdown-menu.show {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity));
+  border: solid 1px gray;
+  box-shadow: 4px 4px 12px 0 rgba(255, 255, 255, 0.25),
+    -4px -4px 12px 0 rgba(255, 255, 255, 0.25);
 }
 
 .dropdown-item {

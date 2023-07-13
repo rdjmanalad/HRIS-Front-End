@@ -1,14 +1,11 @@
 // @flow
 import React from "react";
 import { Card, Tabs, Tab } from "react-bootstrap";
-import { BranchList } from "../CompanyMasterFile/BranchList";
-import { CompanyList } from "../CompanyMasterFile/CompanyList";
-// import { BranchList } from "./BranchList";
-// import { CompanyList } from "./CompanyList";
 import "../../css/CompanyMasterFile.css";
 import { TimeEmployees } from "./TimeEmployees";
 import { Attendance } from "./Attendance";
 import { Leave } from "./Leave";
+import { AttendanceReport } from "./AttendanceReport";
 
 export const TimeKeeping = () => {
   return (
@@ -44,7 +41,7 @@ export const TimeKeeping = () => {
           </Tab>
 
           <Tab eventKey="tab4" title="REPORTS">
-            <BranchList />
+            <AttendanceReport />
           </Tab>
         </Tabs>
       </Card>
