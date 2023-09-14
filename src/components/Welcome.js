@@ -177,7 +177,7 @@ function Welcome() {
 
   return (
     <div>
-      <div className="clsCenter">
+      <div className="clsCenter" style={{ marginTop: "60px" }}>
         {/* <Card>
         <img src={homeImage} alt="agt building"></img>
       </Card> */}

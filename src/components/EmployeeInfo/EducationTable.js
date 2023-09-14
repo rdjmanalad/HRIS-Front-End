@@ -154,6 +154,7 @@ function EducationTable({ empNo }) {
   const saveEditEdu = (rowData) => {
     // alert(rowData.remarks);
     saveEditAttainment(rowData);
+    console.log(rowData);
   };
 
   const handleClose = (deleteAtt) => {
@@ -163,6 +164,10 @@ function EducationTable({ empNo }) {
     } else {
       setShowMod(false);
     }
+  };
+
+  const numbersOnly = (value) => {
+    return value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
   };
 
   return (
@@ -187,16 +192,40 @@ function EducationTable({ empNo }) {
         <tbody>
           <tr>
             <td>
-              <input ref={startYearRef} style={{ width: "7rem" }}></input>
+              <input
+                maxLength="4"
+                ref={startYearRef}
+                style={{ width: "7rem" }}
+                onChange={(event) => {
+                  const { value } = event.target;
+                  event.target.value = numbersOnly(value);
+                }}
+              ></input>
             </td>
             <td>
-              <input ref={endYearRef} style={{ width: "7rem" }}></input>
+              <input
+                maxLength="4"
+                ref={endYearRef}
+                style={{ width: "7rem" }}
+                onChange={(event) => {
+                  const { value } = event.target;
+                  event.target.value = numbersOnly(value);
+                }}
+              ></input>
             </td>
             <td>
-              <input ref={placeRef} style={{ width: "100%" }}></input>
+              <input
+                ref={placeRef}
+                maxLength="50"
+                style={{ width: "100%", textTransform: "uppercase" }}
+              ></input>
             </td>
             <td>
-              <input ref={remarksRef} style={{ width: "100%" }}></input>
+              <input
+                ref={remarksRef}
+                maxLength="50"
+                style={{ width: "100%", textTransform: "uppercase" }}
+              ></input>
             </td>
             <td>
               <div className="centerDiv">
@@ -215,32 +244,84 @@ function EducationTable({ empNo }) {
           ) : (
             eduList.map((school) => (
               <tr key={school.id}>
-                <td
+                {/* <td
+                  maxLength="4"
                   contentEditable="true"
                   onBlur={(e) => (school.startYear = e.target.textContent)}
                 >
                   {school.startYear}
+                </td> */}
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="4"
+                    defaultValue={school.startYear}
+                    style={{
+                      width: "7rem",
+                    }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = numbersOnly(value);
+                    }}
+                    onBlur={(e) => (school.startYear = e.target.value)}
+                  ></input>
                 </td>
-                <td
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="4"
+                    defaultValue={school.endYear}
+                    style={{
+                      width: "7rem",
+                    }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = numbersOnly(value);
+                    }}
+                    onBlur={(e) => (school.endYear = e.target.value)}
+                  ></input>
+                </td>
+                {/* <td
+                  maxLength="4"
                   contentEditable="true"
                   onBlur={(e) => (school.endYear = e.target.textContent)}
                 >
                   {school.endYear}
+                </td> */}
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="50"
+                    defaultValue={school.place}
+                    style={{ width: "100%", textTransform: "uppercase" }}
+                    onBlur={(e) => (school.place = e.target.value)}
+                  ></input>
                 </td>
-                <td
+                {/* <td
+                  style={{ textTransform: "uppercase" }}
                   contentEditable="true"
                   onBlur={(e) => (school.place = e.target.textContent)}
                 >
                   {school.place}
+                </td> */}
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="50"
+                    defaultValue={school.remarks}
+                    style={{ width: "100%", textTransform: "uppercase" }}
+                    onBlur={(e) => (school.remarks = e.target.value)}
+                  ></input>
                 </td>
-                <td
+                {/* <td
+                  style={{ textTransform: "uppercase" }}
                   contentEditable="true"
                   onBlur={(event) =>
                     (school.remarks = event.target.textContent)
                   }
                 >
                   {school.remarks}
-                </td>
+                </td> */}
                 <td>
                   <div className="centerDiv">
                     <ButtonGroup>

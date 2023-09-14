@@ -6,6 +6,7 @@ import filterFactory from "react-bootstrap-table2-filter";
 import { textFilter } from "react-bootstrap-table2-filter";
 import ModalConfirm from "../ModalAlerts/ModalConfirm";
 import PopUpMsg from "../ModalAlerts/PopUpMsg";
+import ModalAddress from "../EmployeeInfo/ModalAddress";
 import {
   Card,
   FormControl,
@@ -25,9 +26,12 @@ export const CompanyList = () => {
   var [action, setAction] = useState("");
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
+  var [showAddress, setShowAddress] = useState(false);
 
   var [delId, setDelId] = useState("");
   const baseURL = localStorage.getItem("baseURL");
+
+  const [address, setAddress] = useState("");
 
   const companyCodeRef = useRef();
   const groupCodeRef = useRef();
@@ -66,9 +70,17 @@ export const CompanyList = () => {
     setShowMsg(false);
   };
 
+  const closeAddress1 = (cl) => {
+    setShowAddress(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    companyAddressRef.current.value = address;
+  }, [address]);
 
   const getData = () => {
     axios.defaults.headers.common["Authorization"] =
@@ -237,6 +249,15 @@ export const CompanyList = () => {
     pagibigBranchRef.current.value = row.pagibigBranch;
     locIDRef.current.value = row.locID;
   }
+
+  const setCompanyAddress = () => {
+    setShowAddress(true);
+    // alert("kk");
+  };
+
+  const setAddr = (adr) => {
+    setAddress(adr);
+  };
 
   const deleteData = () => {
     setAction("DELETE");
@@ -409,6 +430,7 @@ export const CompanyList = () => {
                   <FormControl
                     ref={companyAddressRef}
                     className="inpHeightXs"
+                    onClick={() => setCompanyAddress()}
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -607,12 +629,21 @@ export const CompanyList = () => {
           </div>
         </Card.Footer>
       </Card>
+
       {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
 
       {showMod ? (
         <ModalConfirm handleClose={handleClose} action={action}></ModalConfirm>
       ) : (
         <a></a>
+      )}
+
+      {showAddress && (
+        <ModalAddress
+          closeAddress={closeAddress1}
+          address={address}
+          setAddr={setAddr}
+        ></ModalAddress>
       )}
     </div>
   );

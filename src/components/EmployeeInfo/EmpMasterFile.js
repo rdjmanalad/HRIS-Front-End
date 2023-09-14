@@ -10,25 +10,27 @@ import {
   Col,
   Image,
   Button,
-  FormSelect,
-  Modal,
-  ModalFooter,
 } from "react-bootstrap";
 import axios from "axios";
 import ModalAddress from "./ModalAddress";
+import { Typeahead } from "react-bootstrap-typeahead";
+import { toHaveDisplayValue } from "@testing-library/jest-dom/dist/matchers";
+import useLocalState from "../Hooks/useLocalState";
 
 function EmpMasterFile({ empData, refreshPage }) {
   const [masEmployee, setEmp] = useState([]);
   const [empNo, setEmpNo] = useState(false);
   const [address, setAddress] = useState("");
   const [show, setShow] = useState(false);
-  const [regions, setRegions] = useState("");
-  const [provinces, setProvinces] = useState("");
-  const [cities, setCities] = useState("");
-  const [barangays, setBarangays] = useState("");
-  const [region, setRegion] = useState("");
-  const [province, setProvince] = useState("");
-  const [city, setCity] = useState("");
+  const [sameAddress, setSameAddress] = useState(false);
+  const [showAddress, setShowAddress] = useState(false);
+  const [gender, setGender] = useState("");
+  const [civilStat, setCivilStat] = useState("");
+  const [workStat, setWorkStat] = useState("");
+  const [selectedGen, setSelectedGen] = useState("");
+  const [selectedCivil, setSelectedCivil] = useState("");
+  const [selectedWS, setSelectedWS] = useState("");
+
   const baseURL = localStorage.getItem("baseURL");
 
   const addressRef = useRef();
@@ -51,90 +53,54 @@ function EmpMasterFile({ empData, refreshPage }) {
   const tinnoRef = useRef();
   const pagibigNoRef = useRef();
   const philhealthNoRef = useRef();
-  const regionRef = useRef();
-  const provRef = useRef();
-  const cityMunRef = useRef();
-  const brgyRef = useRef();
-  const otherDetailsRef = useRef();
-
-  const [vregion, setVregion] = useState("");
-  const [vprovince, setVprovince] = useState("");
-  const [vcity, setVcity] = useState("");
-  const [vbarangay, setVbarangay] = useState("");
-  const [tag, setTag] = useState("H");
+  const homeProvRef = useRef();
 
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
+  const [tag, setTag] = useState("H");
+
+  const [lsGender, setlsGender] = useLocalState("lsGender", []);
+  const [lsCivil, setlsCivil] = useLocalState("lsCivil", []);
+  const [lsWorkS, setlsWorkS] = useLocalState("lsWorkS", []);
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
-    // setAddress(empData.address);
+    getGender();
+    getCivil();
+    getWS();
+  }, []);
+
+  useEffect(() => {
     setEmp(empData);
   });
 
+  useEffect(() => {
+    setValues();
+  }, [masEmployee]);
+
   const handleClose = () => {
     setShow(false);
-  };
-
-  const handleShow = () => {
-    setVregion("");
-    setVprovince("");
-    setVcity("");
-    setVbarangay("");
-    setShow(true);
   };
 
   const closeMsg = (close) => {
     setShowMsg(false);
   };
 
-  const setProv = (e) => {
-    setRegion(e.target.value);
-    // alert(e.target.options[e.target.selectedIndex].text);
-    setVregion(e.target.options[e.target.selectedIndex].text);
-    provRef.current.value = "";
-    cityMunRef.current.value = "";
-    brgyRef.current.value = "";
-    setCities("");
-    setBarangays("");
+  const closeAddress1 = (cl) => {
+    setShowAddress(false);
   };
 
-  const setCit = (e) => {
-    setProvince(e.target.value);
-    setVprovince(e.target.options[e.target.selectedIndex].text + ",");
-    brgyRef.current.value = "";
-    setBarangays("");
-  };
-
-  const setBrgy = (e) => {
-    setVcity(e.target.options[e.target.selectedIndex].text + ", ");
-    setCity(e.target.value);
-  };
-
-  const setHouse = (e) => {
-    setVbarangay(e.target.options[e.target.selectedIndex].text + ", ");
-  };
-
-  const putAddress = () => {
-    var add =
-      (otherDetailsRef.current.value
-        ? otherDetailsRef.current.value + ", "
-        : "") +
-      vbarangay +
-      vcity +
-      vregion;
+  const setAddr = (adr) => {
+    // setAddress(adr);
     if (tag === "H") {
-      addressRef.current.value = add;
+      addressRef.current.value = adr;
     } else if (tag === "P") {
-      paddressRef.current.value = add;
+      paddressRef.current.value = adr;
     } else {
-      caddressRef.current.value = add;
+      caddressRef.current.value = adr;
     }
-    setShow(false);
+    setShowAddress(false);
   };
-
-  // const filterProv = provinces.filter(function (result) {
-  //   return result.region_id === region;
-  // });
 
   const checkFirst = () => {
     var isOk = true;
@@ -184,62 +150,64 @@ function EmpMasterFile({ empData, refreshPage }) {
       });
   }
 
-  useEffect(() => {
-    getRegions();
-  }, []);
-
-  useEffect(() => {
-    if (regions) {
-      getProvinces();
-    }
-  }, [region]);
-
-  useEffect(() => {
-    if (provinces) {
-      getCities();
-    }
-  }, [province]);
-
-  useEffect(() => {
-    if (cities) {
-      getBarangays();
-    }
-  }, [city]);
-
-  const getRegions = () => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-
-    axios.get(baseURL + "/api/address/regions").then((response) => {
-      setRegions(response.data);
-      console.log(response.data);
-    });
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+  const getGender = () => {
+    var name = "GENDER";
+    var stat = true;
+    axios
+      .get(baseURL + "/api/reference/name/" + name + "/" + stat, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        // setGender(data);
+        setlsGender(JSON.stringify(data));
+      });
   };
-  const getProvinces = () => {
-    axios.get(baseURL + "/api/address/provinces/" + region).then((response) => {
-      setProvinces(response.data);
-      console.log(response.data);
-    });
-  };
-  const getCities = () => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get(baseURL + "/api/address/cities/" + province).then((response) => {
-      setCities(response.data);
-      console.log(response.data);
-    });
+  const getCivil = () => {
+    var name = "CIVIL STATUS";
+    var stat = true;
+    axios
+      .get(baseURL + "/api/reference/name/" + name + "/" + stat, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        // setCivilStat(data);
+        setlsCivil(JSON.stringify(data));
+      });
   };
-  const getBarangays = () => {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get(baseURL + "/api/address/barangays/" + city).then((response) => {
-      setBarangays(response.data);
-      console.log(response.data);
-    });
+  function newDetails() {
+    window.location.reload(false);
+    clearDetails();
+    setEmp(empData);
+  }
+
+  const getWS = () => {
+    var name = "WORK STATUS";
+    var stat = true;
+    axios
+      .get(baseURL + "/api/reference/name/" + name + "/" + stat, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        // setWorkStat(data);
+        setlsWorkS(JSON.stringify(data));
+      });
   };
 
   function newDetails() {
@@ -250,28 +218,60 @@ function EmpMasterFile({ empData, refreshPage }) {
 
   function editDetails() {}
 
-  useEffect(() => {
-    // alert(masEmployee.length);
+  const setValues = () => {
+    var lsg = JSON.parse(localStorage.getItem("lsGender"));
+    var lsc = JSON.parse(localStorage.getItem("lsCivil"));
+    var lsw = JSON.parse(localStorage.getItem("lsWorkS"));
+    setGender(lsg);
+    setCivilStat(lsc);
+    setWorkStat(lsw);
     cphoneRef.current.value = "";
     if (masEmployee.length !== 0) {
-      console.log(masEmployee.cphone);
       addressRef.current.value = masEmployee.address;
       paddressRef.current.value = masEmployee.paddress;
       phoneRef.current.value = masEmployee.phone;
       cpersonRef.current.value = masEmployee.cperson;
       caddressRef.current.value = masEmployee.caddress;
       cphoneRef.current.value = masEmployee.cphone ? masEmployee.cphone : "";
-      genderRef.current.value = masEmployee.gender;
+      // genderRef.current.value = masEmployee.gender;
+      if (masEmployee.gender != "") {
+        for (var i = 0; i < gender.length; i++) {
+          if (gender[i].code === masEmployee.gender) {
+            setSelectedGen([gender[i]]);
+          }
+        }
+      } else {
+        genderRef.current.clear();
+      }
       birthdayRef.current.value = new Date(
         masEmployee.birthday
       ).toLocaleDateString("en-CA");
       ageRef.current.value = masEmployee.age;
       civilRef.current.value = masEmployee.civil;
+      if (masEmployee.civil != "") {
+        for (var i = 0; i < civilStat.length; i++) {
+          if (civilStat[i].code === masEmployee.civil) {
+            setSelectedCivil([civilStat[i]]);
+          }
+        }
+      } else {
+        civilRef.current.clear();
+      }
       spouseRef.current.value = masEmployee.spouse;
       hireDateRef.current.value = new Date(
         masEmployee.dateHire
       ).toLocaleDateString("en-CA");
       workStatusRef.current.value = masEmployee.workStatus;
+      if (masEmployee.workStatus != "") {
+        for (var i = 0; i < workStat.length; i++) {
+          // alert(workStat.length);
+          if (workStat[i].code === masEmployee.workStatus) {
+            setSelectedWS([workStat[i]]);
+          }
+        }
+      } else {
+        workStatusRef.current.clear();
+      }
       dateRegularRef.current.value = new Date(
         masEmployee.dateRegular
       ).toLocaleDateString("en-CA");
@@ -287,7 +287,7 @@ function EmpMasterFile({ empData, refreshPage }) {
     ageRef.current.value = isNaN(ageRef.current.value)
       ? (ageRef.current.value = "")
       : ageRef.current.value;
-  }, [masEmployee]);
+  };
 
   function clearDetails() {
     addressRef.current.value = "";
@@ -345,19 +345,53 @@ function EmpMasterFile({ empData, refreshPage }) {
     e.target.checked ? (empData.onLeave = 1) : (empData.onLeave = 0);
   };
 
+  const checkToggleHomeProv = (e) => {
+    e.target.checked ? setSameAddress(true) : setSameAddress(false);
+  };
+
+  useEffect(() => {
+    if (sameAddress) {
+      paddressRef.current.value = addressRef.current.value;
+    } else {
+      paddressRef.current.value = empData.paddress;
+    }
+  }, [sameAddress]);
+
   const setHomeAdd = () => {
     setTag("H");
-    handleShow();
+    setShowAddress(true);
+    // handleShow();
   };
 
   const setProvAdd = () => {
     setTag("P");
-    handleShow();
+    setShowAddress(true);
+    // handleShow();
   };
 
   const setContAdd = () => {
     setTag("C");
-    handleShow();
+    setShowAddress(true);
+    // handleShow();
+  };
+
+  const handleInputChange = (event, ref) => {
+    const inputValue = event.target.value;
+    const sanitizedValue = inputValue.replace(/[^0-9-]/g, "");
+    setInputValue(sanitizedValue);
+    event.target.value = sanitizedValue;
+    if (ref === "atm") {
+      empData.atmno = event.target.value;
+    } else if (ref === "sss") {
+      empData.sssno = event.target.value;
+    } else if (ref === "tin") {
+      empData.tinno = event.target.value;
+    } else if (ref === "pag") {
+      empData.pagibigNo = event.target.value;
+    } else if (ref === "plh") {
+      empData.philhealthNo = event.target.value;
+    }
+    //
   };
 
   const calculateAge = (e) => {
@@ -377,6 +411,46 @@ function EmpMasterFile({ empData, refreshPage }) {
     console.log(age_now);
     ageRef.current.value = age_now;
     // return age_now;
+  };
+
+  const numbersOnly = (value) => {
+    return value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+  };
+
+  const genderChange = (selected) => {
+    if (selected.length > 0) {
+      empData.gender = selected[0].code;
+    }
+    setSelectedGen(selected);
+  };
+
+  const genderClick = () => {
+    genderRef.current?.clear();
+    setSelectedGen("");
+  };
+
+  const civilChange = (selected) => {
+    if (selected.length > 0) {
+      empData.civil = selected[0].code;
+    }
+    setSelectedCivil(selected);
+  };
+
+  const civilClick = () => {
+    civilRef.current?.clear();
+    setSelectedCivil("");
+  };
+
+  const wsChange = (selected) => {
+    if (selected.length > 0) {
+      empData.workStatus = selected[0].code;
+    }
+    setSelectedWS(selected);
+  };
+
+  const wsClick = () => {
+    workStatusRef.current?.clear();
+    setSelectedWS("");
   };
 
   return (
@@ -399,25 +473,12 @@ function EmpMasterFile({ empData, refreshPage }) {
                       // defaultValue={empData.address}
                       ref={addressRef}
                       // defaultValue={address}
+                      style={{ textTransform: "uppercase" }}
+                      maxLength="250"
                       className="inpHeightXs"
                       onClick={() => setHomeAdd()}
                       onChange={(event) =>
                         (empData.address = event.target.value)
-                      }
-                    ></FormControl>
-                  </Col>
-                </FormGroup>
-                <FormGroup as={Row}>
-                  <FormLabel column sm="2" className="noWrapText">
-                    Prov Address
-                  </FormLabel>
-                  <Col>
-                    <FormControl
-                      ref={paddressRef}
-                      className="inpHeightXs"
-                      onClick={() => setProvAdd()}
-                      onChange={(event) =>
-                        (empData.paddress = event.target.value)
                       }
                     ></FormControl>
                   </Col>
@@ -430,12 +491,45 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={phoneRef}
                       className={"inpHeightXs"}
-                      // defaultValue={empData.phone}
-                      onChange={(event) => (empData.phone = event.target.value)}
+                      maxLength="11"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = numbersOnly(value);
+                        empData.phone = event.target.value;
+                      }}
+                      // onChange={(event) => (empData.phone = event.target.value)}
                     ></FormControl>
                   </Col>
-                  <Col></Col>
+                  <FormLabel column sm="3" className="noWrapText">
+                    Home Same with Prov Address
+                  </FormLabel>
+                  <Col sm="1">
+                    <Form.Check
+                      ref={homeProvRef}
+                      style={{ paddingTop: "5px" }}
+                      onChange={(event) => checkToggleHomeProv(event)}
+                      // onSelect={(event) => (empData.leave = 1)}
+                    ></Form.Check>
+                  </Col>
                 </FormGroup>
+                <FormGroup as={Row}>
+                  <FormLabel column sm="2" className="noWrapText">
+                    Prov Address
+                  </FormLabel>
+                  <Col>
+                    <FormControl
+                      ref={paddressRef}
+                      className="inpHeightXs"
+                      maxLength="250"
+                      style={{ textTransform: "uppercase" }}
+                      onClick={() => setProvAdd()}
+                      onChange={(event) =>
+                        (empData.paddress = event.target.value)
+                      }
+                    ></FormControl>
+                  </Col>
+                </FormGroup>
+
                 {/* Contact in Case of Emergency ######################*/}
                 <label className="asHeader" style={{ paddingLeft: "10px" }}>
                   Contact in Case of Emergency
@@ -449,6 +543,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={cpersonRef}
                       className={"inpHeightXs"}
                       // defaultValue={empData.cperson}
+                      style={{ textTransform: "uppercase" }}
+                      maxLength="40"
                       onChange={(event) =>
                         (empData.cperson = event.target.value)
                       }
@@ -461,9 +557,15 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       className={"inpHeightXs"}
                       ref={cphoneRef}
-                      onChange={(event) =>
-                        (empData.cphone = event.target.value)
-                      }
+                      maxLength="11"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = numbersOnly(value);
+                        empData.cphone = event.target.value;
+                      }}
+                      // onChange={(event) =>
+                      //   (empData.cphone = event.target.value)
+                      // }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -476,6 +578,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={caddressRef}
                       className={"inpHeightXs"}
                       onClick={() => setContAdd()}
+                      style={{ textTransform: "uppercase" }}
+                      maxLength="250"
                       onChange={(event) =>
                         (empData.caddress = event.target.value)
                       }
@@ -490,30 +594,41 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <FormLabel column sm="1" className="noWrapText">
                     Gender
                   </FormLabel>
-                  <Col sm="2">
+                  {/* <Col sm="2">
                     <FormControl
                       ref={genderRef}
                       className={"inpHeightXs"}
-                      // defaultValue={empData.gender}
+                      style={{ textTransform: "uppercase" }}
                       onChange={(event) =>
                         (empData.gender = event.target.value)
                       }
                     ></FormControl>
+                  </Col> */}
+                  <Col sm="3">
+                    <Typeahead
+                      style={{
+                        textTransform: "uppercase",
+                      }}
+                      className="dropDownList2"
+                      labelKey={(option) => `${option.name}`.toUpperCase()}
+                      id="genderId"
+                      onChange={genderChange}
+                      options={!gender ? [] : gender}
+                      selected={selectedGen}
+                      placeholder={"Choose Gender"}
+                      ref={genderRef}
+                      onFocus={genderClick}
+                    />
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
                     Birthdate
                   </FormLabel>
-                  <Col>
+                  <Col sm="3">
                     <FormControl
                       ref={birthdayRef}
                       className={"inpHeightXs"}
                       type="date"
                       onChange={(event) => calculateAge(event)}
-                      // onChange={(event) =>
-                      //   (empData.birthday = new Date(
-                      //     event.target.value
-                      //   ).toLocaleDateString("en-CA"))
-                      // }
                     ></FormControl>
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
@@ -522,6 +637,7 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <Col>
                     <FormControl
                       ref={ageRef}
+                      disabled
                       className={"inpHeightXs"}
                       // deFaultValue={empData.age}
                       onChange={(event) => (empData.age = event.target.value)}
@@ -533,13 +649,30 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <FormLabel column sm="1" className="noWrapText">
                     Civil Status
                   </FormLabel>
-                  <Col sm="2">
+                  {/* <Col sm="2">
                     <FormControl
                       ref={civilRef}
                       className={"inpHeightXs"}
+                      style={{ textTransform: "uppercase" }}
                       // defaultValue={empData.civil}
                       onChange={(event) => (empData.civil = event.target.value)}
                     ></FormControl>
+                  </Col> */}
+                  <Col sm="3">
+                    <Typeahead
+                      style={{
+                        textTransform: "uppercase",
+                      }}
+                      className="dropDownList2"
+                      labelKey={(option) => `${option.name}`.toUpperCase()}
+                      id="csId"
+                      onChange={civilChange}
+                      options={!civilStat ? [] : civilStat}
+                      selected={selectedCivil}
+                      placeholder={"Choose Civil Stat.."}
+                      ref={civilRef}
+                      onFocus={civilClick}
+                    />
                   </Col>
                   <FormLabel column sm="1" className="noWrapText">
                     Spouse
@@ -549,6 +682,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                       ref={spouseRef}
                       className={"inpHeightXs"}
                       // defaultValue={empData.spouse}
+                      style={{ textTransform: "uppercase" }}
+                      maxLength="50"
                       onChange={(event) =>
                         (empData.spouse = event.target.value)
                       }
@@ -559,35 +694,15 @@ function EmpMasterFile({ empData, refreshPage }) {
                   <FormLabel column sm="1" className="noWrapText">
                     Hire Date
                   </FormLabel>
-                  <Col>
+                  <Col sm="3">
                     <FormControl
                       ref={hireDateRef}
                       className={"inpHeightXs"}
                       type="Date"
-                      // defaultValue={new Date(
-                      //   empData.dateHire
-                      // ).toLocaleDateString("en-CA")}
-                      // value={new Date(empData.dateHire).toLocaleDateString(
-                      //   "en-CA"
-                      // )}
-                      // onClick={() => clearDate()}
-                    ></FormControl>
-                  </Col>
-                  <FormLabel
-                    column
-                    sm="1"
-                    className="noWrapText"
-                    style={{ paddingLeft: "0px" }}
-                  >
-                    Work Status
-                  </FormLabel>
-                  <Col>
-                    <FormControl
-                      ref={workStatusRef}
-                      className={"inpHeightXs"}
-                      // defaultValue={empData.workStatus}
                       onChange={(event) =>
-                        (empData.workStatus = event.target.value)
+                        (empData.dateHire = new Date(
+                          event.target.value
+                        ).toLocaleDateString("en-CA"))
                       }
                     ></FormControl>
                   </Col>
@@ -599,18 +714,51 @@ function EmpMasterFile({ empData, refreshPage }) {
                   >
                     Date Regular
                   </FormLabel>
-                  <Col>
+                  <Col sm="3">
                     <FormControl
                       ref={dateRegularRef}
                       className={"inpHeightXs"}
                       type="Date"
-                      // defaultValue={new Date(empData.dateRegular).toLocaleDateString(
-                      //   "en-CA"
-                      // )}
                       onChange={(event) =>
-                        (empData.dateRegular = event.target.value)
+                        (empData.dateRegular = new Date(
+                          event.target.value
+                        ).toLocaleDateString("en-CA"))
                       }
                     ></FormControl>
+                  </Col>
+                  <FormLabel
+                    column
+                    sm="1"
+                    className="noWrapText"
+                    style={{ paddingLeft: "0px" }}
+                  >
+                    Work Status
+                  </FormLabel>
+                  {/* <Col>
+                    <FormControl
+                      ref={workStatusRef}
+                      className={"inpHeightXs"}
+                      // defaultValue={empData.workStatus}
+                      onChange={(event) =>
+                        (empData.workStatus = event.target.value)
+                      }
+                    ></FormControl>
+                  </Col> */}
+                  <Col>
+                    <Typeahead
+                      style={{
+                        textTransform: "uppercase",
+                      }}
+                      className="dropDownList2"
+                      labelKey={(option) => `${option.name}`.toUpperCase()}
+                      id="wsId"
+                      onChange={wsChange}
+                      options={!workStat ? [] : workStat}
+                      selected={selectedWS}
+                      placeholder={"Choose Work Stat.."}
+                      ref={workStatusRef}
+                      onFocus={wsClick}
+                    />
                   </Col>
                 </FormGroup>
 
@@ -652,8 +800,8 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={atmnoRef}
                       className={"inpHeightXs"}
-                      // defaultValue={empData.atmno}
-                      onChange={(event) => (empData.atmno = event.target.value)}
+                      maxLength="15"
+                      onChange={(event) => handleInputChange(event, "atm")}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -665,8 +813,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={sssnoRef}
                       className={"inpHeightXs"}
-                      // defaultValue={empData.sssno}
-                      onChange={(event) => (empData.sssno = event.target.value)}
+                      maxLength="15"
+                      onChange={(event) => handleInputChange(event, "sss")}
+                      // onChange={(event) => (empData.sssno = event.target.value)}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -678,8 +827,9 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={tinnoRef}
                       className={"inpHeightXs"}
-                      // defaultValue={empData.tinno}
-                      onChange={(event) => (empData.tinno = event.target.value)}
+                      maxLength="15"
+                      onChange={(event) => handleInputChange(event, "tin")}
+                      // onChange={(event) => (empData.tinno = event.target.value)}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -691,10 +841,11 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={pagibigNoRef}
                       className={"inpHeightXs"}
-                      // dafaultValue={empData.pagibigNo}
-                      onChange={(event) =>
-                        (empData.pagibigNo = event.target.value)
-                      }
+                      maxLength="15"
+                      onChange={(event) => handleInputChange(event, "pag")}
+                      // onChange={(event) =>
+                      //   (empData.pagibigNo = event.target.value)
+                      // }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -706,10 +857,11 @@ function EmpMasterFile({ empData, refreshPage }) {
                     <FormControl
                       ref={philhealthNoRef}
                       className={"inpHeightXs"}
-                      // defaultValue={empData.philhealthNo}
-                      onChange={(event) =>
-                        (empData.philhealthNo = event.target.value)
-                      }
+                      maxLength="15"
+                      onChange={(event) => handleInputChange(event, "plh")}
+                      // onChange={(event) =>
+                      //   (empData.philhealthNo = event.target.value)
+                      // }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -739,167 +891,17 @@ function EmpMasterFile({ empData, refreshPage }) {
             >
               Save
             </Button>
-            {/* <Button
-                  className="setButtonMargin"
-                  variant="warning"
-                  onClick={() => editDetails()}
-                >
-                  Edit
-                </Button> */}
-            {/* <Button
-                  className="setButtonMargin"
-                  variant="danger"
-                  onClick={() => deleteEmployee()}
-                >
-                  Remove
-                </Button> */}
-            {/* <Col sm="2"></Col> */}
           </div>
         </Card.Footer>
       </Card>
       {/* <ModalAddress></ModalAddress> */}
-      <Modal
-        show={show}
-        onHide={handleClose}
-        // dialogClassName="my-modal"
-        backdrop="static"
-        className="modal-md"
-      >
-        <Modal.Header closeButton className="border-dark bg-dark text-white">
-          <Modal.Title>Input Address</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="border-dark bg-dark text-white">
-          <FormGroup as={Row}>
-            <FormLabel column sm="4" className="noWrapText">
-              Region
-            </FormLabel>
-            <Col>
-              <FormSelect
-                ref={regionRef}
-                className="dropDownList"
-                style={{ padding: "0px 0px 0px 5px" }}
-                onChange={(event) => setProv(event)}
-              >
-                <option></option>
-                {regions ? (
-                  regions.map((region) => (
-                    <option value={region.region_id} key={region.id}>
-                      {region.name}
-                    </option>
-                  ))
-                ) : (
-                  <option />
-                )}
-              </FormSelect>
-            </Col>
-          </FormGroup>
-          <FormGroup as={Row} style={{ marginTop: "10px" }}>
-            <FormLabel column sm="4" className="noWrapText">
-              Province
-            </FormLabel>
-            <Col>
-              <FormSelect
-                ref={provRef}
-                className="dropDownList"
-                style={{ padding: "0px 0px 0px 5px" }}
-                onChange={(event) => setCit(event)}
-              >
-                <option></option>
-                {provinces ? (
-                  provinces.map((province) => (
-                    <option value={province.province_id} key={province.id}>
-                      {province.name}
-                    </option>
-                  ))
-                ) : (
-                  <option />
-                )}
-              </FormSelect>
-            </Col>
-          </FormGroup>
-          <FormGroup as={Row} style={{ marginTop: "10px" }}>
-            <FormLabel column sm="4" className="noWrapText">
-              City/Municipality
-            </FormLabel>
-            <Col>
-              <FormSelect
-                ref={cityMunRef}
-                className="dropDownList"
-                style={{ padding: "0px 0px 0px 5px" }}
-                onChange={(event) => setBrgy(event)}
-              >
-                <option></option>
-                {cities ? (
-                  cities.map((city) => (
-                    <option value={city.city_id} key={city.id}>
-                      {city.name}
-                    </option>
-                  ))
-                ) : (
-                  <option />
-                )}
-              </FormSelect>
-            </Col>
-          </FormGroup>
-          <FormGroup as={Row} style={{ marginTop: "10px" }}>
-            <FormLabel column sm="4" className="noWrapText">
-              Barangay
-            </FormLabel>
-            <Col>
-              <FormSelect
-                ref={brgyRef}
-                className="dropDownList"
-                style={{ padding: "0px 0px 0px 5px" }}
-                onChange={(event) => setHouse(event)}
-              >
-                <option></option>
-                {barangays ? (
-                  barangays.map((barangay) => (
-                    <option value={barangay.id} key={barangay.id}>
-                      {barangay.name}
-                    </option>
-                  ))
-                ) : (
-                  <option />
-                )}
-              </FormSelect>
-            </Col>
-          </FormGroup>
-          <FormGroup as={Row} style={{ marginTop: "10px" }}>
-            <FormLabel column sm="4" className="noWrapText">
-              House No./Street/Building...
-            </FormLabel>
-            <Col>
-              <FormControl
-                ref={otherDetailsRef}
-                className="dropDownList"
-                style={{ padding: "0px 0px 0px 5px" }}
-                // onChange={(event) => (user.role = event.target.value)}
-              ></FormControl>
-            </Col>
-          </FormGroup>
-        </Modal.Body>
-        <ModalFooter className="border-dark bg-dark text-white">
-          <div style={{ display: "flex" }}>
-            <button
-              type="submit"
-              className="btn btn-secondary btn-md buttonRight"
-              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
-              onClick={() => handleClose()}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary btn-md "
-              style={{ width: "80px", marginTop: "0px" }}
-              onClick={() => putAddress()}
-            >
-              Ok
-            </button>
-          </div>
-        </ModalFooter>
-      </Modal>
+      {showAddress && (
+        <ModalAddress
+          closeAddress={closeAddress1}
+          address={address}
+          setAddr={setAddr}
+        ></ModalAddress>
+      )}
       {showMsg && <PopUpMsg closeMsg={closeMsg} message={message}></PopUpMsg>}
     </div>
   );

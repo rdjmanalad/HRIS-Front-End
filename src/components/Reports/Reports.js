@@ -71,27 +71,6 @@ export const Reports = () => {
     });
   };
 
-  // const printReport = () => {
-  //   alert(agcRef.current.value);
-  //   axios.defaults.headers.common["Authorization"] =
-  //     "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
-  //   axios
-  //     .get("http://localhost:8080/api/reports/sample", {
-  //       headers: {
-  //         contentType: "application/json",
-  //         accept: "application/pdf",
-  //       },
-  //       responseType: "blob",
-  //       // responseType: "arraybuffer",
-  //     })
-  //     .then((response) => {
-  //       const file = new Blob([response.data], { type: "application/pdf" });
-  //       setFileUrl(window.URL.createObjectURL(file));
-  //       window.open(fileURL);
-  //       setShow(false);
-  //     });
-  // };
-
   const printReportCheck = () => {
     var validParam = true;
     var codeFilter =
@@ -537,7 +516,7 @@ export const Reports = () => {
   return (
     <div
       style={{
-        marginTop: "15px",
+        marginTop: "70px",
         marginBottom: "10px",
         paddingBottom: "40px",
         display: "flex",

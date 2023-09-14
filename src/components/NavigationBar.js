@@ -29,6 +29,11 @@ function NavigationBar() {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const baseURL = localStorage.getItem("baseURL");
 
+  const [m1Visible, setm1Vi] = useState("block");
+  const [m2Visible, setm2Vi] = useState("block");
+  const [m3Visible, setm3Vi] = useState("block");
+  const [m4Visible, setm4Vi] = useState("block");
+
   useEffect(() => {
     getId();
   }, []);
@@ -69,8 +74,17 @@ function NavigationBar() {
     axios.get(baseURL + "/api/getRole/" + uId).then((response) => {
       setUserRole(response.data[0].name);
       userRoleDis = userRole.substring(5);
+      allowedMenu(userRole);
       forceUpdate();
     });
+  };
+
+  const allowedMenu = (uRole) => {
+    if (uRole === "ROLE_SUPERVISOR") {
+      setm1Vi("none");
+      setm2Vi("none");
+      setm3Vi("none");
+    }
   };
 
   function logout() {
@@ -94,7 +108,12 @@ function NavigationBar() {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="md">
+    <Navbar
+      bg="dark"
+      variant="dark"
+      expand="md"
+      style={{ position: "fixed", top: "0", width: "100%", zIndex: "99" }}
+    >
       {/* <Container id="navbarContainer"> */}
       <div id="navbarContainer" className="container-xxl">
         <Link to={""} className="navbar-brand">
@@ -107,7 +126,7 @@ function NavigationBar() {
               className="fs-med"
               title="Maintenance"
               id="basic-nav-dropdown"
-              style={{ fontWeight: "bold" }}
+              style={{ fontWeight: "bold", display: m1Visible }}
             >
               <NavDropdown.Item href="EmployeeList">
                 Emloyee List
@@ -126,7 +145,7 @@ function NavigationBar() {
               className="fs-med"
               title="Payroll"
               id="basic-nav-dropdown"
-              style={{ fontWeight: "bold" }}
+              style={{ fontWeight: "bold", display: m2Visible }}
             >
               <NavDropdown.Item href="ChangePayrollPeriod">
                 Change Payroll Period
@@ -161,14 +180,22 @@ function NavigationBar() {
 
             <Nav.Link
               href={"Reports"}
-              style={{ fontWeight: "bold", fontSize: "medium" }}
+              style={{
+                fontWeight: "bold",
+                fontSize: "medium",
+                display: m3Visible,
+              }}
             >
               Reports
             </Nav.Link>
 
             <Nav.Link
               href={"TimeKeeping"}
-              style={{ fontWeight: "bold", fontSize: "medium" }}
+              style={{
+                fontWeight: "bold",
+                fontSize: "medium",
+                display: m4Visible,
+              }}
             >
               Time Keeping
             </Nav.Link>

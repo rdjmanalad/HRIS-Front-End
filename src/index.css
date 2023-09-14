@@ -205,6 +205,13 @@ input[type="radio"]:checked:after {
   margin-top: 5px;
 }
 
+.dropDownList2 {
+  height: 21px;
+  margin-top: 6px;
+  border-radius: 2px;
+  border: 1px solid white;
+}
+
 .deleteWarningIcon {
   margin: 0px 5px 0px 5px;
   width: 30px;
@@ -320,3 +327,9 @@ select:disabled {
 /* input[type="time"]:focus {
   background-color: rgb(176, 173, 230);
 } */
+
+.editTable {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  color: white;
+}

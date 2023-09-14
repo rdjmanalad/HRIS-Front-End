@@ -103,7 +103,7 @@ class EmployeeList extends React.Component {
       <div style={{ paddingBottom: "50px" }}>
         <div
           style={{
-            marginTop: "15px",
+            marginTop: "70px",
             marginBottom: "10px",
           }}
           className="cardVertAlign"
@@ -167,7 +167,9 @@ class EmployeeList extends React.Component {
                   <Form.Control
                     ref={this.firstNameRef}
                     type="text"
+                    maxLength="30"
                     className="inpHeightXs"
+                    style={{ textTransform: "uppercase" }}
                     onChange={(event) =>
                       (employee.firstName = event.target.value)
                     }
@@ -178,6 +180,8 @@ class EmployeeList extends React.Component {
                   <Form.Control
                     ref={this.middleNameRef}
                     type="text"
+                    style={{ textTransform: "uppercase" }}
+                    maxLength="20"
                     className="inpHeightXs"
                     onChange={(event) =>
                       (employee.middleName = event.target.value)
@@ -189,6 +193,8 @@ class EmployeeList extends React.Component {
                   <Form.Control
                     ref={this.lastNameRef}
                     type="text"
+                    style={{ textTransform: "uppercase" }}
+                    maxLength="20"
                     className="inpHeightXs"
                     onChange={(event) =>
                       (employee.lastName = event.target.value)

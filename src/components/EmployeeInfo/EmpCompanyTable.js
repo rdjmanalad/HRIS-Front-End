@@ -167,7 +167,9 @@ function EmpCompanyTable({ empNo }) {
       setShowMod(false);
     }
   };
-
+  const numbersOnly = (value) => {
+    return value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+  };
   return (
     <div className="table-responsive" style={{ maxHeight: "175px" }}>
       <Table
@@ -190,16 +192,44 @@ function EmpCompanyTable({ empNo }) {
         <tbody>
           <tr>
             <td>
-              <input ref={startYearRef} style={{ width: "7rem" }}></input>
+              {/* <input ref={startYearRef} style={{ width: "7rem" }}></input> */}
+              <input
+                maxLength="4"
+                ref={startYearRef}
+                style={{ width: "7rem" }}
+                onChange={(event) => {
+                  const { value } = event.target;
+                  event.target.value = numbersOnly(value);
+                }}
+              ></input>
             </td>
             <td>
-              <input ref={endYearRef} style={{ width: "7rem" }}></input>
+              {/* <input ref={endYearRef} style={{ width: "7rem" }}></input> */}
+              <input
+                maxLength="4"
+                ref={endYearRef}
+                style={{ width: "7rem" }}
+                onChange={(event) => {
+                  const { value } = event.target;
+                  event.target.value = numbersOnly(value);
+                }}
+              ></input>
             </td>
             <td>
-              <input ref={placeRef} style={{ width: "100%" }}></input>
+              {/* <input ref={placeRef} style={{ width: "100%" }}></input> */}
+              <input
+                ref={placeRef}
+                maxLength="50"
+                style={{ width: "100%", textTransform: "uppercase" }}
+              ></input>
             </td>
             <td>
-              <input ref={remarksRef} style={{ width: "100%" }}></input>
+              {/* <input ref={remarksRef} style={{ width: "100%" }}></input> */}
+              <input
+                ref={remarksRef}
+                maxLength="50"
+                style={{ width: "100%", textTransform: "uppercase" }}
+              ></input>
             </td>
             <td>
               <div className="centerDiv">

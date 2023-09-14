@@ -167,7 +167,7 @@ export const BankUploadReport = () => {
   return (
     <div
       style={{
-        marginTop: "15px",
+        marginTop: "70px",
         marginBottom: "10px",
         paddingBottom: "40px",
         display: "flex",

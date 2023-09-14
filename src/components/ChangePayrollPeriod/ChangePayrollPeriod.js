@@ -276,7 +276,7 @@ export const ChangePayrollPeriod = () => {
   return (
     <div
       style={{
-        marginTop: "15px",
+        marginTop: "70px",
         marginBottom: "10px",
         paddingBottom: "50px",
         display: "flex",

@@ -30,7 +30,7 @@ function EmployeeDetails() {
           marginTop: "15px",
           marginBottom: "20px",
         }}
-        className="cardVertAlign"
+        // className="cardVertAlign"
       >
         <EmployeeSideList
           childToParent={childToParent}
@@ -65,36 +65,36 @@ function EmployeeDetails() {
           </Card.Header>
           <Card.Body className="reducePadding">
             <Form as={Row}>
-            <FormGroup as={Col} className="mb-1">
-                  <Form.Label className="noWrapText">
-                    Employee Number
-                  </Form.Label>
-                  <Form.Control
-                    defaultValue={employee.employeeNo}
-                    type="text"
-                    className="inpHeightXs"
-                    // disabled
-                    onChange={(event) =>
-                      (employee.employeeNo = event.target.value)
-                    }
-                  ></Form.Control>
-                </FormGroup>
-                <FormGroup as={Col} className="mb-1">
-                  <Form.Label className="noWrapText">First Name</Form.Label>
-                  <Form.Control
-                    defaultValue={employee.firstName}
-                    type="text"
-                    className="inpHeightXs"
-                    onChange={(event) =>
-                      (employee.firstName = event.target.value)
-                    }
-                  ></Form.Control>
-                </FormGroup>
+              <FormGroup as={Col} className="mb-1">
+                <Form.Label className="noWrapText">Employee Number</Form.Label>
+                <Form.Control
+                  defaultValue={employee.employeeNo}
+                  type="text"
+                  className="inpHeightXs"
+                  // disabled
+                  onChange={(event) =>
+                    (employee.employeeNo = event.target.value)
+                  }
+                ></Form.Control>
+              </FormGroup>
+              <FormGroup as={Col} className="mb-1">
+                <Form.Label className="noWrapText">First Name</Form.Label>
+                <Form.Control
+                  defaultValue={employee.firstName}
+                  type="text"
+                  maxLength="30"
+                  className="inpHeightXs"
+                  onChange={(event) =>
+                    (employee.firstName = event.target.value)
+                  }
+                ></Form.Control>
+              </FormGroup>
               <FormGroup as={Col} className="mb-1">
                 <Form.Label className="noWrapText">Middle Name</Form.Label>
                 <Form.Control
                   value={employee.middleName}
                   type="text"
+                  maxLength="30"
                   className="inpHeightXs"
                 ></Form.Control>
               </FormGroup>
@@ -103,6 +103,7 @@ function EmployeeDetails() {
                 <Form.Control
                   value={employee.lastName}
                   type="text"
+                  maxLength="30"
                   className="inpHeightXs"
                 ></Form.Control>
               </FormGroup>
@@ -110,9 +111,6 @@ function EmployeeDetails() {
           </Card.Body>
         </Card>
       </div>
-      {/* <Card style={{ "margin-top": "60px" }}>
-      <CardHeader style={{ height: "30px" }}>END</CardHeader>
-    </Card> */}
     </div>
   );
 }

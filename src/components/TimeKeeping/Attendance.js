@@ -130,6 +130,28 @@ export const Attendance = () => {
     });
   };
 
+  const printReport = () => {
+    // setShowL(true);
+    var gcode = gcodeRef.current.value;
+    var tranDate = dateInref.current.value;
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
+    axios
+      .get(baseURL + "/api/reportTK/" + tranDate + "/" + gcode, {
+        headers: {
+          contentType: "application/json",
+          accept: "application/pdf",
+        },
+        responseType: "blob",
+      })
+      .then((response) => {
+        const file = new Blob([response.data], { type: "application/pdf" });
+        var w = window.open(window.URL.createObjectURL(file));
+        w.document.title = "sample";
+        // setShowL(false);
+      });
+  };
+
   const addZero = (empNo) => {
     var empString = String(empNo);
     var length = empString.length;
@@ -551,6 +573,14 @@ export const Attendance = () => {
             style={{ marginLeft: "10px" }}
           >
             Submit/Reload
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => printReport()}
+            style={{ marginLeft: "10px", width: "100px" }}
+          >
+            Print
           </Button>
         </div>
         <Container>
