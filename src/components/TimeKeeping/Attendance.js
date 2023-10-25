@@ -178,11 +178,19 @@ export const Attendance = () => {
   };
 
   const timeOut = (data, row) => {
-    return new Date(row.timeOut).toLocaleTimeString("en-US").toUpperCase();
+    if (row.timeOut != null) {
+      return new Date(row.timeOut).toLocaleTimeString("en-US").toUpperCase();
+    } else {
+      return null;
+    }
   };
 
   const timeIn = (data, row) => {
-    return new Date(row.timeIn).toLocaleTimeString("en-US").toUpperCase();
+    if (row.timeIn != null) {
+      return new Date(row.timeIn).toLocaleTimeString("en-US").toUpperCase();
+    } else {
+      return null;
+    }
   };
 
   const transactDate = (data, row) => {

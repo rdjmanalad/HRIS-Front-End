@@ -337,6 +337,7 @@ export const ChangePayrollPeriod = () => {
                 <Col>
                   <FormControl
                     ref={actualNumDaysCodeRef}
+                    disabled
                     className="inpHeightXs"
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
@@ -344,62 +345,7 @@ export const ChangePayrollPeriod = () => {
                   ></FormControl>
                 </Col>
               </FormGroup>
-              {/* <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Transportation Rate
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    ref={transpoRateRef}
-                    className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Union Dues (Rate)
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    ref={unionDueRateRef}
-                    className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Year-End Tax Adj
-                </FormLabel>
-                <Col>
-                  <FormControl
-                    ref={yearEndTaxAdjRef}
-                    className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
-                  ></FormControl>
-                </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
-                <FormLabel column sm="4" className="noWrapText">
-                  Bonus / 13th Month Rate
-                </FormLabel>
-                <Col>
-                  <Form.Check
-                    ref={bonus13thRef}
-                    style={{ paddingTop: "5px" }}
-                    onChange={(event) => checkToggle(event)}
-                  ></Form.Check>
-                </Col>
-              </FormGroup> */}
             </FormGroup>
-            {/* <FormGroup as={Col} xs="1"></FormGroup> */}
             <FormGroup as={Col} sm="5">
               <FormGroup as={Row}>
                 <FormLabel column className="noWrapText" sm="1">
@@ -452,7 +398,7 @@ export const ChangePayrollPeriod = () => {
                 defaultValue={"Z"}
                 placeholder="Group..."
                 className="inpHeightXs"
-                style={{ textTransform: "uppercase" }}
+                maxLength="1"
               ></FormControl>
             </Col>
             <Col sm="3"></Col>

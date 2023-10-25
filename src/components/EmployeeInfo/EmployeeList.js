@@ -87,6 +87,21 @@ class EmployeeList extends React.Component {
       // parentToChild();
     };
 
+    const detailsToEmp = (childdata) => {
+      empp = childdata;
+      // alert(childdata.length);
+      if (childdata.length !== 0) {
+        this.empNoRef.current.value = empp.employeeNo;
+        this.firstNameRef.current.value = empp.firstName;
+        this.lastNameRef.current.value = empp.lastName;
+        this.middleNameRef.current.value = empp.middleName;
+      }
+
+      this.setState({ employee: childdata });
+      this.setState({ mountEmp: empp });
+      // parentToChild();
+    };
+
     const childToParent2 = (childdata2) => {
       empp = childdata2;
       this.setState({ employee: childdata2 });
@@ -207,6 +222,7 @@ class EmployeeList extends React.Component {
               // <EmpMasterFile></EmpMasterFile>
               <EmpMasterFile
                 empData={mountEmp}
+                detailsToEmp={detailsToEmp}
                 // ref={this.child}
               ></EmpMasterFile>
             )}

@@ -442,6 +442,7 @@ export const MassCompute = () => {
                 <Col>
                   <FormControl
                     ref={actualNumDaysCodeRef}
+                    disabled
                     className="inpHeightXs"
                   ></FormControl>
                 </Col>
@@ -545,6 +546,7 @@ export const MassCompute = () => {
                 <Col>
                   <FormControl
                     ref={collectPeriodRef}
+                    maxLength="1"
                     className="inpHeightXs"
                     style={{ textTransform: "uppercase" }}
                     // onChange={(event) =>
@@ -573,6 +575,7 @@ export const MassCompute = () => {
             <Col sm="2">
               <FormControl
                 ref={filterValueRef}
+                maxLength="1"
                 defaultValue={""}
                 placeholder="Group..."
                 className="inpHeightXs"

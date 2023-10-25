@@ -14,11 +14,14 @@ import {
   Row,
   Col,
   Container,
+  FormSelect,
 } from "react-bootstrap";
 
 export const BranchList = () => {
   const [branches, setBranches] = useState([]);
   const [branch, setBranch] = useState([]);
+  const [ccode, setCcode] = useState([]);
+  const [gcode, setGcode] = useState([]);
 
   const branchCodeRef = useRef();
   const groupCodeRef = useRef();
@@ -56,6 +59,7 @@ export const BranchList = () => {
 
   useEffect(() => {
     getData();
+    getDropDown();
   }, []);
 
   const getData = () => {
@@ -111,6 +115,30 @@ export const BranchList = () => {
           clearFields();
           getData();
         }
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  };
+
+  const getDropDown = () => {
+    axios
+      .get(baseURL + "/api/group1/gcode")
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        setGcode(data);
+      })
+      .catch((message) => {
+        alert(message);
+      });
+
+    axios
+      .get(baseURL + "/api/company/ccode")
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log(data);
+        setCcode(data);
       })
       .catch((message) => {
         alert(message);
@@ -211,7 +239,7 @@ export const BranchList = () => {
         style: { padding: "1px" },
         placeholder: "Branch Name",
       }),
-      style: { padding: "0px 0px 0px 5px" },
+      style: { padding: "0px 0px 0px 5px", width: "300px" },
     },
     {
       // dataField: "currentGroup",
@@ -243,6 +271,7 @@ export const BranchList = () => {
                   <FormControl
                     ref={branchCodeRef}
                     className="inpHeightXs"
+                    maxLength="4"
                     // onChange={(event) =>
                     //   (empData.paddress = event.target.value)
                     // }
@@ -253,7 +282,7 @@ export const BranchList = () => {
                 <FormLabel column sm="3" className="noWrapText">
                   Group Code
                 </FormLabel>
-                <Col>
+                {/* <Col>
                   <FormControl
                     ref={groupCodeRef}
                     className="inpHeightXs"
@@ -261,13 +290,27 @@ export const BranchList = () => {
                     //   (group.paddress = event.target.value)
                     // }
                   ></FormControl>
+                </Col> */}
+                <Col>
+                  <FormSelect
+                    className="dropDownList"
+                    style={{ padding: "0px 0px 0px 5px" }}
+                    ref={groupCodeRef}
+                  >
+                    <option></option>
+                    {gcode.map((code) => (
+                      <option value={code.groupCode} key={code.groupCode}>
+                        {code.groupCode} - {code.groupName}
+                      </option>
+                    ))}
+                  </FormSelect>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
                 <FormLabel column sm="3" className="noWrapText">
                   Company Code
                 </FormLabel>
-                <Col>
+                {/* <Col>
                   <FormControl
                     ref={companyCodeRef}
                     className="inpHeightXs"
@@ -275,6 +318,25 @@ export const BranchList = () => {
                     //   (group.paddress = event.target.value)
                     // }
                   ></FormControl>
+                </Col> */}
+                <Col>
+                  <FormSelect
+                    className="dropDownList"
+                    style={{ padding: "0px 0px 0px 5px" }}
+                    ref={companyCodeRef}
+                  >
+                    <option></option>
+                    {ccode.map((o, i) => (
+                      <option
+                        value={ccode[i].substring(0, ccode[i].indexOf(","))}
+                        key={ccode[i].substring(0, ccode[i].indexOf(","))}
+                      >
+                        {ccode[i].substring(0, ccode[i].indexOf(",")) +
+                          " - " +
+                          ccode[i].substring(ccode[i].indexOf(",") + 1)}
+                      </option>
+                    ))}
+                  </FormSelect>
                 </Col>
               </FormGroup>
             </FormGroup>
@@ -288,6 +350,7 @@ export const BranchList = () => {
                   <FormControl
                     ref={branchNameRef}
                     className="inpHeightXs"
+                    maxLength="30"
                     // onChange={(event) =>
                     //   (empData.paddress = event.target.value)
                     // }
@@ -302,6 +365,7 @@ export const BranchList = () => {
                   <FormControl
                     ref={addressRef}
                     className="inpHeightXs"
+                    maxLength="3"
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -313,7 +377,7 @@ export const BranchList = () => {
           <label className="asHeader" style={{ paddingLeft: "5px" }}>
             BRANCH LIST
           </label>
-          <Container style={{ width: "700px" }}>
+          <Container style={{ width: "900px" }}>
             <BootstrapTable
               id="bsTable"
               // keyField="userId"
@@ -354,6 +418,14 @@ export const BranchList = () => {
               onClick={() => deleteData()}
             >
               Delete
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
+              onClick={() => clearFields()}
+            >
+              Clear
             </button>
             <button
               type="submit"

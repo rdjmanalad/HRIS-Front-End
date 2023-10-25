@@ -486,6 +486,8 @@ function PayrollInfo({ empData }) {
                   <Col>
                     <FormControl
                       className="inpHeightXs"
+                      maxLength="20"
+                      style={{ textTransform: "uppercase" }}
                       // value={empData.rank}
                       ref={rankRef}
                       onChange={(event) => (payroll.rank = event.target.value)}
@@ -499,6 +501,8 @@ function PayrollInfo({ empData }) {
                   <Col>
                     <FormControl
                       className="inpHeightXs"
+                      maxLength="20"
+                      style={{ textTransform: "uppercase" }}
                       // value={empData.taxCode}
                       ref={taxRef}
                       onChange={(event) => (payroll.tax = event.target.value)}
@@ -512,6 +516,8 @@ function PayrollInfo({ empData }) {
                   <Col>
                     <FormControl
                       className="inpHeightXs currency"
+                      maxLength="12"
+                      onFocus={(event) => event.target.select()}
                       onChange={(event) => {
                         const { value } = event.target;
                         event.target.value = normalizeCurrency(value);
@@ -538,6 +544,8 @@ function PayrollInfo({ empData }) {
                       className="inpHeightXs currency"
                       ref={basicRef}
                       // value={empData.basicPay}
+                      maxLength="12"
+                      onFocus={(event) => event.target.select()}
                       inputMode="numeric"
                       autoComplete="cc-number"
                       onChange={(event) => {
@@ -562,6 +570,8 @@ function PayrollInfo({ empData }) {
                       className="inpHeightXs currency"
                       inputMode="numeric"
                       autoComplete="cc-number"
+                      maxLength="12"
+                      onFocus={(event) => event.target.select()}
                       onChange={(event) => {
                         const { value } = event.target;
                         event.target.value = normalizeCurrency(value);
@@ -585,6 +595,8 @@ function PayrollInfo({ empData }) {
                       className="inpHeightXs currency"
                       inputMode="numeric"
                       autoComplete="cc-number"
+                      maxLength="12"
+                      onFocus={(event) => event.target.select()}
                       onChange={(event) => {
                         const { value } = event.target;
                         event.target.value = normalizeCurrency(value);
@@ -606,6 +618,10 @@ function PayrollInfo({ empData }) {
                   <Col>
                     <FormControl
                       className="inpHeightXs currency"
+                      inputMode="numeric"
+                      autoComplete="cc-number"
+                      maxLength="12"
+                      onFocus={(event) => event.target.select()}
                       onChange={(event) => {
                         const { value } = event.target;
                         event.target.value = normalizeCurrency(value);
@@ -627,6 +643,7 @@ function PayrollInfo({ empData }) {
                   <Col>
                     <FormControl
                       className="inpHeightXs"
+                      maxLength="20"
                       ref={coopRef}
                     ></FormControl>
                   </Col>
@@ -641,7 +658,9 @@ function PayrollInfo({ empData }) {
                   <Col>
                     <FormControl
                       className="inpHeightXs"
+                      style={{ textTransform: "uppercase" }}
                       ref={jobRef}
+                      maxLength="20"
                       onChange={(event) =>
                         (payroll.workPosition = event.target.value)
                       }
@@ -655,7 +674,10 @@ function PayrollInfo({ empData }) {
                   <Col>
                     <FormSelect
                       className="dropDownList"
-                      style={{ padding: "0px 0px 0px 5px" }}
+                      style={{
+                        padding: "0px 0px 0px 5px",
+                        textTransform: "uppercase",
+                      }}
                       ref={natureRef}
                       onChange={(event) =>
                         (empData.nature = event.target.value)
@@ -679,7 +701,7 @@ function PayrollInfo({ empData }) {
                       as="textarea"
                       rows={2}
                       className="inpHeightXs"
-                      style={{ height: "60px" }}
+                      style={{ height: "60px", textTransform: "uppercase" }}
                       ref={remarksRef}
                       onChange={(event) =>
                         (payroll.remarks = event.target.value)
@@ -698,7 +720,7 @@ function PayrollInfo({ empData }) {
             <button
               type="submit"
               className="btn btn-success btn-md buttonRight"
-              style={{ width: "80px", "margin-top": "5px" }}
+              style={{ width: "80px", marginTop: "5px" }}
               onClick={() => saveChanges()}
             >
               Save

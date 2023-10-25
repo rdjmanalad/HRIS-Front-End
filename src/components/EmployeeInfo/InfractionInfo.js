@@ -216,6 +216,10 @@ function InfractionInfo({ empNo }) {
     }
   };
 
+  const numbersOnly = (value) => {
+    return value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+  };
+
   return (
     <div>
       <Card className={" border-dark bg-dark text-white"}>
@@ -225,16 +229,16 @@ function InfractionInfo({ empNo }) {
               <label
                 className="asHeader"
                 style={{
-                  "margin-top": "5px",
-                  "margin-left": "6px",
-                  "padding-right": "0px",
+                  marginTop: "5px",
+                  marginLeft: "6px",
+                  marginRight: "0px",
                 }}
               >
                 Infraction Information
               </label>
 
               {/* new column   ################################## */}
-              <FormGroup as={Col} style={{ "padding-right": "0px" }}>
+              <FormGroup as={Col} style={{ paddingRight: "0px" }}>
                 <FormGroup as={Row}>
                   <FormLabel column sm="3" className="noWrapText">
                     Prepare Date
@@ -259,11 +263,12 @@ function InfractionInfo({ empNo }) {
                       as="textarea"
                       rows={2}
                       className="inpHeightXs"
-                      style={{ height: "70px" }}
+                      maxLength="100"
+                      style={{ height: "70px", textTransform: "uppercase" }}
                       ref={infractionRef}
-                      onChange={(event) =>
-                        (setArray.infraction = event.target.value)
-                      }
+                      onChange={(event) => {
+                        setArray.infraction = event.target.value;
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -278,9 +283,12 @@ function InfractionInfo({ empNo }) {
                     <FormControl
                       className="inpHeightXs"
                       ref={suspesionRef}
-                      onChange={(event) =>
-                        (setArray.suspend = event.target.value)
-                      }
+                      maxLength="2"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = numbersOnly(value);
+                        setArray.suspend = event.target.value;
+                      }}
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -293,7 +301,8 @@ function InfractionInfo({ empNo }) {
                       as="textarea"
                       rows={2}
                       className="inpHeightXs"
-                      style={{ height: "70px" }}
+                      maxLength="250"
+                      style={{ height: "70px", textTransform: "uppercase" }}
                       ref={sanctionRef}
                       onChange={(event) =>
                         (setArray.sanction = event.target.value)
@@ -307,9 +316,9 @@ function InfractionInfo({ empNo }) {
               <label
                 className="asHeader"
                 style={{
-                  "margin-top": "10px",
-                  "margin-left": "6px",
-                  "padding-right": "0px",
+                  marginTop: "10px",
+                  marginLeft: "6px",
+                  marginRight: "0px",
                 }}
               >
                 Infraction History
@@ -321,7 +330,7 @@ function InfractionInfo({ empNo }) {
                 bordered
                 hover
                 variant="dark"
-                Table-sm
+                size="sm"
                 style={{ height: "15rem" }}
               >
                 <thead>
@@ -343,12 +352,7 @@ function InfractionInfo({ empNo }) {
                   ) : (
                     infractions.map((infra) => (
                       <tr key={infra.id} style={{ verticalAlign: "middle" }}>
-                        <td
-                        // contentEditable="true"
-                        // onBlur={(e) =>
-                        //   (infra.prepareDate = e.target.textContent)
-                        // }
-                        >
+                        <td>
                           <FormControl
                             className="inpHeightXs"
                             type="date"
@@ -362,29 +366,68 @@ function InfractionInfo({ empNo }) {
                           ></FormControl>
                           {/* {new Date(infra.transactDate).toLocaleDateString()} */}
                         </td>
-                        <td
+                        {/* <td
                           contentEditable="true"
                           onBlur={(event) =>
                             (infra.suspend = event.target.textContent)
                           }
                         >
                           {infra.suspend}
+                        </td> */}
+                        <td>
+                          <input
+                            className="editTable"
+                            maxLength="2"
+                            defaultValue={infra.suspend}
+                            style={{
+                              width: "7rem",
+                            }}
+                            onChange={(event) => {
+                              const { value } = event.target;
+                              event.target.value = numbersOnly(value);
+                            }}
+                            onBlur={(e) => (infra.suspend = e.target.value)}
+                          ></input>
                         </td>
-                        <td
+                        {/* <td
                           contentEditable="true"
                           onBlur={(event) =>
                             (infra.infraction = event.target.textContent)
                           }
                         >
                           {infra.infraction}
+                        </td> */}
+                        <td>
+                          <input
+                            className="editTable"
+                            maxLength="100"
+                            defaultValue={infra.infraction}
+                            style={{
+                              width: "100%",
+                              textTransform: "uppercase",
+                            }}
+                            onBlur={(e) => (infra.infraction = e.target.value)}
+                          ></input>
                         </td>
-                        <td
+                        {/* <td
                           contentEditable="true"
                           onBlur={(event) =>
                             (infra.sanction = event.target.textContent)
                           }
                         >
                           {infra.sanction}
+                        </td> */}
+                        <td>
+                          <input
+                            className="editTable"
+                            maxLength="250"
+                            defaultValue={infra.sanction}
+                            style={{
+                              width: "100%",
+                              textTransform: "uppercase",
+                            }}
+                            onBlur={(e) => (infra.sanction = e.target.value)}
+                          ></input>
                         </td>
                         <td>
                           <div className="centerDiv">
@@ -421,7 +464,7 @@ function InfractionInfo({ empNo }) {
             <button
               type="submit"
               className="btn btn-success btn-md buttonRight"
-              style={{ width: "80px", "margin-top": "0px" }}
+              style={{ width: "80px", marginTop: "0px" }}
               onClick={() => saveNew()}
             >
               Save

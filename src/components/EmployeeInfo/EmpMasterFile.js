@@ -14,10 +14,12 @@ import {
 import axios from "axios";
 import ModalAddress from "./ModalAddress";
 import { Typeahead } from "react-bootstrap-typeahead";
-import { toHaveDisplayValue } from "@testing-library/jest-dom/dist/matchers";
 import useLocalState from "../Hooks/useLocalState";
+import ImageUpload from "../OtherModal/ImageUpload";
+import NoImage from "../../img/NoImage.png";
+import UploadImage from "../../img/UploadImage.png";
 
-function EmpMasterFile({ empData, refreshPage }) {
+function EmpMasterFile({ empData, detailsToEmp }) {
   const [masEmployee, setEmp] = useState([]);
   const [empNo, setEmpNo] = useState(false);
   const [address, setAddress] = useState("");
@@ -30,6 +32,11 @@ function EmpMasterFile({ empData, refreshPage }) {
   const [selectedGen, setSelectedGen] = useState("");
   const [selectedCivil, setSelectedCivil] = useState("");
   const [selectedWS, setSelectedWS] = useState("");
+  const [file, setFile] = useState("");
+  const [imgTrigger, setImgTrigger] = useState(false);
+  var [showImgUpload, setShowImgUpload] = useState(false);
+
+  // var showImgUpload = true;
 
   const baseURL = localStorage.getItem("baseURL");
 
@@ -57,6 +64,8 @@ function EmpMasterFile({ empData, refreshPage }) {
 
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
+  var [fileURL, setFileURL] = useState();
+  var [fileOnly, setFileOnly] = useState();
   const [tag, setTag] = useState("H");
 
   const [lsGender, setlsGender] = useLocalState("lsGender", []);
@@ -75,6 +84,10 @@ function EmpMasterFile({ empData, refreshPage }) {
   });
 
   useEffect(() => {
+    setImgTrigger(true);
+  }, [file]);
+
+  useEffect(() => {
     setValues();
   }, [masEmployee]);
 
@@ -88,6 +101,14 @@ function EmpMasterFile({ empData, refreshPage }) {
 
   const closeAddress1 = (cl) => {
     setShowAddress(false);
+  };
+
+  const closeUpload = (fl, fo) => {
+    if (fl) {
+      setFile(fl);
+      setFileOnly(fo);
+    }
+    setShowImgUpload(false);
   };
 
   const setAddr = (adr) => {
@@ -140,13 +161,45 @@ function EmpMasterFile({ empData, refreshPage }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          // alert("Successfully Saved!");
+          empData.employeeNo = response.data;
+          detailsToEmp(empData);
           setMessage("Data Saved");
           setShowMsg(true);
+          if (imgTrigger) {
+            saveImage(response.data);
+          }
         }
       })
       .catch((message) => {
         alert(message);
+      });
+  }
+
+  function saveImage(name) {
+    const newName = name + ".png";
+    const formData = new FormData();
+    formData.append("file", fileOnly[0]);
+    formData.append("name", newName);
+    axios
+      .post(baseURL + "/api/masemployee/image/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response);
+          if (!response.data === "success") {
+            alert(response.data);
+          } else {
+            setMessage("Data Saved");
+            setShowMsg(true);
+          }
+          setImgTrigger(false);
+        }
+      })
+      .catch((error) => {
+        alert(error.message);
       });
   }
 
@@ -162,8 +215,6 @@ function EmpMasterFile({ empData, refreshPage }) {
       })
       .then((response) => response.data)
       .then((data) => {
-        console.log(data);
-        // setGender(data);
         setlsGender(JSON.stringify(data));
       });
   };
@@ -180,11 +231,31 @@ function EmpMasterFile({ empData, refreshPage }) {
       })
       .then((response) => response.data)
       .then((data) => {
-        console.log(data);
-        // setCivilStat(data);
         setlsCivil(JSON.stringify(data));
       });
   };
+
+  function getImage(empno) {
+    const filename = empno + ".png";
+    axios
+      .get(baseURL + "/api/masemployee/getImage/" + filename, {
+        headers: {
+          contentType: "application/json",
+          accept: "application/pdf",
+        },
+        responseType: "blob",
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          const empImage = URL.createObjectURL(response.data);
+          setFile(empImage);
+        }
+      })
+      .catch((message) => {
+        setFile(UploadImage);
+        // alert(message);
+      });
+  }
 
   function newDetails() {
     window.location.reload(false);
@@ -282,6 +353,7 @@ function EmpMasterFile({ empData, refreshPage }) {
       pagibigNoRef.current.value = masEmployee.pagibigNo;
       philhealthNoRef.current.value = masEmployee.philhealthNo;
       calcAge(new Date(masEmployee.birthday));
+      getImage(masEmployee.employeeNo);
     }
 
     ageRef.current.value = isNaN(ageRef.current.value)
@@ -339,6 +411,7 @@ function EmpMasterFile({ empData, refreshPage }) {
     empData.waverage = "";
     empData.workPosition = "";
     empData.workStatus = "";
+    empData.image_file = "";
   }
 
   const checkToggle = (e) => {
@@ -451,6 +524,15 @@ function EmpMasterFile({ empData, refreshPage }) {
   const wsClick = () => {
     workStatusRef.current?.clear();
     setSelectedWS("");
+  };
+
+  const handleSelect = (e) => {
+    console.log(e.target.files);
+    setFile(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const callUpload = () => {
+    setShowImgUpload(true);
   };
 
   return (
@@ -779,13 +861,19 @@ function EmpMasterFile({ empData, refreshPage }) {
               <FormGroup as={Col}>
                 <FormGroup as={Row} className="mb-1">
                   <FormLabel as={Col} className="mb-1">
-                    <div className={("borderWhite", "imageSize2")}>
-                      <Image
-                        fluid
-                        src={""}
-                        alt="Missing Image"
+                    <div style={{ marginTop: "6px" }}>
+                      <div
                         className={("borderWhite", "imageSize2")}
-                      ></Image>
+                        onClick={() => callUpload()}
+                        style={{ display: "flex", margin: "auto" }}
+                      >
+                        <Image
+                          fluid
+                          src={file}
+                          alt="Missing Image"
+                          className={"imageSize3"}
+                        ></Image>
+                      </div>
                     </div>
                   </FormLabel>
                 </FormGroup>
@@ -859,9 +947,6 @@ function EmpMasterFile({ empData, refreshPage }) {
                       className={"inpHeightXs"}
                       maxLength="15"
                       onChange={(event) => handleInputChange(event, "plh")}
-                      // onChange={(event) =>
-                      //   (empData.philhealthNo = event.target.value)
-                      // }
                     ></FormControl>
                   </Col>
                 </FormGroup>
@@ -894,7 +979,10 @@ function EmpMasterFile({ empData, refreshPage }) {
           </div>
         </Card.Footer>
       </Card>
-      {/* <ModalAddress></ModalAddress> */}
+
+      {showImgUpload && (
+        <ImageUpload closeUpload={closeUpload} fileURL={fileURL}></ImageUpload>
+      )}
       {showAddress && (
         <ModalAddress
           closeAddress={closeAddress1}

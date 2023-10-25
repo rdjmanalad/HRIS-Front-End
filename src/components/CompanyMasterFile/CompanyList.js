@@ -15,6 +15,7 @@ import {
   Row,
   Col,
   Container,
+  FormSelect,
 } from "react-bootstrap";
 
 export const CompanyList = () => {
@@ -27,6 +28,7 @@ export const CompanyList = () => {
   var [showMsg, setShowMsg] = useState(false);
   var [message, setMessage] = useState("");
   var [showAddress, setShowAddress] = useState(false);
+  const [gcode, setGcode] = useState([]);
 
   var [delId, setDelId] = useState("");
   const baseURL = localStorage.getItem("baseURL");
@@ -76,6 +78,7 @@ export const CompanyList = () => {
 
   useEffect(() => {
     getData();
+    getDropDown();
   }, []);
 
   useEffect(() => {
@@ -90,6 +93,19 @@ export const CompanyList = () => {
       setCompanies(response.data);
       console.log(response.data);
     });
+  };
+
+  const getDropDown = () => {
+    axios
+      .get(baseURL + "/api/group1/gcode")
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        setGcode(data);
+      })
+      .catch((message) => {
+        alert(message);
+      });
   };
 
   const saveCompany = () => {
@@ -273,6 +289,14 @@ export const CompanyList = () => {
     }
   };
 
+  const filterString = (value) => {
+    return value.replace(/[^0-9-]/g, "");
+  };
+
+  const filterStringSPA = (value) => {
+    return value.replace(/[^spa\d-]+$/, "");
+  };
+
   const selectRowProp = {
     mode: "radio",
     clickToSelect: true,
@@ -374,10 +398,9 @@ export const CompanyList = () => {
                 <Col sm="3">
                   <FormControl
                     ref={companyCodeRef}
+                    maxLength="3"
+                    style={{ textTransform: "uppercase" }}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (empData.paddress = event.target.value)
-                    // }
                   ></FormControl>
                 </Col>
                 <Col></Col>
@@ -388,9 +411,8 @@ export const CompanyList = () => {
                   <FormControl
                     ref={locIDRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
+                    maxLength="3"
+                    style={{ textTransform: "uppercase" }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -398,7 +420,7 @@ export const CompanyList = () => {
                 <FormLabel column sm="2" className="noWrapText">
                   Group Code
                 </FormLabel>
-                <Col sm="3">
+                {/* <Col sm="3">
                   <FormControl
                     ref={groupCodeRef}
                     className="inpHeightXs"
@@ -406,6 +428,20 @@ export const CompanyList = () => {
                     //   (group.paddress = event.target.value)
                     // }
                   ></FormControl>
+                </Col> */}
+                <Col sm="3">
+                  <FormSelect
+                    className="dropDownList"
+                    style={{ padding: "0px 0px 0px 5px" }}
+                    ref={groupCodeRef}
+                  >
+                    <option></option>
+                    {gcode.map((code, i) => (
+                      <option value={code.groupCode} key={code.groupCode}>
+                        {code.groupCode} - {code.groupName}
+                      </option>
+                    ))}
+                  </FormSelect>
                 </Col>
               </FormGroup>
               <FormGroup as={Row}>
@@ -415,10 +451,9 @@ export const CompanyList = () => {
                 <Col>
                   <FormControl
                     ref={companyNameRef}
+                    maxLength="80"
+                    style={{ textTransform: "uppercase" }}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -429,11 +464,10 @@ export const CompanyList = () => {
                 <Col>
                   <FormControl
                     ref={companyAddressRef}
+                    maxLength="150"
                     className="inpHeightXs"
+                    style={{ textTransform: "uppercase" }}
                     onClick={() => setCompanyAddress()}
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -445,9 +479,8 @@ export const CompanyList = () => {
                   <FormControl
                     ref={philSignatoryRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
+                    maxLength="50"
+                    style={{ textTransform: "uppercase" }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -459,6 +492,8 @@ export const CompanyList = () => {
                   <FormControl
                     ref={philPositionRef}
                     className="inpHeightXs"
+                    maxLength="50"
+                    style={{ textTransform: "uppercase" }}
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -476,6 +511,11 @@ export const CompanyList = () => {
                   <FormControl
                     ref={sssnoRef}
                     className="inpHeightXs"
+                    maxLength="15"
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = filterString(value);
+                    }}
                     // onChange={(event) =>
                     //   (group.paddress = event.target.value)
                     // }
@@ -490,9 +530,11 @@ export const CompanyList = () => {
                   <FormControl
                     ref={tinRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (empData.paddress = event.target.value)
-                    // }
+                    maxLength="15"
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = filterString(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -505,9 +547,11 @@ export const CompanyList = () => {
                   <FormControl
                     ref={philhealthNoRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
+                    maxLength="15"
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = filterString(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -520,9 +564,12 @@ export const CompanyList = () => {
                   <FormControl
                     ref={dateOpenRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
+                    maxLength="15"
+                    style={{ textTransform: "uppercase" }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = filterStringSPA(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -534,9 +581,11 @@ export const CompanyList = () => {
                   <FormControl
                     ref={pagibigNoRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
+                    maxLength="15"
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = filterString(value);
+                    }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -548,9 +597,8 @@ export const CompanyList = () => {
                   <FormControl
                     ref={pagibigBranchRef}
                     className="inpHeightXs"
-                    // onChange={(event) =>
-                    //   (group.paddress = event.target.value)
-                    // }
+                    maxLength="15"
+                    style={{ textTransform: "uppercase" }}
                   ></FormControl>
                 </Col>
               </FormGroup>
@@ -617,6 +665,14 @@ export const CompanyList = () => {
               onClick={() => deleteData()}
             >
               Delete
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
+              onClick={() => clearFields()}
+            >
+              Clear
             </button>
             <button
               type="submit"

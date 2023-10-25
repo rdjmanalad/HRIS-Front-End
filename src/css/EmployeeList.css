@@ -33,6 +33,7 @@
   background-color: lightgray;
   border-radius: 2px;
   font-weight: 500;
+  text-transform: uppercase;
 }
 
 .asHeader {
@@ -70,6 +71,12 @@
 
 .imageSize2 {
   margin-top: 5px;
+  width: 145px;
+  height: 145px;
+  background-color: white;
+}
+
+.imageSize3 {
   width: 145px;
   height: 145px;
   background-color: white;

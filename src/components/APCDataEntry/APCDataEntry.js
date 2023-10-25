@@ -197,6 +197,7 @@ export const APCDataEntry = () => {
             <Col>
               <FormControl
                 ref={bpiBranchCodeRef}
+                maxLength="15"
                 className="inpHeightXs"
                 onChange={(event) => (setAPC.bpiBCode = event.target.value)}
               ></FormControl>
@@ -222,6 +223,7 @@ export const APCDataEntry = () => {
             <Col>
               <FormControl
                 ref={compAcctNoRef}
+                maxLength="15"
                 className="inpHeightXs"
                 onChange={(event) => (setAPC.compAcctNo = event.target.value)}
               ></FormControl>
@@ -234,6 +236,7 @@ export const APCDataEntry = () => {
             <Col>
               <FormControl
                 ref={compCodeRef}
+                maxLength="15"
                 className="inpHeightXs"
                 onChange={(event) => (setAPC.compCode = event.target.value)}
               ></FormControl>
@@ -246,6 +249,7 @@ export const APCDataEntry = () => {
             <Col>
               <FormControl
                 ref={batchNoRef}
+                maxLength="10"
                 className="inpHeightXs"
                 onChange={(event) => (setAPC.batchNo = event.target.value)}
               ></FormControl>

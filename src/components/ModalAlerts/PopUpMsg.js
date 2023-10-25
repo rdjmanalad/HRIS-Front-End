@@ -34,8 +34,8 @@ function PopUpMsg({ closeMsg, message }) {
         <Modal.Body className="border-dark bg-dark text-white">
           <Card
             style={{
-              "max-width": "25rem",
-              "min-width": "25rem",
+              maxWidth: "25rem",
+              minWidth: "25rem",
               height: "auto",
             }}
             className={" border-dark bg-dark text-white"}

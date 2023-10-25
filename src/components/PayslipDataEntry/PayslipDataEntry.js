@@ -686,6 +686,7 @@ export const PaySlipDataEntry = () => {
                     ref={basicPayRef}
                     disabled
                     className="inpHeightXs currency2"
+                    maxLength="9"
                     style={{ fontWeight: "bolder" }}
                     onChange={(event) => {
                       const { value } = event.target;
@@ -711,6 +712,7 @@ export const PaySlipDataEntry = () => {
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
+                    maxLength="9"
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
@@ -743,6 +745,7 @@ export const PaySlipDataEntry = () => {
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
+                    maxLength="9"
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
@@ -772,6 +775,7 @@ export const PaySlipDataEntry = () => {
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
+                    maxLength="9"
                     onChange={(event) => {
                       const { value } = event.target;
                       event.target.value = normalizeCurrency(value);
@@ -798,6 +802,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={incentiveRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -827,6 +832,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={bonusRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -856,6 +862,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={otpayRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -885,6 +892,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={srHolidayPayRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -914,6 +922,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={legHolidayPayRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -943,6 +952,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={restOTPayRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -972,6 +982,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={lateDeducRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder", color: "red" }}
                     onFocus={(event) => event.target.select()}
@@ -1001,6 +1012,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={absDeducRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder", color: "red" }}
                     onFocus={(event) => event.target.select()}
@@ -1030,6 +1042,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={leaveCreditsRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1059,6 +1072,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={otherCompRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder", color: "red" }}
                     onFocus={(event) => event.target.select()}
@@ -1106,6 +1120,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={withHoldTaxRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1135,6 +1150,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={sssPremRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1164,6 +1180,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={philhealthPremRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1193,6 +1210,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={pagibigPremRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1222,6 +1240,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={hmoRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1251,6 +1270,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={fakeOverRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1280,6 +1300,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={promisoryRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1309,6 +1330,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={sssLoanRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1338,6 +1360,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={promisoryNoteRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1367,6 +1390,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={pagibigRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1396,6 +1420,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={storageRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1425,6 +1450,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={stPeterRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1454,6 +1480,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={emergencyRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1483,6 +1510,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={layAwayRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1512,6 +1540,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={personalRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1541,6 +1570,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={lifeInsRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1570,6 +1600,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={cspsmcsRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1599,6 +1630,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={otherDeducRef}
+                    maxLength="9"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1859,6 +1891,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={vacLeaveRef}
+                    maxLength="2"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1876,6 +1909,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={lateRef}
+                    maxLength="4"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder", color: "red" }}
                     onFocus={(event) => event.target.select()}
@@ -1903,6 +1937,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={absentRef}
+                    maxLength="4"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder", color: "red" }}
                     onFocus={(event) => event.target.select()}
@@ -1928,6 +1963,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={overTimeRef}
+                    maxLength="4"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1951,6 +1987,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={srHolRef}
+                    maxLength="4"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -1976,6 +2013,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={legHolRef}
+                    maxLength="4"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}
@@ -2001,6 +2039,7 @@ export const PaySlipDataEntry = () => {
                 <Col>
                   <FormControl
                     ref={restSunRef}
+                    maxLength="4"
                     className="inpHeightXs currency2"
                     style={{ fontWeight: "bolder" }}
                     onFocus={(event) => event.target.select()}

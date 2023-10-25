@@ -1798,6 +1798,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={sssCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -1832,6 +1833,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={sssAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -1867,6 +1869,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={sssBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2000,6 +2003,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={pagCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2034,6 +2038,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={pagAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2069,6 +2074,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={pagBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2199,6 +2205,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={spCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2233,6 +2240,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={spAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2267,6 +2275,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={spBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2399,6 +2408,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={plCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2433,6 +2443,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={plAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2467,6 +2478,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={plBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2609,6 +2621,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={emerCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2643,6 +2656,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={emerAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2677,6 +2691,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={emerBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2806,6 +2821,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={foCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2840,6 +2856,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={foAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -2874,6 +2891,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={foBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3008,6 +3026,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={storCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3042,6 +3061,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={storAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3076,6 +3096,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={storBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3208,6 +3229,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={pnCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3242,6 +3264,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={pnAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3276,6 +3299,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={pnBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3405,6 +3429,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={lapCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3439,6 +3464,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={lapAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3473,6 +3499,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={lapBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3605,6 +3632,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={perCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3639,6 +3667,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={perAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3673,6 +3702,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={perBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3806,6 +3836,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={liCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3840,6 +3871,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={liAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -3874,6 +3906,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={liBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -4003,6 +4036,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={hmoCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -4037,6 +4071,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={hmoAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -4071,6 +4106,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={hmoBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -4204,6 +4240,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={cpmCapRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -4238,6 +4275,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={cpmAmorRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",
@@ -4272,6 +4310,7 @@ export const EmployeeLoans = () => {
                   <Col>
                     <FormControl
                       ref={cpmBalRef}
+                      maxLength="10"
                       className="inpHeightXs"
                       style={{
                         fontWeight: "bolder",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { DropSelect } from "../SelectionDropdown/DropSelect";
 import {
@@ -16,6 +16,8 @@ export const AttendanceReport = () => {
   const [branches, setBranches] = useState([]);
   const baseURL = localStorage.getItem("baseURL");
   const [reLoad, setReLoad] = useState(false);
+  const dateInref = useRef();
+  const dateInref2 = useRef();
   const months = [
     "1",
     "2",
@@ -48,11 +50,17 @@ export const AttendanceReport = () => {
   };
 
   const populate = () => {
-    var br = [];
+    // var br = [];
+    // for (var i = 0; i < branch.length; i++) {
+    //   br.push(branch[i].branchCode);
+    //   branches.push(branch[i].branchCode);
+    //   setBranches(br);
+    // }
+    var grp = [];
     for (var i = 0; i < branch.length; i++) {
-      br.push(branch[i].branchCode);
-      branches.push(branch[i].branchCode);
-      setBranches(br);
+      grp.push(branch[i].groupCode);
+      branches.push(branch[i].groupCode);
+      setBranches(grp);
     }
   };
 
@@ -60,10 +68,10 @@ export const AttendanceReport = () => {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + localStorage.getItem("jwt").replace(/^"(.+(?="$))"$/, "$1");
 
-    axios.get(baseURL + "/api/branches").then((response) => {
+    axios.get(baseURL + "/api/group1/gcode").then((response) => {
+      console.log(response.data);
       setBranch(response.data);
       populate();
-      // console.log(response.data);
     });
   };
 
@@ -78,6 +86,37 @@ export const AttendanceReport = () => {
 
   const handlePeriod = (selected) => {
     // alert("ss" + selected);
+  };
+
+  const printReport = () => {
+    alert("print");
+  };
+
+  const computeDates = (e) => {
+    var date = e.target.value;
+    var month = 0;
+    var year = 0;
+    var sDay = 0;
+    var eDay = 0;
+    var periodTo = "";
+    sDay = date.substr(8);
+    month = date.substring(5, 7);
+    year = date.substring(0, 4);
+    eDay = String(computeEndDay(year, month)).substring(8, 10);
+    if (sDay === "01") {
+      periodTo = year + "-" + month + "-" + "15";
+      dateInref2.current.value = periodTo;
+    } else if (sDay === "16") {
+      periodTo = year + "-" + month + "-" + eDay;
+      dateInref2.current.value = periodTo;
+    } else {
+      dateInref.current.value = date;
+      dateInref2.current.value = date;
+    }
+  };
+
+  var computeEndDay = (y, m) => {
+    return new Date(y, m, 0);
   };
 
   return (
@@ -105,12 +144,12 @@ export const AttendanceReport = () => {
                 <Col sm="5">
                   <DropSelect
                     options={branches}
-                    placeholder="Choose a Branch..."
+                    placeholder="Choose a Group..."
                     onChange={handleMonth}
                   />
                 </Col>
               </FormGroup>
-              <FormGroup as={Row}>
+              {/* <FormGroup as={Row}>
                 <Col sm="2"></Col>
                 <FormLabel column sm="2" className="noWrapText">
                   Month
@@ -122,8 +161,8 @@ export const AttendanceReport = () => {
                     onChange={handleMonth}
                   />
                 </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
+              </FormGroup> */}
+              {/* <FormGroup as={Row}>
                 <Col sm="2"></Col>
                 <FormLabel column sm="2" className="noWrapText">
                   Year
@@ -140,8 +179,8 @@ export const AttendanceReport = () => {
                     // style={{ width: "100px" }}
                   ></FormControl>
                 </Col>
-              </FormGroup>
-              <FormGroup as={Row}>
+              </FormGroup> */}
+              {/* <FormGroup as={Row}>
                 <Col sm="2"></Col>
                 <FormLabel column sm="2" className="noWrapText">
                   Period
@@ -152,6 +191,36 @@ export const AttendanceReport = () => {
                     placeholder="Choose a Period..."
                     onChange={handlePeriod}
                   />
+                </Col>
+              </FormGroup> */}
+              <FormGroup as={Row}>
+                <Col sm="2"></Col>
+                <FormLabel column sm="2" className="noWrapText">
+                  Period From
+                </FormLabel>
+                <Col sm="5">
+                  <FormControl
+                    className="inpHeightXs"
+                    type={"date"}
+                    ref={dateInref}
+                    // style={{ height: "26px" }}
+                    onChange={(e) => computeDates(e)}
+                  ></FormControl>
+                </Col>
+              </FormGroup>
+              <FormGroup as={Row}>
+                <Col sm="2"></Col>
+                <FormLabel column sm="2" className="noWrapText">
+                  Period To
+                </FormLabel>
+                <Col sm="5">
+                  <FormControl
+                    className="inpHeightXs"
+                    type={"date"}
+                    disabled
+                    ref={dateInref2}
+                    // style={{ height: "26px" }}
+                  ></FormControl>
                 </Col>
               </FormGroup>
             </FormGroup>
@@ -171,7 +240,7 @@ export const AttendanceReport = () => {
               type="submit"
               className="btn btn-primary btn-md "
               style={{ width: "80px", marginTop: "0px" }}
-              //   onClick={() => saveData()}
+              onClick={() => printReport()}
             >
               Print
             </button>

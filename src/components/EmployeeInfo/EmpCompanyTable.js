@@ -143,10 +143,6 @@ function EmpCompanyTable({ empNo }) {
     // alert(setArray.remarks);
   }
 
-  function handleClick(hey) {
-    alert(hey);
-  }
-
   function deleteEmp(roww) {
     setAction("DELETE");
     setShowMod(true);
@@ -177,7 +173,7 @@ function EmpCompanyTable({ empNo }) {
         bordered
         hover
         variant="dark"
-        Table-sm
+        // Table-sm
         style={{ height: "10rem" }}
       >
         <thead>
@@ -246,33 +242,79 @@ function EmpCompanyTable({ empNo }) {
               <td colSpan={"5"}>No Employment Found</td>
             </tr>
           ) : (
-            empList.map((school) => (
-              <tr key={school.id}>
-                <td
+            empList.map((comp) => (
+              <tr key={comp.id}>
+                {/* <td
                   contentEditable="true"
                   onBlur={(e) => (school.startYear = e.target.textContent)}
                 >
                   {school.startYear}
+                </td> */}
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="4"
+                    defaultValue={comp.startYear}
+                    style={{
+                      width: "7rem",
+                    }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = numbersOnly(value);
+                    }}
+                    onBlur={(e) => (comp.startYear = e.target.value)}
+                  ></input>
                 </td>
-                <td
+                {/* <td
                   contentEditable="true"
-                  onBlur={(e) => (school.endYear = e.target.textContent)}
+                  onBlur={(e) => (comp.endYear = e.target.textContent)}
                 >
-                  {school.endYear}
+                  {comp.endYear}
+                </td> */}
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="4"
+                    defaultValue={comp.endYear}
+                    style={{
+                      width: "7rem",
+                    }}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      event.target.value = numbersOnly(value);
+                    }}
+                    onBlur={(e) => (comp.endYear = e.target.value)}
+                  ></input>
                 </td>
-                <td
+                {/* <td
                   contentEditable="true"
-                  onBlur={(e) => (school.place = e.target.textContent)}
+                  onBlur={(e) => (comp.place = e.target.textContent)}
                 >
-                  {school.place}
+                  {comp.place}
+                </td> */}
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="50"
+                    defaultValue={comp.place}
+                    style={{ width: "100%", textTransform: "uppercase" }}
+                    onBlur={(e) => (comp.place = e.target.value)}
+                  ></input>
                 </td>
-                <td
+                {/* <td
                   contentEditable="true"
-                  onBlur={(event) =>
-                    (school.remarks = event.target.textContent)
-                  }
+                  onBlur={(event) => (comp.remarks = event.target.textContent)}
                 >
-                  {school.remarks}
+                  {comp.remarks}
+                </td> */}
+                <td>
+                  <input
+                    className="editTable"
+                    maxLength="50"
+                    defaultValue={comp.remarks}
+                    style={{ width: "100%", textTransform: "uppercase" }}
+                    onBlur={(e) => (comp.remarks = e.target.value)}
+                  ></input>
                 </td>
                 <td>
                   <div className="centerDiv">
@@ -280,7 +322,7 @@ function EmpCompanyTable({ empNo }) {
                       <Button
                         size="sm"
                         variant="warning"
-                        onClick={() => saveEditEmp(school)}
+                        onClick={() => saveEditEmp(comp)}
                       >
                         Save
                       </Button>
@@ -288,7 +330,7 @@ function EmpCompanyTable({ empNo }) {
                       <Button
                         size="sm"
                         variant="danger"
-                        onClick={() => deleteEmp(school.id)}
+                        onClick={() => deleteEmp(comp.id)}
                       >
                         Delete
                       </Button>

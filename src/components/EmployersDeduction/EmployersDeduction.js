@@ -281,6 +281,7 @@ export const EmployersDeduction = () => {
             <Col>
               <FormControl
                 ref={sssDeducRef}
+                maxLength="9"
                 className="inpHeightXs"
                 defaultValue={employee.sssdeduction}
                 onChange={(event) =>
@@ -296,6 +297,7 @@ export const EmployersDeduction = () => {
             <Col>
               <FormControl
                 ref={pagDeducRef}
+                maxLength="9"
                 className="inpHeightXs"
                 onChange={(event) =>
                   (setArray.pagibigDeduction = event.target.value)
@@ -310,6 +312,7 @@ export const EmployersDeduction = () => {
             <Col>
               <FormControl
                 ref={phDeducRef}
+                maxLength="9"
                 className="inpHeightXs"
                 onChange={(event) =>
                   (setArray.philhealthDeduction = event.target.value)

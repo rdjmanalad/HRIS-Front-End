@@ -202,6 +202,7 @@ export const GroupList = () => {
                 <FormControl
                   ref={groupCodeRef}
                   className="inpHeightXs"
+                  maxLength={"1"}
                   style={{ textTransform: "uppercase" }}
                   // onChange={(event) =>
                   //   (empData.paddress = event.target.value)
@@ -215,6 +216,7 @@ export const GroupList = () => {
                 <FormControl
                   ref={groupNameRef}
                   className="inpHeightXs"
+                  maxLength={"30"}
                   style={{ textTransform: "uppercase" }}
                 ></FormControl>
               </Col>
@@ -265,6 +267,14 @@ export const GroupList = () => {
               onClick={() => deleteGroup()}
             >
               Delete
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ width: "80px", marginTop: "0px", marginRight: "5px" }}
+              onClick={() => clearFields()}
+            >
+              Clear
             </button>
             <button
               type="submit"

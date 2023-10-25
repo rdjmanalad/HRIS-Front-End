@@ -19,7 +19,7 @@ export const CompanyMasterFile = () => {
     >
       <Card
         className={" border-dark bg-dark text-white "}
-        style={{ marginLeft: "10px", width: "80rem" }}
+        style={{ marginLeft: "10px", width: "85rem" }}
       >
         <Tabs
           defaultActiveKey="home"

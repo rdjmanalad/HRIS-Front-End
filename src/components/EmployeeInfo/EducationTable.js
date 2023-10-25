@@ -177,7 +177,7 @@ function EducationTable({ empNo }) {
         bordered
         hover
         variant="dark"
-        Table-sm
+        // Table-sm
         style={{ height: "10rem" }}
       >
         <thead>

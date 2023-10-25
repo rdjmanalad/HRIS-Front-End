@@ -130,13 +130,6 @@ function ModalPromoTransferHist({ empNo }) {
   // };
   return (
     <div style={{ marginTop: "10px" }}>
-      {/* <Button
-        variant="primary"
-        onClick={handleShow}
-        style={{ "margin-top": "5px" }}
-      >
-        Show Promotions and Transfer History
-      </Button> */}
       <label
         className="asHeaderClicable"
         style={{ paddingLeft: "5px" }}
