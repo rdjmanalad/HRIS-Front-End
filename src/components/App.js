@@ -37,6 +37,8 @@ function App() {
 
   useEffect(() => {
     setBaseURL("http://localhost:8080");
+    // setBaseURL("http://127.0.0.1:8080");
+    // setBaseURL("");
   }, []);
 
   let logged = false;

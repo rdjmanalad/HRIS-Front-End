@@ -83,9 +83,9 @@ function EmpMasterFile({ empData, detailsToEmp }) {
     setEmp(empData);
   });
 
-  useEffect(() => {
-    setImgTrigger(true);
-  }, [file]);
+  // useEffect(() => {
+  //   setImgTrigger(true);
+  // }, [file]);
 
   useEffect(() => {
     setValues();
@@ -107,6 +107,7 @@ function EmpMasterFile({ empData, detailsToEmp }) {
     if (fl) {
       setFile(fl);
       setFileOnly(fo);
+      setImgTrigger(true);
     }
     setShowImgUpload(false);
   };

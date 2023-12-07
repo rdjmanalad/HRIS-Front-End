@@ -51,6 +51,7 @@ const LoginApp = () => {
       // fetch("api/login", {
       headers: {
         "Content-Type": "application-json",
+        Origin: "http://127.0.0.1:8080/api/login",
       },
       method: "post",
       body: JSON.stringify(reqBody),
